@@ -3,3 +3,7 @@
 ################################################################################
 
 /.vs/MvcMoviesCore/DesignTimeBuild
+/.vs/MvcMoviesCore/v15
+/.vs/MvcMoviesCore/v16
+/MvcMoviesCore/bin
+/MvcMoviesCore/obj
