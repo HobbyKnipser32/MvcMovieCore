@@ -1,0 +1,120 @@
+﻿@model MvcMoviesCore.Models.Movies
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>Movies</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="YearOfPublication" class="control-label"></label>
+                <input asp-for="YearOfPublication" class="form-control" />
+                <span asp-validation-for="YearOfPublication" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Genre" class="control-label"></label>
+                <select asp-for="GenreId" class="form-control" asp-items="ViewBag.GenreId"></select>
+                <span asp-validation-for="GenreId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecordCarrier" class="control-label"></label>
+                <select asp-for="RecordCarrierId" class="form-control" asp-items="ViewBag.RecordCarrierId">
+                    @if (Model.RecordCarrierId == null)
+                    {
+                        <option selected="selected" value=""></option>
+                    }
+                </select>
+                <span asp-validation-for="RecordCarrierId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="InStock" /> @Html.DisplayNameFor(model => model.InStock)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="StorageLocation" class="control-label"></label>
+                <select asp-for="StorageLocationId" class="form-control" asp-items="ViewBag.StorageLocationId">
+                    @if (Model.StorageLocationId == null)
+                    {
+                        <option selected="selected" value=""></option>
+                    }
+                </select>
+                <span asp-validation-for="StorageLocationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Added" class="control-label"></label>
+                <input asp-for="Added" class="form-control" />
+                <span asp-validation-for="Added" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OnWatch" class="control-label"></label>
+                <input asp-for="OnWatch" class="form-control" />
+                <span asp-validation-for="OnWatch" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Remark" class="control-label"></label>
+                <input asp-for="Remark" class="form-control" />
+                <span asp-validation-for="Remark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Adult" /> @Html.DisplayNameFor(model => model.Adult)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="ThreeD" /> @Html.DisplayNameFor(model => model.ThreeD)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Owner" class="control-label"></label>
+                <input asp-for="Owner" class="form-control" />
+                <span asp-validation-for="Owner" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IMDB" class="control-label"></label>
+                <input asp-for="IMDB" class="form-control" />
+                <span asp-validation-for="IMDB" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ranking" class="control-label"></label>
+                <input asp-for="Ranking" class="form-control" />
+                <span asp-validation-for="Ranking" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastView" class="control-label"></label>
+                <input asp-for="LastView" class="form-control" />
+                <span asp-validation-for="LastView" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

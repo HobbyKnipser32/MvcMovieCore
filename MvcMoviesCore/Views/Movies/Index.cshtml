@@ -1,0 +1,139 @@
+﻿@using ReflectionIT.Mvc.Paging
+@*@model IEnumerable<MvcMoviesCore.Models.Movies>*@
+@model ReflectionIT.Mvc.Paging.PagingList<MvcMoviesCore.Models.Movies>
+@addTagHelper *, ReflectionIT.Mvc.Paging
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Movies</h2>
+<form method="get" class="form-inline">
+    <input name="filter" class="form-control" placeholder="filter"
+           value="@Model.RouteValue["Filter"]" />
+    <button type="submit" class="btn btn-info">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+    </button>
+</form>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<nav aria-label="Movies navigation">
+    @await this.Component.InvokeAsync("Pager", new { PagingList = this.Model })
+</nav>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.SortableHeaderFor(model => model.Name, this.Model)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.YearOfPublication, Model)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.InStock, Model)
+            </th>
+            @*<th>
+            @Html.SortableHeaderFor(model => model.Added)
+        </th>*@
+            @*<th>
+            @Html.SortableHeaderFor(model => model.OnWatch)
+        </th>*@
+            @*<th>
+            @Html.SortableHeaderFor(model => model.Remark)
+        </th>*@
+            @*<th>
+            @Html.SortableHeaderFor(model => model.Adult)
+        </th>*@
+            <th>
+                @Html.SortableHeaderFor(model => model.ThreeD)
+            </th>
+            @*<th>
+            @Html.SortableHeaderFor(model => model.Owner)
+        </th>*@
+            @*<th>
+            @Html.SortableHeaderFor(model => model.IMDB)
+        </th>*@
+            @*<th>
+            @Html.SortableHeaderFor(model => model.Ranking)
+        </th>*@
+            <th>
+                @Html.SortableHeaderFor(model => model.LastView)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.Genre)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.RecordCarrier)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.StorageLocation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.YearOfPublication)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InStock)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Added)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.OnWatch)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Adult)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.ThreeD)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Owner)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.IMDB)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Ranking)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastView)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RecordCarrier.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StorageLocation.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav aria-label="Movies navigation">
+    <vc:pager paging-list="@Model" />
+</nav>
