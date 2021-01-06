@@ -55,10 +55,10 @@ namespace MvcMoviesCore.Controllers
             }
 
             var movies = await _context.Movies
-                .Include(m => m.Genre)
-                .Include(m => m.RecordCarrier)
-                .Include(m => m.StorageLocation)
-                .Include(m => m.MoviesPerson)
+                .Include(i => i.Genre)
+                .Include(i => i.RecordCarrier)
+                .Include(i => i.StorageLocation)
+                .Include(i => i.MoviesPerson)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movies == null)
             {
@@ -67,11 +67,11 @@ namespace MvcMoviesCore.Controllers
 
             foreach (var mpId in movies.MoviesPerson)
             {
-                mpId.Person = await _context.Person.FirstOrDefaultAsync(f => f.Id == mpId.PersonId);
+                mpId.Person = await _context.Person.Include(i => i.Sex).FirstOrDefaultAsync(f => f.Id == mpId.PersonId);
                 mpId.Person.ActorsAge = mpId.Person.GetActorsMovieAge(mpId.Person.Birthday, movies.YearOfPublication);
             }
 
-            movies.MoviesPerson = movies.MoviesPerson.OrderBy(o => o.Person.Name).ToList();
+            movies.MoviesPerson = movies.MoviesPerson.OrderBy(o => o.Person.Sex.Name).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
 
             return View(movies);
         }
