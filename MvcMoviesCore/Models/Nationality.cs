@@ -7,7 +7,6 @@ namespace MvcMoviesCore.Models
     [Table("Nationality")]
     public partial class Nationality
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Nationality()
         {
             Person = new HashSet<Person>();
@@ -17,7 +16,6 @@ namespace MvcMoviesCore.Models
 
         public string Name { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Person> Person { get; set; }
     }
 }

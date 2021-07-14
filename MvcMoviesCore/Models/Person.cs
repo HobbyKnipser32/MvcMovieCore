@@ -7,7 +7,6 @@ namespace MvcMoviesCore.Models
     [Table("Person")]
     public partial class Person : Age
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Person()
         {
             MoviesPerson = new HashSet<MoviesPerson>();
@@ -33,7 +32,6 @@ namespace MvcMoviesCore.Models
 
         public Guid PersonTypesId { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MoviesPerson> MoviesPerson { get; set; }
 
         public virtual PersonTypes PersonType { get; set; }
