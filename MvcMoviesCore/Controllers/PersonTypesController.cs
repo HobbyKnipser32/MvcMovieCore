@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcMoviesCore.Models;
@@ -78,7 +77,7 @@ namespace MvcMoviesCore.Controllers
                 if (personTypes == null)
                     return NotFound();
 
-                ViewData["PersonId"] = new SelectList(ctx.Person, "Id", "Name", personTypes.Person);
+                ViewData["PersonId"] = new SelectList(ctx.Person, "Id", "Name");
                 return View(personTypes);
             }
         }
@@ -86,16 +85,33 @@ namespace MvcMoviesCore.Controllers
         // POST: PersonTypesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(Guid id, [Bind("Id,Name,PersonId")] PersonTypes personTypes)
         {
-            try
+            if (id != personTypes.Id)
+                return NotFound();
+
+            if (ModelState.IsValid)
             {
+                try
+                {
+                    using (var ctx = new MvcMovieCoreContext())
+                    {
+                        ctx.Update(personTypes);
+                        await ctx.SaveChangesAsync();
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PersonTypeExists(personTypes.Id))
+                        return NotFound();
+                    else
+                        throw;
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+
+            ViewData["PersonId"] = new SelectList(new MvcMovieCoreContext().Person, "Id", "Name");
+            return View(personTypes);
         }
 
         // GET: PersonTypesController/Delete/5
@@ -104,28 +120,36 @@ namespace MvcMoviesCore.Controllers
             if (!id.HasValue)
                 return NotFound();
 
-            using (var ctx = new MvcMovieCoreContext())
+            using (MvcMovieCoreContext ctx = new MvcMovieCoreContext())
             {
                 var personType = await ctx.PersonType.Include(i => i.Person).FirstOrDefaultAsync(f => f.Id == id);
+
                 if (personType == null)
                     return NotFound();
+
+                ViewData["PersonId"] = new SelectList(ctx.Person, "Id", "Name"); 
                 return View(personType);
             }
         }
 
         // POST: PersonTypesController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            try
+            using (var ctx = new MvcMovieCoreContext())
             {
+                var personType = await ctx.PersonType.FindAsync(id);
+                ctx.PersonType.Remove(personType);
+                await ctx.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+        }
+
+        private bool PersonTypeExists(Guid id)
+        {
+            using (var ctx = new MvcMovieCoreContext())
+                return ctx.PersonType.Any(a => a.Id == id);
         }
     }
 }
