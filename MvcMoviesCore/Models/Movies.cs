@@ -57,6 +57,9 @@ namespace MvcMoviesCore.Models
 
         public string ChangeUser { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? RunTime { get; set; }
+
         [Required]
         public virtual Genre Genre { get; set; }
 
