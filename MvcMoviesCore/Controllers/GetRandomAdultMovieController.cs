@@ -1,23 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MvcMoviesCore.Models;
 using System;
 using System.Linq;
 
 namespace MvcMoviesCore.Controllers
 {
-    public class GetRandomMovieController : Controller
+    public class GetRandomAdultMovieController : Controller
     {
         MvcMovieCoreContext _context;
 
-        public GetRandomMovieController(MvcMovieCoreContext context)
+        public GetRandomAdultMovieController(MvcMovieCoreContext context)
         {
             _context = context;
         }
 
         public IActionResult Index()
         {
-            var movies = _context.Movies.Include(i => i.MoviesPerson).Where(w => w.Adult == false && w.LastView == null && w.InStock == true).ToList();
+            var movies = _context.Movies.Where(w => w.Adult == true && (w.OnWatch != "o" || w.OnWatch != "-")).ToList();
             if (movies.Any())
             {
                 int random = new Random().Next(1, movies.Count());
