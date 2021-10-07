@@ -21,7 +21,7 @@ namespace MvcMoviesCore.Models
         {
             var age = "(-)";
             if (birthDay != null && yearOfPublication != null)
-                age = GetAge(yearOfPublication, birthDay);
+                return GetAge(yearOfPublication, birthDay);
             return age;
         }
 
@@ -37,9 +37,9 @@ namespace MvcMoviesCore.Models
 
             if (birthDay != null)
                 if (obit != null)
-                    age = GetAge(obit, birthDay) + " (+)";
+                    return $"{GetAge(obit, birthDay)}  (†)";
                 else
-                    age = GetAge(DateTime.Now, birthDay);
+                    return GetAge(DateTime.Now, birthDay);
 
             return age;
         }
