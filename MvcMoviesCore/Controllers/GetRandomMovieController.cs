@@ -30,7 +30,6 @@ namespace MvcMoviesCore.Controllers
                 {
                     if (moviePerson.Person != null)
                     {
-                        //var personAge = new Person();
                         moviePerson.Person.ActorsAge = moviePerson.Person.GetActorsMovieAge(moviePerson.Person.Birthday, movie.YearOfPublication);
                         Sex sex = _context.Sex.Where(w => w.Id == moviePerson.Person.SexId).FirstOrDefault();
                         if (sex != null)
