@@ -36,10 +36,7 @@ namespace MvcMoviesCore.Models
             var age = "(-)";
 
             if (birthDay != null)
-                if (obit != null)
-                    return $"{GetAge(obit, birthDay)}  (†)";
-                else
-                    return GetAge(DateTime.Now, birthDay);
+                return obit != null ? $"{GetAge(obit, birthDay)}  (†)" : GetAge(DateTime.Now, birthDay);
 
             return age;
         }
