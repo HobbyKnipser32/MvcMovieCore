@@ -8,7 +8,7 @@ namespace MvcMoviesCore.Controllers
 {
     public class GetRandomAdultMovieController : Controller
     {
-        MvcMovieCoreContext _context;
+        private readonly MvcMovieCoreContext _context;
 
         public GetRandomAdultMovieController(MvcMovieCoreContext context)
         {
