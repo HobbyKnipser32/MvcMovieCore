@@ -36,7 +36,7 @@ namespace MvcMoviesCore.Models
             var age = "(-)";
 
             if (birthDay != null)
-                return obit != null ? $"{GetAge(obit, birthDay)}  (†)" : GetAge(DateTime.Now, birthDay);
+                return obit != null ? $"{GetAge(obit, birthDay)} (†)" : GetAge(DateTime.Now, birthDay);
 
             return age;
         }
@@ -47,6 +47,6 @@ namespace MvcMoviesCore.Models
         /// <param name="endDate"></param>
         /// <param name="startDate"></param>
         /// <returns></returns>
-        private string GetAge(DateTime? endDate, DateTime? startDate) => ((int) ((endDate - startDate)?.TotalDays / 365.25)).ToString();
+        private string GetAge(DateTime? endDate, DateTime? startDate) => ((int)((endDate - startDate)?.TotalDays / 365.25)).ToString();
     }
 }
