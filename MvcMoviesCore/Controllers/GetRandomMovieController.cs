@@ -18,6 +18,7 @@ namespace MvcMoviesCore.Controllers
         public IActionResult Index()
         {
             var movies = _context.Movies
+                                 .Include(i => i.RecordCarrier)
                                  .Include(i => i.MoviesPerson)
                                  .ThenInclude(moviesPerson => moviesPerson.Person)
                                  .Where(w => w.Adult == false && w.LastView == null && w.InStock == true)
