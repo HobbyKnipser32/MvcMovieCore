@@ -6,7 +6,7 @@ namespace MvcMoviesCore.Models
     public abstract class Age
     {
         /// <summary>
-        /// The current Age this Person
+        /// The current Age of this Person
         /// </summary>
         [NotMapped]
         public string ActorsAge { get; set; }
