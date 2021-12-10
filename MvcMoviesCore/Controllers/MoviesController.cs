@@ -188,8 +188,21 @@ namespace MvcMoviesCore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var movies = await _context.Movies.FindAsync(id);
-            _context.Movies.Remove(movies);
+            var movie = await _context.Movies.FindAsync(id);
+            var moviesPerson = _context.MoviesPerson.Where(w => w.MoviesId == movie.Id).ToList();
+            foreach (var moviePerson in moviesPerson)
+            {
+                var scenes = _context.Scenes.Where(w => w.MoviesPersonsId == moviePerson.Id).ToList();
+                if (scenes.Any())
+                {
+                    _context.Scenes.RemoveRange(scenes);
+                    _context.SaveChanges();
+                }
+                _context.MoviesPerson.Remove(moviePerson);
+                _context.SaveChanges();
+            }
+
+            _context.Movies.Remove(movie);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

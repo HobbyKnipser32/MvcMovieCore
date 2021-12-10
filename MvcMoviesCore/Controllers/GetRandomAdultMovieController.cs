@@ -20,7 +20,7 @@ namespace MvcMoviesCore.Controllers
             var movies = _context.Movies
                                  .Include(i => i.MoviesPerson)
                                  .ThenInclude(moviesPerson => moviesPerson.Person)
-                                 .Where(w => w.Adult == true && w.InStock == true && (w.OnWatch != "o" || w.OnWatch != "-"))
+                                 .Where(w => w.Adult == true && w.InStock == true && !(w.OnWatch.Contains("o") || w.OnWatch.Contains("-")))
                                  .ToList();
             if (movies.Any())
             {

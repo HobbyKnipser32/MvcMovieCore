@@ -30,5 +30,7 @@ namespace MvcMoviesCore.Models
         public DbSet<StorageLocation> StorageLocation { get; set; }
 
         public DbSet<Nationality> Nationalities { get; set; }
+
+        public DbSet<Scenes> Scenes { get; set; }
     }
 }
