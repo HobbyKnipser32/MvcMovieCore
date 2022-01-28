@@ -24,7 +24,7 @@ namespace MvcMoviesCore.Controllers
                                  .ToList();
             if (movies.Any())
             {
-                int random = new Random().Next(1, movies.Count());
+                int random = new Random().Next(0, movies.Count() - 1);
                 var movie = movies[random];
                 foreach (var moviePerson in movie.MoviesPerson)
                 {
@@ -32,7 +32,7 @@ namespace MvcMoviesCore.Controllers
                     {
                         var personAge = new Person();
                         moviePerson.Person.ActorsAge = personAge.GetActorsMovieAge(moviePerson.Person.Birthday, movie.YearOfPublication);
-                        Sex sex = _context.Sex.Where(w => w.Id == moviePerson.Person.SexId).FirstOrDefault();
+                        Sex sex = _context.Sex.FirstOrDefault(x => x.Id == moviePerson.Person.SexId);
                         if (sex != null)
                             moviePerson.Person.Sex.Name = sex.Name;
                     }

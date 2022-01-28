@@ -7,100 +7,113 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Movies</h4>
+    <h4>Movie</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.YearOfPublication)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.YearOfPublication)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.InStock)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.InStock)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Added)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Added)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.OnWatch)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.OnWatch)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Remark)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Remark)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Adult)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Adult)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ThreeD)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ThreeD)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Owner)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Owner)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IMDB)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IMDB)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Ranking)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Ranking)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LastView)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LastView)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Genre)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Genre.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.RecordCarrier)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.RecordCarrier.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.StorageLocation)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.StorageLocation.Name)
-        </dd>
-    </dl>
+    <h5>
+        @Html.DisplayFor(model => model.Name)
+    </h5>
+    <table>
+        <tr>
+            <td>
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.RunTime)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.RunTime)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Genre)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Genre.Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.YearOfPublication)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.YearOfPublication)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.InStock)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.InStock)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Added)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Added)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.OnWatch)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.OnWatch)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Remark)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Remark)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IMDB)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.IMDB)
+                    </dd>
+                </dl>
+            </td>
+            <td>
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Adult)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Adult)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ThreeD)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ThreeD)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Owner)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Owner)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Ranking)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Ranking)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.LastView)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.LastView)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.RecordCarrier)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.RecordCarrier.Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.StorageLocation)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.StorageLocation.Name)
+                    </dd>
+                </dl>
+            </td>
+        </tr>
+    </table>
     <h4>Darsteller</h4>
     <table class="table">
         <tbody>
@@ -108,10 +121,11 @@
                 <th>Name</th>
                 <th>Geschlecht</th>
                 <th>Alter bein Dreh</th>
+                <th></th>
             </tr>
             @foreach (var item in Model.MoviesPerson)
             {
-               
+
                 <tr>
                     <td>
                         <a asp-controller="Person" asp-action="Details" asp-route-id="@item.Person.Id">
@@ -123,6 +137,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Person.ActorsAge)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Practices)
                     </td>
                 </tr>
             }
