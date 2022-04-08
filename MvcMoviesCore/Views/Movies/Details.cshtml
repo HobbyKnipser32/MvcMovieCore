@@ -7,11 +7,8 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Movie</h4>
+    <h4>@Html.DisplayFor(model => model.Name)</h4>
     <hr />
-    <h5>
-        @Html.DisplayFor(model => model.Name)
-    </h5>
     <table>
         <tr>
             <td>
@@ -123,10 +120,10 @@
                 <th>Alter bein Dreh</th>
                 <th></th>
             </tr>
+            @{var i = 0;}
             @foreach (var item in Model.MoviesPerson)
             {
-
-                <tr>
+                <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
                     <td>
                         <a asp-controller="Person" asp-action="Details" asp-route-id="@item.Person.Id">
                             @Html.DisplayFor(modelItem => item.Person.Name)
@@ -142,6 +139,7 @@
                         @Html.DisplayFor(modelItem => item.Practices)
                     </td>
                 </tr>
+                i++;
             }
         </tbody>
     </table>
