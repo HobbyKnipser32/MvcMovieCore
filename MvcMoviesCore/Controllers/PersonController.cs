@@ -177,7 +177,7 @@ namespace MvcMoviesCore.Controllers
 
         private bool PersonExists(Guid id)
         {
-            return _context.Person.Any(e => e.Id == id);
+            return _context.Person.Any(e => e.Id.Equals(id));
         }
     }
 }
