@@ -20,7 +20,7 @@ namespace MvcMoviesCore.Controllers
         // GET: Person
         public async Task<IActionResult> Index(string filter = null)
         {
-            IQueryable<Person> mvcMovieCoreContext = _context.Person.Include(p => p.PersonType).Include(p => p.Sex).Include(p => p.Nationality).OrderBy(o => o.Name);
+            IQueryable<Person> mvcMovieCoreContext = _context.Person.Include(i => i.PersonType).Include(i => i.Sex).Include(i => i.Nationality).OrderBy(o => o.Name);
             if (!string.IsNullOrWhiteSpace(filter))
                 mvcMovieCoreContext = mvcMovieCoreContext.Where(w => w.Name.Contains(filter));
 
@@ -38,10 +38,10 @@ namespace MvcMoviesCore.Controllers
             }
 
             var person = await _context.Person
-                .Include(p => p.PersonType)
-                .Include(p => p.Sex)
-                .Include(p => p.Nationality)
-                .Include(p => p.MoviesPerson)
+                .Include(i => i.PersonType)
+                .Include(i => i.Sex)
+                .Include(i => i.Nationality)
+                .Include(i => i.MoviesPerson)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
@@ -153,8 +153,8 @@ namespace MvcMoviesCore.Controllers
             }
 
             var person = await _context.Person
-                .Include(p => p.PersonType)
-                .Include(p => p.Sex)
+                .Include(i => i.PersonType)
+                .Include(i => i.Sex)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
@@ -173,6 +173,32 @@ namespace MvcMoviesCore.Controllers
             _context.Person.Remove(person);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Birthdays(DateTime birthday = new DateTime())
+        {
+            if (birthday == null || birthday == DateTime.MinValue)
+                birthday = DateTime.Today;
+
+            var persons = await _context.Person
+                                        .Where(w => w.Birthday.Value.Month == birthday.Month && w.Birthday.Value.Day == birthday.Day)
+                                        .Include(i => i.PersonType)
+                                        .Include(i => i.Sex)
+                                        .Include(i => i.Nationality)
+                                        .Include(i => i.MoviesPerson)
+                                        .OrderBy(o => o.Name).ToListAsync();
+            foreach (var person in persons)
+            {
+                person.ActorsAge = person.Obit == null ? (birthday.Year - person.Birthday.Value.Year).ToString() : person.GetActorsAge(person.Birthday, person.Obit);
+                foreach (var id in person.MoviesPerson)
+                {
+                    id.Movies = await _context.Movies.FirstOrDefaultAsync(f => f.Id == id.MoviesId);
+                    id.Movies.ActorsAge = id.Movies.GetActorsMovieAge(person.Birthday, id.Movies.YearOfPublication);
+                }
+                person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.YearOfPublication).ThenBy(t => t.Movies.Name).ToList();
+            }
+
+            return View(persons);
         }
 
         private bool PersonExists(Guid id)

@@ -30,8 +30,7 @@ namespace MvcMoviesCore.Controllers
                 return NotFound();
             }
 
-            var genre = await _context.Genre
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var genre = await _context.Genre.FirstOrDefaultAsync(m => m.Id == id);
             if (genre == null)
             {
                 return NotFound();
@@ -122,8 +121,7 @@ namespace MvcMoviesCore.Controllers
                 return NotFound();
             }
 
-            var genre = await _context.Genre
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var genre = await _context.Genre.FirstOrDefaultAsync(m => m.Id == id);
             if (genre == null)
             {
                 return NotFound();
