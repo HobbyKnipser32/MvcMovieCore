@@ -177,7 +177,7 @@ namespace MvcMoviesCore.Controllers
 
         public async Task<IActionResult> Birthdays(DateTime birthday = new DateTime())
         {
-            if (birthday == null || birthday == DateTime.MinValue)
+            if (birthday == DateTime.MinValue)
                 birthday = DateTime.Today;
 
             var persons = await _context.Person
@@ -197,6 +197,7 @@ namespace MvcMoviesCore.Controllers
                 }
                 person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.YearOfPublication).ThenBy(t => t.Movies.Name).ToList();
             }
+            ViewData["BirthDay"] = birthday.ToShortDateString();
 
             return View(persons);
         }

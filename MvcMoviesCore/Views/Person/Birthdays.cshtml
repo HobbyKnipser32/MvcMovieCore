@@ -4,16 +4,15 @@
     ViewData["Title"] = "Geburtstage";
 }
 
-<h2>Geburtstag(e)</h2>
-@*<form method="get" class="form-inline">
-    <input type="text" name="filter" class="form-control" />
+<h2>
+    Geburtstag(e) @ViewData["BirthDay"]
+</h2>
+<form method="get" class="form-inline">
+    <input type="date" name="birthday" class="form-control" />
     <button type="submit" class="btn btn-info">
         <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
     </button>
 </form>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
 <table class="table">
     <thead>
         <tr>
