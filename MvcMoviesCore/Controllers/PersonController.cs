@@ -208,8 +208,9 @@ namespace MvcMoviesCore.Controllers
                 ViewData["BirthDay"] = $" {birthday.Day}.{birthday.Month:00}.";
             }
 
-            if (combine != null && combine.ToLower().Equals("on") && year > 0)
+            if (combine != null && combine.ToLower().Equals("on"))
             {
+                if (year == 0) year = birthday.Year;
                 persons = await _context.Person
                                         .Where(w => w.Birthday.Value.Year == year && w.Birthday.Value.Month == birthday.Month && w.Birthday.Value.Day == birthday.Day)
                                         .Include(i => i.PersonType)
