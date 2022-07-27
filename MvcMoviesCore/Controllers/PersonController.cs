@@ -176,7 +176,7 @@ namespace MvcMoviesCore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Birthdays(DateTime birthday = new DateTime(), int year = 0)
+        public async Task<IActionResult> Birthdays(string combine, DateTime birthday = new DateTime(), int year = 0)
         {
             if (birthday == DateTime.MinValue)
                 birthday = DateTime.Today;
@@ -198,14 +198,27 @@ namespace MvcMoviesCore.Controllers
             else
             {
                 persons = await _context.Person
-                                            .Where(w => w.Birthday.Value.Month == birthday.Month && w.Birthday.Value.Day == birthday.Day)
-                                            .Include(i => i.PersonType)
-                                            .Include(i => i.Sex)
-                                            .Include(i => i.Nationality)
-                                            .Include(i => i.MoviesPerson)
-                                            .OrderBy(o => o.PersonType)
-                                            .ThenBy(t => t.Name).ToListAsync();
+                                        .Where(w => w.Birthday.Value.Month == birthday.Month && w.Birthday.Value.Day == birthday.Day)
+                                        .Include(i => i.PersonType)
+                                        .Include(i => i.Sex)
+                                        .Include(i => i.Nationality)
+                                        .Include(i => i.MoviesPerson)
+                                        .OrderBy(o => o.PersonType)
+                                        .ThenBy(t => t.Name).ToListAsync();
                 ViewData["BirthDay"] = $" {birthday.Day}.{birthday.Month:00}.";
+            }
+
+            if (combine != null && combine.ToLower().Equals("on") && year > 0)
+            {
+                persons = await _context.Person
+                                        .Where(w => w.Birthday.Value.Year == year && w.Birthday.Value.Month == birthday.Month && w.Birthday.Value.Day == birthday.Day)
+                                        .Include(i => i.PersonType)
+                                        .Include(i => i.Sex)
+                                        .Include(i => i.Nationality)
+                                        .Include(i => i.MoviesPerson)
+                                        .OrderBy(o => o.PersonType)
+                                        .ThenBy(t => t.Name).ToListAsync();
+                ViewData["BirthDay"] = $" {birthday.Day:00}.{birthday.Month:00}.{year}";
             }
 
             foreach (var person in persons)
