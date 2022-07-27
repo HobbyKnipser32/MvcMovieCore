@@ -8,10 +8,23 @@
     Geburtstag(e) @ViewData["BirthDay"]
 </h2>
 <form method="get" class="form-inline">
-    <input type="date" name="birthday" class="form-control" />
-    <button type="submit" class="btn btn-info">
-        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
-    </button>
+    <p>
+        Geburtstag:
+        <input type="date" name="birthday" class="form-control" />
+        <button type="submit" class="btn btn-info">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> suchen
+        </button>
+    </p>
+    <p>
+        Jahr:
+        <input type="number" name="year" class="form-control" />
+        <button type="submit" class="btn btn-info">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> suchen
+        </button>
+    </p>
+    <p>
+        <input type="checkbox" id="combine" name="combine" class="form-control" />
+    </p>
 </form>
 <table class="table">
     <thead>

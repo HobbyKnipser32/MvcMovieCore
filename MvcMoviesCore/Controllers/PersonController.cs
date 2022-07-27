@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcMoviesCore.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -175,18 +176,38 @@ namespace MvcMoviesCore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Birthdays(DateTime birthday = new DateTime())
+        public async Task<IActionResult> Birthdays(DateTime birthday = new DateTime(), int year = 0)
         {
             if (birthday == DateTime.MinValue)
                 birthday = DateTime.Today;
 
-            var persons = await _context.Person
-                                        .Where(w => w.Birthday.Value.Month == birthday.Month && w.Birthday.Value.Day == birthday.Day)
+            var persons = new List<Person>();
+
+            if (year > 0)
+            {
+                persons = await _context.Person
+                                        .Where(w => w.Birthday.Value.Year == year)
                                         .Include(i => i.PersonType)
                                         .Include(i => i.Sex)
                                         .Include(i => i.Nationality)
                                         .Include(i => i.MoviesPerson)
-                                        .OrderBy(o => o.Name).ToListAsync();
+                                        .OrderBy(o => o.PersonType)
+                                        .ThenBy(t => t.Name).ToListAsync();
+                ViewData["BirthDay"] = $" im Jahr {year}";
+            }
+            else
+            {
+                persons = await _context.Person
+                                            .Where(w => w.Birthday.Value.Month == birthday.Month && w.Birthday.Value.Day == birthday.Day)
+                                            .Include(i => i.PersonType)
+                                            .Include(i => i.Sex)
+                                            .Include(i => i.Nationality)
+                                            .Include(i => i.MoviesPerson)
+                                            .OrderBy(o => o.PersonType)
+                                            .ThenBy(t => t.Name).ToListAsync();
+                ViewData["BirthDay"] = $" {birthday.Day}.{birthday.Month:00}.";
+            }
+
             foreach (var person in persons)
             {
                 person.ActorsAge = person.Obit == null ? (birthday.Year - person.Birthday.Value.Year).ToString() : person.GetActorsAge(person.Birthday, person.Obit);
@@ -197,7 +218,7 @@ namespace MvcMoviesCore.Controllers
                 }
                 person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.YearOfPublication).ThenBy(t => t.Movies.Name).ToList();
             }
-            ViewData["BirthDay"] = birthday.ToShortDateString();
+            //ViewData["BirthDay"] = birthday.ToShortDateString();
 
             return View(persons);
         }
