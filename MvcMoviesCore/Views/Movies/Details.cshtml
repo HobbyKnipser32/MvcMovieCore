@@ -120,7 +120,9 @@
                 <th>Alter bein Dreh</th>
                 <th></th>
             </tr>
-            @{var i = 0;}
+            @{
+                var i = 0;
+            }
             @foreach (var item in Model.MoviesPerson)
             {
                 <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
@@ -137,6 +139,11 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Practices)
+                    </td>
+                    <td>
+                        <form>
+                            <button name="id" style="background-color: transparent; color: red" value="@item.Id" asp-action="DeleteLink">Verknüpfung entfernen</button>
+                        </form>
                     </td>
                 </tr>
                 i++;

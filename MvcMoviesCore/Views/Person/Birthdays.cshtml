@@ -8,20 +8,17 @@
     Geburtstag(e) @ViewData["BirthDay"]
 </h2>
 <form method="get" class="form-inline">
-    <p>
-        Geburtstag:
-        <input type="date" name="birthday" class="form-control" />
-    </p>
-    <p>
-        Jahr:
-        <input type="number" name="year" class="form-control" />
-    </p>
-    <p>
-        <input type="checkbox" id="combine" name="combine" class="form-control" />
-    </p>
-        <button type="submit" class="btn btn-info">
-            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> suchen
-        </button>
+    <dl class="dl-horizontal">
+        <dt>Geburtstag:</dt>
+        <dd><input type="date" name="birthday" class="form-control" /></dd>
+        <dt>Jahr:</dt>
+        <dd><input type="number" name="year" class="form-control" /></dd>
+        <dt>exaktes Datum:</dt>
+        <dd><input type="checkbox" id="combine" name="combine" class="form-control" /></dd>
+    </dl>
+    <button type="submit" class="btn btn-info">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> suchen
+    </button>
 </form>
 <table class="table">
     <thead>
@@ -32,9 +29,6 @@
             <th>
                 Aktuelles Alter
             </th>
-            @*<th>
-            @Html.DisplayNameFor(model => model.Obit)
-            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Nationality)
             </th>
@@ -79,9 +73,7 @@
                     @Html.DisplayFor(modelItem => item.Sex.Name)
                 </td>
                 <td>
-                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> @*|*@
-                    @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                 </td>
             </tr>
             @foreach (var movies in item.MoviesPerson)

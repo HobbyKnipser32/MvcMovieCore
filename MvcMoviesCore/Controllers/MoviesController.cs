@@ -41,7 +41,7 @@ namespace MvcMoviesCore.Controllers
 
             var model = await PagingList.CreateAsync(mvcMovieCoreContext, 10, page, sortExpression, "Name");
 
-            model.RouteValue = new RouteValueDictionary {{ "filter", filter}};
+            model.RouteValue = new RouteValueDictionary { { "filter", filter } };
 
             return View(model);
         }
@@ -204,6 +204,34 @@ namespace MvcMoviesCore.Controllers
 
             _context.Movies.Remove(movie);
             await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeleteLink(Guid? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var moviePerson = await _context.MoviesPerson
+                                            .Include(i => i.Movies)
+                                            .Include(i => i.Person)
+                                            .FirstOrDefaultAsync(f => f.Id == id);
+            if (moviePerson == null)
+                return NotFound();
+
+            return View(moviePerson);
+        }
+
+        [HttpPost, ActionName("DeleteLink")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteLinkConfirmed(Guid? id)
+        {
+            var moviePerson = await _context.MoviesPerson.FindAsync(id);
+            if (moviePerson != null)
+            {
+                _context.MoviesPerson.Remove(moviePerson);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Index));
         }
 
