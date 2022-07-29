@@ -224,7 +224,7 @@ namespace MvcMoviesCore.Controllers
 
         [HttpPost, ActionName("DeleteLink")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteLinkConfirmed(Guid? id)
+        public async Task<IActionResult> DeleteLinkConfirmed(Guid id)
         {
             var moviePerson = await _context.MoviesPerson.FindAsync(id);
             if (moviePerson != null)
