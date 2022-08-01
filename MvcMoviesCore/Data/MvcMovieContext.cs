@@ -32,5 +32,7 @@ namespace MvcMoviesCore.Models
         public DbSet<Nationality> Nationalities { get; set; }
 
         public DbSet<Scenes> Scenes { get; set; }
+
+        public DbSet<MovieRole> MovieRole { get; set; }
     }
 }

@@ -47,6 +47,24 @@ namespace MvcMoviesCore.Models
         /// <param name="endDate"></param>
         /// <param name="startDate"></param>
         /// <returns></returns>
-        private string GetAge(DateTime? endDate, DateTime? startDate) => ((int)((endDate - startDate)?.TotalDays / 365.25)).ToString();
+        private string GetAge(DateTime? endDate, DateTime? startDate)
+        {
+            if (startDate == null || endDate == null)
+                return "(-)";
+
+            var localStartDate = new DateTime();
+            var localEndDate = new DateTime();
+
+            if (startDate != null)
+                localStartDate = startDate.Value;
+            if (endDate != null)
+                localEndDate = endDate.Value;
+
+           var years = localEndDate.Year - localStartDate.Year - 1 +
+                    (((localEndDate.Month > localStartDate.Month) ||
+                     ((localEndDate.Month == localStartDate.Month) &&
+                      (localEndDate.Day >= localStartDate.Day))) ? 1 : 0);
+            return years.ToString();
+        }
     }
 }

@@ -119,6 +119,7 @@
                 <th>Geschlecht</th>
                 <th>Alter bein Dreh</th>
                 <th></th>
+                <th></th>
             </tr>
             @{
                 var i = 0;
@@ -138,11 +139,18 @@
                         @Html.DisplayFor(modelItem => item.Person.ActorsAge)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Practices)
+                        @if (item.Practices != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Practices)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.MovieRole.Name)
+                        }
                     </td>
                     <td>
                         <form>
-                            <button name="id" style="background-color: transparent; color: red" value="@item.Id" asp-action="DeleteLink">Verknüpfung entfernen</button>
+                            <button name="id" style="background-color: transparent; color: red; border: hidden" value="@item.Id" asp-action="DeleteLink">Verknüpfung entfernen</button>
                         </form>
                     </td>
                 </tr>

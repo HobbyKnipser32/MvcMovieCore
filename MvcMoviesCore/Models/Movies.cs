@@ -28,6 +28,7 @@ namespace MvcMoviesCore.Models
 
         public Guid? StorageLocationId { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime? Added { get; set; }
 
         public string OnWatch { get; set; }

@@ -2,6 +2,7 @@ namespace MvcMoviesCore.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("Person")]
@@ -18,9 +19,11 @@ namespace MvcMoviesCore.Models
 
         public Guid SexId { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         [Column(TypeName = "datetime2")]
         public DateTime? Birthday { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         [Column(TypeName = "datetime2")]
         public DateTime? Obit { get; set; }
 

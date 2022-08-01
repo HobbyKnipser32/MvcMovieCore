@@ -59,6 +59,7 @@ namespace MvcMoviesCore.Controllers
                 .Include(i => i.RecordCarrier)
                 .Include(i => i.StorageLocation)
                 .Include(i => i.MoviesPerson)
+                .ThenInclude(t => t.MovieRole)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movies == null)
             {

@@ -13,5 +13,7 @@ namespace MvcMoviesCore.Models
         public virtual Movies Movies { get; set; }
 
         public virtual Person Person { get; set; }
+
+        public virtual MovieRole MovieRole { get; set; }
     }
 }
