@@ -219,6 +219,8 @@ namespace MvcMoviesCore.Controllers
             if (moviePerson == null)
                 return NotFound();
 
+            ViewData["Referer"] = Request.Headers["Referer"].ToString();
+
             return View(moviePerson);
         }
 
