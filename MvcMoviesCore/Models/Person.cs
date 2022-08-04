@@ -19,10 +19,12 @@ namespace MvcMoviesCore.Models
 
         public Guid SexId { get; set; }
 
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         [Column(TypeName = "datetime2")]
         public DateTime? Birthday { get; set; }
 
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         [Column(TypeName = "datetime2")]
         public DateTime? Obit { get; set; }

@@ -1,4 +1,7 @@
-﻿@model IEnumerable<MvcMoviesCore.Models.Person>
+﻿@*@model IEnumerable<MvcMoviesCore.Models.Person>*@
+@using ReflectionIT.Mvc.Paging
+@model ReflectionIT.Mvc.Paging.PagingList<MvcMoviesCore.Models.Person>
+@addTagHelper *, ReflectionIT.Mvc.Paging
 
 @{
     ViewData["Title"] = "Index";
@@ -14,6 +17,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<nav aria-label="Movies navigation">
+    @await this.Component.InvokeAsync("Pager", new { PagingList = this.Model })
+</nav>
 <table class="table">
     <thead>
         <tr>
@@ -45,38 +51,43 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Birthday)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Obit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nationality.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Height)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Weight)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PersonType.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sex.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Birthday)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Obit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nationality.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Height)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Weight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PersonType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sex.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<nav aria-label="Movies navigation">
+    <vc:pager paging-list="@Model" />
+</nav>

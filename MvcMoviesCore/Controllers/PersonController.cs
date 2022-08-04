@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcMoviesCore.Models;
+using ReflectionIT.Mvc.Paging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,15 +20,23 @@ namespace MvcMoviesCore.Controllers
         }
 
         // GET: Person
-        public async Task<IActionResult> Index(string filter = null)
+        public async Task<IActionResult> Index(string filter = null, string sortExpression = "Name", int page = 1)
         {
-            IQueryable<Person> mvcMovieCoreContext = _context.Person.Include(i => i.PersonType).Include(i => i.Sex).Include(i => i.Nationality).OrderBy(o => o.Name);
+            var mvcMovieCoreContext = _context.Person
+                                              .Include(i => i.PersonType)
+                                              .Include(i => i.Sex)
+                                              .Include(i => i.Nationality)
+                                              .OrderBy(o => o.Name)
+                                              .AsQueryable();
             if (!string.IsNullOrWhiteSpace(filter))
                 mvcMovieCoreContext = mvcMovieCoreContext.Where(w => w.Name.Contains(filter));
 
             //model.RouteValue = new RouteValueDictionary { { "filter", filter } };
 
-            return View(await mvcMovieCoreContext.ToListAsync());
+            var model = await PagingList.CreateAsync(mvcMovieCoreContext, 20, page, sortExpression, "Name");
+
+            return View(model);
+            //return View(await mvcMovieCoreContext.ToListAsync());
         }
 
         // GET: Person/Details/5
@@ -113,7 +122,7 @@ namespace MvcMoviesCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,SexId,Birthday,Obit,Nationality,Größe,Gewicht,PersonTypesId")] Person person)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Größe,Gewicht,PersonTypesId")] Person person)
         {
             if (id != person.Id)
             {

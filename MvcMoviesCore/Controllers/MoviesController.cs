@@ -39,7 +39,7 @@ namespace MvcMoviesCore.Controllers
             if (!_showAdult)
                 mvcMovieCoreContext = mvcMovieCoreContext.Where(w => w.Adult == false);
 
-            var model = await PagingList.CreateAsync(mvcMovieCoreContext, 10, page, sortExpression, "Name");
+            var model = await PagingList.CreateAsync(mvcMovieCoreContext, 20, page, sortExpression, "Name");
 
             model.RouteValue = new RouteValueDictionary { { "filter", filter } };
 
