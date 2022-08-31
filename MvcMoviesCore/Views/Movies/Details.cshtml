@@ -158,6 +158,26 @@
             }
         </tbody>
     </table>
+    @if (Model.Scenes != null && Model.Scenes.Any())
+    {
+        <h4>Szenen Aufschlüsselung</h4>
+        <table class="table">
+            <tbody>
+                @{
+                    i = 0;
+                }
+                @foreach (var scene in Model.Scenes)
+                {
+                    <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
+                        <td>
+                            @Html.DisplayFor(model => scene)
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    }
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

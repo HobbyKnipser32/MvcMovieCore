@@ -61,6 +61,9 @@ namespace MvcMoviesCore.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal? RunTime { get; set; }
 
+        [NotMapped]
+        public List<string> Scenes { get; set; }
+
         [Required]
         public virtual Genre Genre { get; set; }
 

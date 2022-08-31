@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using MvcMoviesCore.Models;
 using ReflectionIT.Mvc.Paging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,27 +56,30 @@ namespace MvcMoviesCore.Controllers
                 return NotFound();
             }
 
-            var movies = await _context.Movies
+            var movie = await _context.Movies
                 .Include(i => i.Genre)
                 .Include(i => i.RecordCarrier)
                 .Include(i => i.StorageLocation)
                 .Include(i => i.MoviesPerson)
                 .ThenInclude(t => t.MovieRole)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movies == null)
+            if (movie == null)
             {
                 return NotFound();
             }
 
-            foreach (var mpId in movies.MoviesPerson)
+
+            foreach (var mpId in movie.MoviesPerson)
             {
                 mpId.Person = await _context.Person.Include(i => i.Sex).FirstOrDefaultAsync(f => f.Id == mpId.PersonId);
-                mpId.Person.ActorsAge = mpId.Person.GetActorsMovieAge(mpId.Person.Birthday, movies.YearOfPublication);
+                mpId.Person.ActorsAge = mpId.Person.GetActorsMovieAge(mpId.Person.Birthday, movie.YearOfPublication);
             }
 
-            movies.MoviesPerson = movies.MoviesPerson.OrderBy(o => o.Person.Sex.Name).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
+            movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Sex.Name).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
 
-            return View(movies);
+            movie.Scenes = GetScenes(id);
+
+            return View(movie);
         }
 
         // GET: Movies/Create
@@ -241,6 +246,52 @@ namespace MvcMoviesCore.Controllers
         private bool MoviesExists(Guid id)
         {
             return _context.Movies.Any(e => e.Id == id);
+        }
+
+        private List<string> GetScenes(Guid? movieId)
+        {
+            var moviePersons = _context.MoviesPerson
+                .Where(w => w.MoviesId.Equals(movieId))
+                .Include(i => i.Person)
+                .ThenInclude(t => t.Sex)
+                .ToList();
+
+            if (!moviePersons.Any())
+                return null;
+
+            var scenes = new List<ViewModelScenes>();
+
+            foreach (var moviePerson in moviePersons)
+            {
+                var scenen = _context.Scenes.Where(w => w.MoviesPersonsId.Equals(moviePerson.Id)).ToList();
+                if (scenen.Any())
+                {
+                    foreach (var scene in scenen)
+                    {
+                        scenes.Add(new ViewModelScenes
+                        {
+                            Nr = scene.Scene,
+                            Name = moviePerson.Person.Name,
+                            Sex = moviePerson.Person.Sex.Name
+                        });
+                    }
+                }
+            }
+
+            var szenen = new List<string>();
+            foreach (var scene in scenes.GroupBy(g => g.Nr).OrderBy(o => o.Key))
+            {
+                var s = scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.Sex).ThenBy(o => o.Name).ToList();
+                string szene = $"Szene {scene.Key}: ";
+                foreach (var t in s)
+                {
+                    szene += $"{t.Name}, ";
+                }
+                szene = szene.Substring(0, szene.Length - 2);
+                szenen.Add(szene);
+
+            }
+            return szenen;
         }
     }
 }
