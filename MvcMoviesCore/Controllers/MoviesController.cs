@@ -77,7 +77,7 @@ namespace MvcMoviesCore.Controllers
 
             movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Sex.Name).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
 
-            movie.Scenes = GetScenes(id);
+            movie.Scenes = await GetScenes(id);
 
             return View(movie);
         }
@@ -251,13 +251,13 @@ namespace MvcMoviesCore.Controllers
             return _context.Movies.Any(e => e.Id == id);
         }
 
-        private List<string> GetScenes(Guid? movieId)
+        private async Task<List<string>> GetScenes(Guid? movieId)
         {
-            var moviePersons = _context.MoviesPerson
+            var moviePersons = await _context.MoviesPerson
                 .Where(w => w.MoviesId.Equals(movieId))
                 .Include(i => i.Person)
                 .ThenInclude(t => t.Sex)
-                .ToList();
+                .ToListAsync();
 
             if (!moviePersons.Any())
                 return null;
@@ -266,7 +266,7 @@ namespace MvcMoviesCore.Controllers
 
             foreach (var moviePerson in moviePersons)
             {
-                var scenen = _context.Scenes.Where(w => w.MoviesPersonsId.Equals(moviePerson.Id)).ToList();
+                var scenen = await _context.Scenes.Where(w => w.MoviesPersonsId.Equals(moviePerson.Id)).ToListAsync();
                 if (scenen.Any())
                 {
                     foreach (var scene in scenen)
