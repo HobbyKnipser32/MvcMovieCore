@@ -237,6 +237,9 @@ namespace MvcMoviesCore.Controllers
             var moviePerson = await _context.MoviesPerson.FindAsync(id);
             if (moviePerson != null)
             {
+                var scenes = _context.Scenes.Where(w=>w.MoviesPersonsId.Equals(moviePerson.Id)).ToList();
+                if (scenes.Any())
+                    _context.Scenes.RemoveRange(scenes);
                 _context.MoviesPerson.Remove(moviePerson);
                 await _context.SaveChangesAsync();
             }
