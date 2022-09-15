@@ -66,7 +66,7 @@ namespace MvcMoviesCore.Controllers
                 mpId.Movies.ActorsAge = mpId.Movies.GetActorsMovieAge(person.Birthday, mpId.Movies.YearOfPublication);
             }
 
-            person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.YearOfPublication).ThenBy(t => t.Movies.Name).ToList();
+            person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication).ToList();
 
             return View(person);
         }
