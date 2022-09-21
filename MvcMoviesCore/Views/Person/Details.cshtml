@@ -1,4 +1,8 @@
 ﻿@model MvcMoviesCore.Models.Person
+@using ReflectionIT.Mvc.Paging
+@*@model IEnumerable<MvcMoviesCore.Models.Movies>*@
+201@*@model ReflectionIT.Mvc.Paging.PagingList<MvcMoviesCore.Models.MoviesPerson>*@
+@addTagHelper *, ReflectionIT.Mvc.Paging
 
 @{
     ViewData["Title"] = "Details";
@@ -67,6 +71,24 @@
     </dl>
     <h4>Film(e)</h4>
     <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Film
+                    @*@Html.SortableHeaderFor(Model.MoviesPerson )*@
+                </th>
+                <th>
+                    Erscheinungsjahr
+                </th>
+                <th>
+                    Alter
+                </th>
+                <th>
+                    Praxis
+                </th>
+                <th></th>
+            </tr>
+        </thead>
         <tbody>
             @foreach (var item in Model.MoviesPerson)
             {
