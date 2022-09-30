@@ -35,7 +35,7 @@
                         @Html.DisplayNameFor(model => model.InStock)
                     </dt>
                     <dd>
-                        @Html.DisplayFor(model => model.Added)
+                        @Html.DisplayFor(model => model.InStock)
                     </dd>
                     <dt>
                         @Html.DisplayNameFor(model => model.OnWatch)
@@ -56,7 +56,7 @@
                         @Html.DisplayFor(model => model.IMDB)
                     </dd>
                     <dt>
-                        Datum zur Datenbank hinzugefügt:
+                        Zur Datenbank hinzugefügt:
                     </dt>
                     <dd>
                         @if (Model.Added == null || Model.Added == DateTime.MinValue)
