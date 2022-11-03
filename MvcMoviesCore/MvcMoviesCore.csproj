@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Shared\MoviesDetailView.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.3" />
@@ -22,4 +26,16 @@
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
-</Project>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Shared\MoviesDetailView.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Shared\MoviesDetailView.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\MoviesDetailView.razor" />
+  </ItemGroup>
+
+</Project> 
