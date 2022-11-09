@@ -239,7 +239,7 @@ namespace MvcMoviesCore.Controllers
                     id.Movies = await _context.Movies.FirstOrDefaultAsync(f => f.Id == id.MoviesId);
                     id.Movies.ActorsAge = id.Movies.GetActorsMovieAge(person.Birthday, id.Movies.YearOfPublication);
                 }
-                person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.YearOfPublication).ThenBy(t => t.Movies.Name).ToList();
+                person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.YearOfPublication).ThenBy(t => t.Movies.Name).Take(5).ToList();
             }
             //ViewData["BirthDay"] = birthday.ToShortDateString();
 
