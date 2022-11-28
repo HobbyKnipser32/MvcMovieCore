@@ -24,7 +24,7 @@ namespace MvcMoviesCore.Models
 
         public Guid? RecordCarrierId { get; set; }
 
-        public bool InStock { get; set; }
+        public bool? InStock { get; set; }
 
         public Guid? StorageLocationId { get; set; }
 
@@ -37,7 +37,7 @@ namespace MvcMoviesCore.Models
 
         public bool Adult { get; set; }
 
-        public bool ThreeD { get; set; }
+        public bool? ThreeD { get; set; }
 
         public string Owner { get; set; }
 
