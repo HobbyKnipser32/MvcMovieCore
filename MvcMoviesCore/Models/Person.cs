@@ -33,7 +33,10 @@ namespace MvcMoviesCore.Models
 
         public decimal? Height { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:0}")]
         public decimal? Weight { get; set; }
+
+        public int? Classification { get; set; }
 
         public Guid PersonTypesId { get; set; }
 

@@ -136,7 +136,14 @@
                 <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
                     <td>
                         <a asp-controller="Person" asp-action="Details" asp-route-id="@item.Person.Id">
-                            @Html.DisplayFor(modelItem => item.Person.Name)
+                            @if (item.Person.Classification != null && item.Person.Classification < 8)
+                            {
+                                <b>@Html.DisplayFor(modelItem => item.Person.Name)</b>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.Person.Name)
+                            }
                         </a>
                     </td>
                     <td>
@@ -177,7 +184,7 @@
                 {
                     <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
                         <td>
-                            @Html.DisplayFor(model => scene)
+                            @Html.DisplayTextFor(model => scene) @*/.WriteTo(Output, HtmlEncoder.Encode)*@
                         </td>
                     </tr>
                     i++;
