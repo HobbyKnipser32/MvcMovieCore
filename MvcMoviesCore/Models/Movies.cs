@@ -24,7 +24,7 @@ namespace MvcMoviesCore.Models
 
         public Guid? RecordCarrierId { get; set; }
 
-        public bool InStock { get; set; }
+        public bool? InStock { get; set; }
 
         public Guid? StorageLocationId { get; set; }
 

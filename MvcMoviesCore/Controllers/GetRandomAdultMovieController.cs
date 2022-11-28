@@ -26,19 +26,21 @@ namespace MvcMoviesCore.Controllers
             {
                 int random = new Random().Next(0, movies.Count() - 1);
                 var movie = movies[random];
-                foreach (var moviePerson in movie.MoviesPerson)
-                {
-                    if (moviePerson.Person != null)
-                    {
-                        var personAge = new Person();
-                        moviePerson.Person.ActorsAge = personAge.GetActorsMovieAge(moviePerson.Person.Birthday, movie.YearOfPublication);
-                        Sex sex = _context.Sex.FirstOrDefault(x => x.Id == moviePerson.Person.SexId);
-                        if (sex != null)
-                            moviePerson.Person.Sex.Name = sex.Name;
-                    }
-                }
-                movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Sex.Name).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
-                return View(movie);
+                return Redirect($"Movies/Details/{movie.Id}");
+                //foreach (var moviePerson in movie.MoviesPerson)
+                //{
+                //    if (moviePerson.Person != null)
+                //    {
+                //        var personAge = new Person();
+                //        moviePerson.Person.ActorsAge = personAge.GetActorsMovieAge(moviePerson.Person.Birthday, movie.YearOfPublication);
+                //        Sex sex = _context.Sex.FirstOrDefault(x => x.Id == moviePerson.Person.SexId);
+                //        if (sex != null)
+                //            moviePerson.Person.Sex.Name = sex.Name;
+                //    }
+                //}
+                //movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Sex.Name).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
+                //return RedirectToAction("Details", "Movies", movie.Id);
+                    //View(movie);
             }
 
             return View();

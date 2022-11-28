@@ -48,6 +48,22 @@ namespace MvcMoviesCore.Controllers
             return View(model);
         }
 
+        //public async void RandomAdultMovie()
+        //{
+        //    var movies = _context.Movies
+        //                       .Include(i => i.MoviesPerson)
+        //                       .ThenInclude(moviesPerson => moviesPerson.Person)
+        //                       .Where(w => w.Adult == true && w.InStock == true && !(w.OnWatch.Contains("o") || w.OnWatch.Contains("-")))
+        //                       .ToList();
+        //    if (movies.Any())
+        //    {
+        //        int random = new Random().Next(0, movies.Count() - 1);
+        //        var movie = movies[random];
+        //        if (movie != null)
+        //            Details(movie.Id);
+        //    }
+        //}
+
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -239,7 +255,10 @@ namespace MvcMoviesCore.Controllers
             {
                 var scenes = _context.Scenes.Where(w => w.MoviesPersonsId.Equals(moviePerson.Id)).ToList();
                 if (scenes.Any())
+                {
                     _context.Scenes.RemoveRange(scenes);
+                    await _context.SaveChangesAsync();
+                }
                 _context.MoviesPerson.Remove(moviePerson);
                 await _context.SaveChangesAsync();
             }
@@ -275,7 +294,8 @@ namespace MvcMoviesCore.Controllers
                         {
                             Nr = scene.Scene,
                             Name = moviePerson.Person.Name,
-                            Sex = moviePerson.Person.Sex.Name
+                            Sex = moviePerson.Person.Sex.Name,
+                            Classification = moviePerson.Person.Classification
                         });
                     }
                 }
@@ -288,6 +308,9 @@ namespace MvcMoviesCore.Controllers
                 string szene = $"Szene {scene.Key}: ";
                 foreach (var t in s)
                 {
+                    //if (t.Classification != null && t.Classification < 8)
+                    //    szene += $"<b>{t.Name}</b>, ";
+                    //else
                     szene += $"{t.Name}, ";
                 }
                 szene = szene.Substring(0, szene.Length - 2);
