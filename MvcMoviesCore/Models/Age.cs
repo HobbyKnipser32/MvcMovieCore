@@ -17,11 +17,11 @@ namespace MvcMoviesCore.Models
         /// <param name="birthDay">Birthday of the Person</param>
         /// <param name="yearOfPublication">Start of the movie</param>
         /// <returns></returns>
-        public string GetActorsMovieAge(DateTime? birthDay, DateTime? yearOfPublication)
+        public string GetActorsAgeInMovie(DateTime? birthDay, DateTime? yearOfPublication)
         {
             var age = "(-)";
             if (birthDay != null && yearOfPublication != null)
-                return GetAge(yearOfPublication, birthDay);
+                return GetAge(birthDay, yearOfPublication);
             return age;
         }
 
@@ -36,7 +36,7 @@ namespace MvcMoviesCore.Models
             var age = "(-)";
 
             if (birthDay != null)
-                return obit != null ? $"{GetAge(obit, birthDay)} (†)" : GetAge(DateTime.Now, birthDay);
+                return obit != null ? $"{GetAge(birthDay, obit )} (†)" : GetAge(birthDay, DateTime.Now);
 
             return age;
         }
@@ -44,27 +44,26 @@ namespace MvcMoviesCore.Models
         /// <summary>
         /// Get the current age.
         /// </summary>
-        /// <param name="endDate"></param>
         /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
         /// <returns></returns>
-        private string GetAge(DateTime? endDate, DateTime? startDate)
+        private string GetAge(DateTime? startDate, DateTime? endDate)
         {
             if (startDate == null || endDate == null)
                 return "(-)";
 
-            var localStartDate = new DateTime();
             var localEndDate = new DateTime();
+            var localStartDate = new DateTime();
 
             if (startDate != null)
                 localStartDate = startDate.Value;
             if (endDate != null)
                 localEndDate = endDate.Value;
 
-           var years = localEndDate.Year - localStartDate.Year - 1 +
-                    (((localEndDate.Month > localStartDate.Month) ||
-                     ((localEndDate.Month == localStartDate.Month) &&
-                      (localEndDate.Day >= localStartDate.Day))) ? 1 : 0);
-            return years.ToString();
+            return (localEndDate.Year - localStartDate.Year - 1 +
+                 (((localStartDate.Month < localEndDate.Month) ||
+                  ((localStartDate.Month == localEndDate.Month) &&
+                   (localStartDate.Day <= localEndDate.Day))) ? 1 : 0)).ToString();
         }
     }
 }

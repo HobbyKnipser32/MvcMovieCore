@@ -63,7 +63,7 @@ namespace MvcMoviesCore.Controllers
             foreach (var mpId in person.MoviesPerson)
             {
                 mpId.Movies = await _context.Movies.FirstOrDefaultAsync(f => f.Id == mpId.MoviesId);
-                mpId.Movies.ActorsAge = mpId.Movies.GetActorsMovieAge(person.Birthday, mpId.Movies.YearOfPublication);
+                mpId.Movies.ActorsAge = mpId.Movies.GetActorsAgeInMovie(person.Birthday, mpId.Movies.YearOfPublication);
             }
 
             person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication).ToList();
@@ -237,7 +237,7 @@ namespace MvcMoviesCore.Controllers
                 foreach (var id in person.MoviesPerson)
                 {
                     id.Movies = await _context.Movies.FirstOrDefaultAsync(f => f.Id == id.MoviesId);
-                    id.Movies.ActorsAge = id.Movies.GetActorsMovieAge(person.Birthday, id.Movies.YearOfPublication);
+                    id.Movies.ActorsAge = id.Movies.GetActorsAgeInMovie(person.Birthday, id.Movies.YearOfPublication);
                 }
                 person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.YearOfPublication).ThenBy(t => t.Movies.Name).Take(5).ToList();
             }

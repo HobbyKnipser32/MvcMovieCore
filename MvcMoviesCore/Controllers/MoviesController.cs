@@ -88,10 +88,10 @@ namespace MvcMoviesCore.Controllers
             foreach (var mpId in movie.MoviesPerson)
             {
                 mpId.Person = await _context.Person.Include(i => i.Sex).FirstOrDefaultAsync(f => f.Id == mpId.PersonId);
-                if (mpId.Person.Obit == null)
-                    mpId.Person.ActorsAge = mpId.Person.GetActorsMovieAge(mpId.Person.Birthday, movie.YearOfPublication);
-                else
+                if (mpId.Person.Obit != null && mpId.Person.Obit.Value.Year < movie.YearOfPublication.Value.Year)
                     mpId.Person.ActorsAge = mpId.Person.GetActorsAge(mpId.Person.Birthday, mpId.Person.Obit);
+                else
+                    mpId.Person.ActorsAge = mpId.Person.GetActorsAgeInMovie(mpId.Person.Birthday, movie.YearOfPublication);
             }
 
             movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Sex.Name).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
