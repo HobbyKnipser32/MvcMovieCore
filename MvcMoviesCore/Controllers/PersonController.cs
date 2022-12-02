@@ -180,6 +180,21 @@ namespace MvcMoviesCore.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var person = await _context.Person.FindAsync(id);
+            if (person != null)
+            {
+                var moviePersons = await _context.MoviesPerson.Where(w => w.PersonId.Equals(person.Id)).ToListAsync();
+                if (moviePersons.Any())
+                {
+                    foreach (var moviePerson in moviePersons)
+                    {
+                        var scenes = await _context.Scenes.Where(w => w.MoviesPersonsId.Equals(moviePerson.Id)).ToListAsync();
+                        _context.Scenes.RemoveRange(scenes);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+                _context.MoviesPerson.RemoveRange(moviePersons);
+                await _context.SaveChangesAsync();
+            }
             _context.Person.Remove(person);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
