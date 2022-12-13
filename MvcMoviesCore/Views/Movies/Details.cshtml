@@ -180,11 +180,31 @@
                 @{
                     i = 0;
                 }
-                @foreach (var scene in Model.Scenes)
+                @foreach (var scene in Model.Scenes.GroupBy(g => g.Nr).OrderBy(o => o.Key))
                 {
                     <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
                         <td>
-                            @Html.DisplayTextFor(model => scene) @*/.WriteTo(Output, HtmlEncoder.Encode)*@
+                            Szene @Html.DisplayTextFor(model => scene.Key):&nbsp;
+                            @{
+                                var s = Model.Scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.Sex).ThenBy(o => o.Name).ToList();
+                            }
+                            @foreach (var t in s)
+                            {
+                                if (t.Classification < 8)
+                                {
+                                    <b>
+                                        @Html.DisplayTextFor(model => t.Name)
+                                    </b>
+                                }
+                                else
+                                {
+                                    @Html.DisplayTextFor(model => t.Name)
+
+                                }
+                                <text>
+                                    &nbsp
+                                </text>
+                            }
                         </td>
                     </tr>
                     i++;

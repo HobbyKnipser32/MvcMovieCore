@@ -22,21 +22,18 @@ namespace MvcMoviesCore.Controllers
         // GET: Person
         public async Task<IActionResult> Index(string filter = null, string sortExpression = "Name", int page = 1)
         {
-            var mvcMovieCoreContext = _context.Person
-                                              .Include(i => i.PersonType)
-                                              .Include(i => i.Sex)
-                                              .Include(i => i.Nationality)
-                                              .OrderBy(o => o.Name)
-                                              .AsQueryable();
+            var persons = _context.Person
+                                  .Include(i => i.PersonType)
+                                  .Include(i => i.Sex)
+                                  .Include(i => i.Nationality)
+                                  .OrderBy(o => o.Name)
+                                  .AsQueryable();
             if (!string.IsNullOrWhiteSpace(filter))
-                mvcMovieCoreContext = mvcMovieCoreContext.Where(w => w.Name.Contains(filter));
+                persons = persons.Where(w => w.Name.Contains(filter));
 
-            //model.RouteValue = new RouteValueDictionary { { "filter", filter } };
-
-            var model = await PagingList.CreateAsync(mvcMovieCoreContext, 20, page, sortExpression, "Name");
+            var model = await PagingList.CreateAsync(persons, 20, page, sortExpression, "Name");
 
             return View(model);
-            //return View(await mvcMovieCoreContext.ToListAsync());
         }
 
         // GET: Person/Details/5

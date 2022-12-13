@@ -28,41 +28,25 @@ namespace MvcMoviesCore.Controllers
         {
             _showAdult = adult;
 
-            var mvcMovieCoreContext = _context.Movies
-                                              .Include(m => m.Genre)
-                                              .Include(m => m.RecordCarrier)
-                                              .Include(m => m.StorageLocation)
-                                              .OrderBy(o => o.Name)
-                                              .AsQueryable();
+            var movies = _context.Movies
+                                 .Include(m => m.Genre)
+                                 .Include(m => m.RecordCarrier)
+                                 .Include(m => m.StorageLocation)
+                                 .OrderBy(o => o.Name)
+                                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(filter))
-                mvcMovieCoreContext = mvcMovieCoreContext.Where(p => p.Name.Contains(filter));
+                movies = movies.Where(p => p.Name.Contains(filter));
 
             if (!_showAdult)
-                mvcMovieCoreContext = mvcMovieCoreContext.Where(w => w.Adult == false);
+                movies = movies.Where(w => w.Adult == false);
 
-            var model = await PagingList.CreateAsync(mvcMovieCoreContext, 20, page, sortExpression, "Name");
+            var model = await PagingList.CreateAsync(movies, 20, page, sortExpression, "Name");
 
             model.RouteValue = new RouteValueDictionary { { "filter", filter } };
 
             return View(model);
         }
-
-        //public async void RandomAdultMovie()
-        //{
-        //    var movies = _context.Movies
-        //                       .Include(i => i.MoviesPerson)
-        //                       .ThenInclude(moviesPerson => moviesPerson.Person)
-        //                       .Where(w => w.Adult == true && w.InStock == true && !(w.OnWatch.Contains("o") || w.OnWatch.Contains("-")))
-        //                       .ToList();
-        //    if (movies.Any())
-        //    {
-        //        int random = new Random().Next(0, movies.Count() - 1);
-        //        var movie = movies[random];
-        //        if (movie != null)
-        //            Details(movie.Id);
-        //    }
-        //}
 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(Guid? id)
@@ -95,6 +79,7 @@ namespace MvcMoviesCore.Controllers
             }
 
             movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Sex.Name).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
+            //movie.PagingList = await PagingList.CreateAsync(movie.MoviesPerson as IQueryable<MoviesPerson>, movie.MoviesPerson.Count, 1, "Id", "Id"); 
 
             movie.Scenes = await GetScenes(id);
 
@@ -273,7 +258,7 @@ namespace MvcMoviesCore.Controllers
             return _context.Movies.Any(e => e.Id == id);
         }
 
-        private async Task<List<string>> GetScenes(Guid? movieId)
+        private async Task<List<ViewModelScenes>> GetScenes(Guid? movieId)
         {
             var moviePersons = await _context.MoviesPerson
                 .Where(w => w.MoviesId.Equals(movieId))
@@ -311,16 +296,13 @@ namespace MvcMoviesCore.Controllers
                 string szene = $"Szene {scene.Key}: ";
                 foreach (var t in s)
                 {
-                    //if (t.Classification != null && t.Classification < 8)
-                    //    szene += $"<b>{t.Name}</b>, ";
-                    //else
                     szene += $"{t.Name}, ";
                 }
                 szene = szene.Substring(0, szene.Length - 2);
                 szenen.Add(szene);
 
             }
-            return szenen;
+            return scenes;
         }
     }
 }
