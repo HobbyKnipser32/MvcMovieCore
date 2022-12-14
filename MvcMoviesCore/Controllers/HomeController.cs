@@ -1,14 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MvcMoviesCore.Models;
 using System.Diagnostics;
+using System.Linq;
 
 namespace MvcMoviesCore.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly MvcMovieCoreContext _context;
+
+        public HomeController(MvcMovieCoreContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            var movies = _context.Movies
+                                 .Include(m => m.Genre)
+                                 .Include(m => m.RecordCarrier)
+                                 .Include(m => m.StorageLocation)
+                                 .OrderByDescending(o => o.CreateDate)
+                                 .ThenBy(t => t.Name)
+                                 .Take(20)
+                                 .AsQueryable();
+            return View(movies);
         }
 
         public IActionResult About()
