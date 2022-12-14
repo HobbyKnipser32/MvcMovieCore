@@ -78,7 +78,7 @@ namespace MvcMoviesCore.Controllers
                     mpId.Person.ActorsAge = mpId.Person.GetActorsAgeInMovie(mpId.Person.Birthday, movie.YearOfPublication);
             }
 
-            movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Classification).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
+            movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Classification ).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
             //movie.PagingList = await PagingList.CreateAsync(movie.MoviesPerson as IQueryable<MoviesPerson>, movie.MoviesPerson.Count, 1, "Id", "Id"); 
 
             movie.Scenes = await GetScenes(id);
