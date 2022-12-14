@@ -78,7 +78,7 @@ namespace MvcMoviesCore.Controllers
                     mpId.Person.ActorsAge = mpId.Person.GetActorsAgeInMovie(mpId.Person.Birthday, movie.YearOfPublication);
             }
 
-            movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Sex.Name).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
+            movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Classification).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
             //movie.PagingList = await PagingList.CreateAsync(movie.MoviesPerson as IQueryable<MoviesPerson>, movie.MoviesPerson.Count, 1, "Id", "Id"); 
 
             movie.Scenes = await GetScenes(id);
@@ -289,19 +289,19 @@ namespace MvcMoviesCore.Controllers
                 }
             }
 
-            var szenen = new List<string>();
-            foreach (var scene in scenes.GroupBy(g => g.Nr).OrderBy(o => o.Key))
-            {
-                var s = scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.Sex).ThenBy(o => o.Name).ToList();
-                string szene = $"Szene {scene.Key}: ";
-                foreach (var t in s)
-                {
-                    szene += $"{t.Name}, ";
-                }
-                szene = szene.Substring(0, szene.Length - 2);
-                szenen.Add(szene);
+            //var szenen = new List<string>();
+            //foreach (var scene in scenes.GroupBy(g => g.Nr).OrderBy(o => o.Key))
+            //{
+            //    var s = scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.cl.Sex).ThenBy(o => o.Name).ToList();
+            //    string szene = $"Szene {scene.Key}: ";
+            //    foreach (var t in s)
+            //    {
+            //        szene += $"{t.Name}, ";
+            //    }
+            //    szene = szene.Substring(0, szene.Length - 2);
+            //    szenen.Add(szene);
+            //}
 
-            }
             return scenes;
         }
     }
