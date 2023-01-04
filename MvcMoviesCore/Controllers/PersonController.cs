@@ -37,7 +37,7 @@ namespace MvcMoviesCore.Controllers
         }
 
         // GET: Person/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid? id, string sortExpression = "Name", int page = 1)
         {
             if (id == null)
             {
@@ -64,6 +64,8 @@ namespace MvcMoviesCore.Controllers
             }
 
             person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication).ToList();
+
+            //var model = await PagingList.CreateAsync(person.MoviesPerson, 20, page, sortExpression, "Name");
 
             return View(person);
         }

@@ -18,13 +18,14 @@ namespace MvcMoviesCore.Controllers
         public IActionResult Index()
         {
             var movies = _context.Movies
-                                 .Include(m => m.Genre)
-                                 .Include(m => m.RecordCarrier)
-                                 .Include(m => m.StorageLocation)
-                                 .OrderByDescending(o => o.CreateDate)
-                                 .ThenBy(t => t.Name)
-                                 .Take(20)
-                                 .AsQueryable();
+                .Include(m => m.Genre)
+                .Include(m => m.RecordCarrier)
+                .Include(m => m.StorageLocation)
+                .Where(w => w.LastView == null)
+                .OrderByDescending(o => o.CreateDate)
+                .ThenBy(t => t.Name)
+                .Take(20)
+                .AsQueryable();
             return View(movies);
         }
 
