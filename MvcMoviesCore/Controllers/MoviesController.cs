@@ -45,6 +45,8 @@ namespace MvcMoviesCore.Controllers
 
             model.RouteValue = new RouteValueDictionary { { "filter", filter } };
 
+            var practices = GetPractices();
+
             return View(model);
         }
 
@@ -78,7 +80,7 @@ namespace MvcMoviesCore.Controllers
                     mpId.Person.ActorsAge = mpId.Person.GetActorsAgeInMovie(mpId.Person.Birthday, movie.YearOfPublication);
             }
 
-            movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Classification ).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
+            movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Classification).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
             //movie.PagingList = await PagingList.CreateAsync(movie.MoviesPerson as IQueryable<MoviesPerson>, movie.MoviesPerson.Count, 1, "Id", "Id"); 
 
             movie.Scenes = await GetScenes(id);
@@ -303,6 +305,34 @@ namespace MvcMoviesCore.Controllers
             //}
 
             return scenes;
+        }
+
+        private List<string> GetPractices()
+        {
+            var practices = new List<string>();
+            var allPractices = _context.MoviesPerson.Where(w => !string.IsNullOrEmpty(w.Practices)).GroupBy(g => g.Practices).ToList();
+            if (allPractices.Any())
+            {
+                foreach (var practice in allPractices)
+                {
+                    if (practice.Key.Contains(","))
+                    {
+                        var keys = practice.Key.Split(',').ToList();
+                        foreach (var key in keys)
+                        {
+                            if (!practices.Contains(key.Trim()))
+                                practices.Add(key.Trim());
+                        }
+                    }
+                    else
+                    {
+                        if (!practices.Contains(practice.Key))
+                            practices.Add(practice.Key);
+                    }
+                }
+            }
+            practices.Sort();
+            return practices;
         }
     }
 }
