@@ -40,6 +40,22 @@ namespace MvcMoviesCore.Models
 
         public Guid PersonTypesId { get; set; }
 
+        public string BMI
+        {
+            get
+            {
+                if (this.Height == null || this.Weight == null)
+                    return string.Empty;
+                
+                var bmi = Weight.GetValueOrDefault() / (Height.GetValueOrDefault() * Height.GetValueOrDefault());
+#if DEBUG
+                return Math.Round(bmi, 2).ToString();
+#else
+                return Math.Round(bmi, 0).ToString();
+#endif
+            }
+        }
+
         public virtual ICollection<MoviesPerson> MoviesPerson { get; set; }
 
         public virtual PersonTypes PersonType { get; set; }
