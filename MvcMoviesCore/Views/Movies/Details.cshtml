@@ -159,7 +159,10 @@
                         }
                         else
                         {
-                            @Html.DisplayFor(modelItem => item.MovieRole.Name)
+                            if (item.MovieRole != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.MovieRole.Name)
+                            }
                         }
                     </td>
                     <td>
