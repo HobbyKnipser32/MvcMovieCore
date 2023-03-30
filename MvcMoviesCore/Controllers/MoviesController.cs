@@ -102,19 +102,19 @@ namespace MvcMoviesCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,YearOfPublication,GenreId,RecordCarrierId,InStock,StorageLocationId,Added,OnWatch,Remark,Adult,ThreeD,Owner,IMDB,Ranking,LastView")] Movies movies)
+        public async Task<IActionResult> Create([Bind("Id,Name,YearOfPublication,GenreId,RecordCarrierId,InStock,StorageLocationId,Added,OnWatch,Remark,Adult,ThreeD,Owner,IMDB,Ranking,LastView")] Movies movie)
         {
             if (ModelState.IsValid)
             {
-                movies.Id = Guid.NewGuid();
-                _context.Add(movies);
+                movie.Id = Guid.NewGuid();
+                _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(o => o.Name), "Id", "Name", movies.GenreId);
-            ViewData["RecordCarrierId"] = new SelectList(_context.RecordCarrier.OrderBy(o => o.Name), "Id", "Name", movies.RecordCarrierId);
-            ViewData["StorageLocationId"] = new SelectList(_context.StorageLocation.OrderBy(o => o.Name), "Id", "Name", movies.StorageLocationId);
-            return View(movies);
+            ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(o => o.Name), "Id", "Name", movie.GenreId);
+            ViewData["RecordCarrierId"] = new SelectList(_context.RecordCarrier.OrderBy(o => o.Name), "Id", "Name", movie.RecordCarrierId);
+            ViewData["StorageLocationId"] = new SelectList(_context.StorageLocation.OrderBy(o => o.Name), "Id", "Name", movie.StorageLocationId);
+            return View(movie);
         }
 
         // GET: Movies/Edit/5
@@ -326,8 +326,8 @@ namespace MvcMoviesCore.Controllers
                     }
                     else
                     {
-                        if (!practices.Contains(practice.Key))
-                            practices.Add(practice.Key);
+                        if (!practices.Contains(practice.Key.Trim()))
+                            practices.Add(practice.Key.Trim());
                     }
                 }
             }

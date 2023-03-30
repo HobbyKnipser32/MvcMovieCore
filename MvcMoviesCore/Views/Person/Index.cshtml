@@ -1,6 +1,6 @@
 ﻿@*@model IEnumerable<MvcMoviesCore.Models.Person>*@
 @using ReflectionIT.Mvc.Paging
-@model ReflectionIT.Mvc.Paging.PagingList<MvcMoviesCore.Models.Person>
+@model             ReflectionIT.Mvc.Paging.PagingList<global::MvcMoviesCore.Models.Person>
 @addTagHelper *, ReflectionIT.Mvc.Paging
 
 @{
@@ -41,6 +41,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Weight)
             </th>
+            <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.PersonType)
             </th>
@@ -71,6 +72,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Weight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BMI)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PersonType.Name)
