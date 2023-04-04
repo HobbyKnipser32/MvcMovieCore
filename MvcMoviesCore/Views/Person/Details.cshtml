@@ -70,12 +70,11 @@
         </dd>
     </dl>
     <h4>Film(e)</h4>
-    <table class="table">
+    <table class="table" id="personDetails">
         <thead>
             <tr>
                 <th>
                     Film
-                    @*@Html.SortableHeaderFor(Model.MoviesPerson )*@
                 </th>
                 <th>
                     Erscheinungsjahr
@@ -86,7 +85,9 @@
                 <th>
                     Praxis
                 </th>
-                <th></th>
+                <th>
+                    Bewertung
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -119,3 +120,16 @@
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts
+{
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function(){
+            $('#personDetails').DataTable({
+                ordering: true,
+            });
+        })
+    </script>
+}
