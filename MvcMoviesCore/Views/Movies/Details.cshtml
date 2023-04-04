@@ -119,7 +119,7 @@
         </tr>
     </table>
     <h4>Darsteller</h4>
-    <table class="table">
+    <table class="table" id="movieDetails">
         <tbody>
             <tr>
                 <th>Name</th>
@@ -220,3 +220,16 @@
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts
+    {
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function () {
+            $('#movieDetails').DataTable({
+                ordering: true,
+            });
+        })
+    </script>
+}
