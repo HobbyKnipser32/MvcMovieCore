@@ -27,34 +27,48 @@
         </dd>
     </dl>
     <h4>Darsteller</h4>
-    <table class="table">
-        <tbody>
+    <table class="table" id="indexRandom" >
+        <thead>
             <tr>
                 <th>Name:</th>
                 <th>Geschlecht:</th>
                 <th>Alter beim Dreh:</th>
                 <th></th>
             </tr>
+        </thead>
+        <tbody>
             @foreach (var item in Model.MoviesPerson)
             {
-
-            <tr>
-                <td>
-                    <a asp-controller="Person" asp-action="Details" asp-route-id="@item.Person.Id">
-                        @Html.DisplayFor(modelItem => item.Person.Name)
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Person.Sex.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Person.ActorsAge)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Practices)
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        <a asp-controller="Person" asp-action="Details" asp-route-id="@item.Person.Id">
+                            @Html.DisplayFor(modelItem => item.Person.Name)
+                        </a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Person.Sex.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Person.ActorsAge)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Practices)
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
+
+@section Scripts
+    {
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function () {
+            $('#indexRandom').DataTable({
+                ordering: true,
+            });
+        })
+    </script>
+}
