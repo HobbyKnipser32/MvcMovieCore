@@ -70,7 +70,7 @@
         </dd>
     </dl>
     <h4>Film(e)</h4>
-    <table class="table" id="personDetails">
+    <table class="table display" id="personDetails" >
         <thead>
             <tr>
                 <th>
@@ -129,6 +129,9 @@
         $(document).ready(function(){
             $('#personDetails').DataTable({
                 ordering: true,
+                fixedHeader: {
+                    header: true,
+                }
             });
         })
     </script>

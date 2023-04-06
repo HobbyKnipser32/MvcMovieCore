@@ -119,15 +119,17 @@
         </tr>
     </table>
     <h4>Darsteller</h4>
-    <table class="table" id="movieDetails">
-        <tbody>
+    <table class="table hover" id="movieDetails">
+        <thead>
             <tr>
                 <th>Name</th>
                 <th>Geschlecht</th>
                 <th>Alter beim Dreh</th>
-                <th></th>
+                <th>Praxis</th>
                 <th></th>
             </tr>
+        </thead>
+        <tbody>
             @{
                 var i = 0;
             }
@@ -229,6 +231,10 @@
         $(document).ready(function () {
             $('#movieDetails').DataTable({
                 ordering: true,
+                fixedHeader: {
+                    header: true,
+                    footer: false
+                }
             });
         })
     </script>
