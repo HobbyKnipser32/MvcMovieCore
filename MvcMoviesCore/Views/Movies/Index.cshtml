@@ -4,7 +4,7 @@
 @addTagHelper *, ReflectionIT.Mvc.Paging
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Movies";
 }
 
 <h2>Movies</h2>
@@ -24,11 +24,12 @@
     @await this.Component.InvokeAsync("Pager", new { PagingList = this.Model })
 </nav>*@
 
-<table class="table table-striped table-no-bordered table-hover" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;" id="movieIndex">
+@*<table class="table table-striped table-no-bordered table-hover order-column dataTable" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;" id="movieIndex">*@
+<table class="table order-column dataTable" cellspacing="0" id="movieIndex">
     <thead>
         <tr>
-            <th>
-               Film
+            <th class="sorting">
+                Film
             </th>
             <th>
                 Erscheinungsjahr
@@ -68,29 +69,29 @@
                     @Html.DisplayFor(modelItem => item.InStock)
                 </td>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.Added)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.Added)
+            </td>*@
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.OnWatch)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.OnWatch)
+            </td>*@
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.Remark)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.Remark)
+            </td>*@
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.Adult)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.Adult)
+            </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.ThreeD)
                 </td>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.Owner)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.Owner)
+            </td>*@
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.IMDB)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.IMDB)
+            </td>*@
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.Ranking)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.Ranking)
+            </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.LastView)
                 </td>
@@ -118,14 +119,16 @@
 </nav>
 *@
 @section Scripts
-{
-<partial name="_DataTableScripts" />
+    {
+    <partial name="_DataTableScripts" />
 
-<script>
-    $(document).ready(function () {
-        $('#movieIndex').DataTable({
-            ordering: true,
-        });
-    })
-</script>
+    <script>
+        $(document).ready(function () {
+            $('#movieIndex').DataTable({
+                ordering: true,
+                lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                iDisplayLength: 20,
+            });
+        })
+    </script>
 }

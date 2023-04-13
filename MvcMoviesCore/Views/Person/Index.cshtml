@@ -1,10 +1,10 @@
-﻿@*@model IEnumerable<MvcMoviesCore.Models.Person>*@
+﻿@model IEnumerable<MvcMoviesCore.Models.Person>
 @using ReflectionIT.Mvc.Paging
-@model             ReflectionIT.Mvc.Paging.PagingList<global::MvcMoviesCore.Models.Person>
+@*@model             ReflectionIT.Mvc.Paging.PagingList<global::MvcMoviesCore.Models.Person>*@
 @addTagHelper *, ReflectionIT.Mvc.Paging
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Personen";
 }
 
 <h2>Index</h2>
@@ -17,10 +17,10 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<nav aria-label="Movies navigation">
+@*<nav aria-label="Movies navigation">
     @await this.Component.InvokeAsync("Pager", new { PagingList = this.Model })
-</nav>
-<table class="table">
+</nav>*@
+<table class="table" id="personsIndex">
     <thead>
         <tr>
             <th>
@@ -92,6 +92,21 @@
     </tbody>
 </table>
 
-<nav aria-label="Movies navigation">
+@*<nav aria-label="Movies navigation">
     <vc:pager paging-list="@Model" />
-</nav>
+</nav>*@
+
+@section Scripts
+    {
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function () {
+            $('#personsIndex').DataTable({
+                ordering: true,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                iDisplayLength: 25,
+            });
+        })
+    </script>
+}
