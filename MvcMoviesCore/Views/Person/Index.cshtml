@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<MvcMoviesCore.Models.Person>
 @using ReflectionIT.Mvc.Paging
-@model             ReflectionIT.Mvc.Paging.PagingList<global::MvcMoviesCore.Models.Person>
 @addTagHelper *, ReflectionIT.Mvc.Paging
 
 @{
@@ -102,6 +101,8 @@
         $(document).ready(function () {
             $('#personIndex').DataTable({
                 ordering: true,
+                lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                iDisplayLength: 20,
                 fixedHeader: {
                     header: true,
                 }

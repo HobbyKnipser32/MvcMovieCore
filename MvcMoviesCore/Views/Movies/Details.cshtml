@@ -224,13 +224,15 @@
 </div>
 
 @section Scripts
-{
+    {
     <partial name="_DataTableScripts" />
 
     <script>
         $(document).ready(function () {
             $('#movieDetails').DataTable({
                 ordering: true,
+                lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                iDisplayLength: -1,
                 fixedHeader: {
                     header: true,
                     footer: false

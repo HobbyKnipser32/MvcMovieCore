@@ -70,7 +70,7 @@
         </dd>
     </dl>
     <h4>Film(e)</h4>
-    <table class="table display" id="personDetails" >
+    <table class="table display" id="personDetails">
         <thead>
             <tr>
                 <th>
@@ -122,13 +122,15 @@
 </div>
 
 @section Scripts
-{
+    {
     <partial name="_DataTableScripts" />
 
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('#personDetails').DataTable({
                 ordering: true,
+                lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                iDisplayLength: -1,
                 fixedHeader: {
                     header: true,
                 }
