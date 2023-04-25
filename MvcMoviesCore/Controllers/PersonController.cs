@@ -20,7 +20,7 @@ namespace MvcMoviesCore.Controllers
         }
 
         // GET: Person
-        public async Task<IActionResult> Index(string filter = null, string sortExpression = "Name", int page = 1)
+        public IActionResult Index(string filter = null, string sortExpression = "Name", int page = 1)
         {
             var persons = _context.Person
                                   .Include(i => i.PersonType)
@@ -31,9 +31,9 @@ namespace MvcMoviesCore.Controllers
             if (!string.IsNullOrWhiteSpace(filter))
                 persons = persons.Where(w => w.Name.Contains(filter));
 
-            var model = await PagingList.CreateAsync(persons, 20, page, sortExpression, "Name");
+            //var model = await PagingList.CreateAsync(persons, 20, page, sortExpression, "Name");
 
-            return View(model);
+            return View(persons);
         }
 
         // GET: Person/Details/5

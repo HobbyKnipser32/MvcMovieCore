@@ -1,26 +1,23 @@
-﻿@*@model IEnumerable<MvcMoviesCore.Models.Person>*@
+﻿@model IEnumerable<MvcMoviesCore.Models.Person>
 @using ReflectionIT.Mvc.Paging
-@model             ReflectionIT.Mvc.Paging.PagingList<global::MvcMoviesCore.Models.Person>
 @addTagHelper *, ReflectionIT.Mvc.Paging
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Persons";
 }
 
-<h2>Index</h2>
+<h2>Persons</h2>
 <form method="get" class="form-inline">
     <input type="text" name="filter" class="form-control" />
     <button type="submit" class="btn btn-info">
-        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search 
     </button>
 </form>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create new person</a>
 </p>
-<nav aria-label="Movies navigation">
-    @await this.Component.InvokeAsync("Pager", new { PagingList = this.Model })
-</nav>
-<table class="table">
+
+<table class="table" id="personIndex">
     <thead>
         <tr>
             <th>
@@ -92,6 +89,22 @@
     </tbody>
 </table>
 
-<nav aria-label="Movies navigation">
+@*<nav aria-label="Movies navigation">
     <vc:pager paging-list="@Model" />
-</nav>
+</nav>*@
+
+@section Scripts
+ {
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function () {
+            $('#personIndex').DataTable({
+                ordering: true,
+                fixedHeader: {
+                    header: true,
+                }
+            });
+        })
+    </script>
+}
