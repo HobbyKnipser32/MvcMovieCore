@@ -1,9 +1,10 @@
 ﻿@model IEnumerable<MvcMoviesCore.Models.Person>
 @using ReflectionIT.Mvc.Paging
+@model             ReflectionIT.Mvc.Paging.PagingList<global::MvcMoviesCore.Models.Person>
 @addTagHelper *, ReflectionIT.Mvc.Paging
 
 @{
-    ViewData["Title"] = "Persons";
+    ViewData["Title"] = "Personen";
 }
 
 <h2>Persons</h2>

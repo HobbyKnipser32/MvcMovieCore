@@ -164,6 +164,7 @@ namespace MvcMoviesCore.Controllers
             var person = await _context.Person
                 .Include(i => i.PersonType)
                 .Include(i => i.Sex)
+                .Include(i => i.Nationality)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
