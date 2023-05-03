@@ -348,7 +348,7 @@ namespace MvcMoviesCore.Controllers
                     if (g.Any())
                     {
                         foreach (var item in g)
-                            if (!filterContent.Contains(item))
+                            if (!string.IsNullOrWhiteSpace(item) && !item.Contains("-") && !filterContent.Contains(item))
                                 filterContent.Add(item.Trim());
                     }
                 }
@@ -362,7 +362,7 @@ namespace MvcMoviesCore.Controllers
                     if (p.Any())
                     {
                         foreach (var item in p)
-                            if (!filterContent.Contains(item))
+                            if (!(string.IsNullOrWhiteSpace(item) && !item.Contains("-") && !filterContent.Contains(item.Trim())))
                                 filterContent.Add(item.Trim());
                     }
                 }
