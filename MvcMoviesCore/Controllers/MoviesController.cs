@@ -46,6 +46,7 @@ namespace MvcMoviesCore.Controllers
             //model.RouteValue = new RouteValueDictionary { { "filter", filter } };
 
             var practices = GetPractices();
+            var filterContent = GetFilterContent();
 
             return View(movies);
         }
@@ -333,6 +334,40 @@ namespace MvcMoviesCore.Controllers
             }
             practices.Sort();
             return practices;
+        }
+
+        private List<string> GetFilterContent()
+        {
+            var filterContent = new List<string>();
+            var genres = _context.Genre.Where(w => !string.IsNullOrEmpty(w.Name)).ToList();
+            if (genres.Any())
+            {
+                foreach (var genre in genres)
+                {
+                    var g = genre.Name.Split(".");
+                    if (g.Any())
+                    {
+                        foreach (var item in g)
+                            if (!filterContent.Contains(item))
+                                filterContent.Add(item.Trim());
+                    }
+                }
+            }
+            var practices = _context.MoviesPerson.Where(w => !string.IsNullOrEmpty(w.Practices));
+            if (practices.Any())
+            {
+                foreach (var practic in practices)
+                {
+                    var p = practic.Practices.Split(",");
+                    if (p.Any())
+                    {
+                        foreach (var item in p)
+                            if (!filterContent.Contains(item))
+                                filterContent.Add(item.Trim());
+                    }
+                }
+            }
+            return filterContent.OrderBy(o => o).ToList();
         }
     }
 }
