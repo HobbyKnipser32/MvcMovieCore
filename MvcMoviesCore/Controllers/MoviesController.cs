@@ -358,7 +358,7 @@ namespace MvcMoviesCore.Controllers
             {
                 foreach (var practic in practices)
                 {
-                    var p = practic.Practices.Split(",");
+                    var p = practic.Practices.Split(",", StringSplitOptions.RemoveEmptyEntries);
                     if (p.Any())
                     {
                         foreach (var item in p)
