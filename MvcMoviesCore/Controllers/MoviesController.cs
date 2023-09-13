@@ -24,7 +24,7 @@ namespace MvcMoviesCore.Controllers
         }
 
         // GET: Movies
-        public IActionResult Index(string filter, string sortExpression = "Name", int page = 1, bool adult = true)
+        public IActionResult Index(string filter, bool adult = true)
         {
             _showAdult = adult;
 
@@ -40,10 +40,6 @@ namespace MvcMoviesCore.Controllers
 
             if (!_showAdult)
                 movies = movies.Where(w => w.Adult == false);
-
-            //var model = await PagingList.CreateAsync(movies, 20, page, sortExpression, "Name");
-
-            //model.RouteValue = new RouteValueDictionary { { "filter", filter } };
 
             var practices = GetPractices();
             var filterContent = GetFilterContent();
@@ -82,7 +78,6 @@ namespace MvcMoviesCore.Controllers
             }
 
             movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Classification).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
-            //movie.PagingList = await PagingList.CreateAsync(movie.MoviesPerson as IQueryable<MoviesPerson>, movie.MoviesPerson.Count, 1, "Id", "Id"); 
 
             movie.Scenes = await GetScenes(id);
 
