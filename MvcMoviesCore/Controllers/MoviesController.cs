@@ -89,7 +89,7 @@ namespace MvcMoviesCore.Controllers
             return View(movie);
         }
 
-        // GET: Movies/Create
+        // GET: Movies/Create   9   
         public IActionResult Create()
         {
             ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(o => o.Name), "Id", "Name");
@@ -343,7 +343,7 @@ namespace MvcMoviesCore.Controllers
             if (genres.Any())
             {
                 foreach (var genre in genres)
-                {
+                { 
                     var g = genre.Name.Split(".");
                     if (g.Any())
                     {
