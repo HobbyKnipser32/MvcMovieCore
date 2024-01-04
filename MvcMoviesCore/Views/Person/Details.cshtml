@@ -106,7 +106,14 @@
                         @Html.DisplayFor(modelItem => item.Movies.ActorsAge)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Practices)
+                        @if (string.IsNullOrEmpty(item.Practices))
+                        {
+                            @Html.DisplayFor(modelItem => item.MovieRole.Name)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.Practices)
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Movies.OnWatch)
@@ -122,7 +129,7 @@
 </div>
 
 @section Scripts
-    {
+{
     <partial name="_DataTableScripts" />
 
     <script>
