@@ -247,7 +247,8 @@ namespace MvcMoviesCore.Controllers
                 _context.MoviesPerson.Remove(moviePerson);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Index));
+            return Ok();
+            //return RedirectToAction(nameof(Index));
         }
 
         private bool MoviesExists(Guid id)

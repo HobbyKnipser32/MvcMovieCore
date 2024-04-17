@@ -242,21 +242,25 @@
             });
         });
 
-        function deleteLink(id) {
-            Swal.fire({
-                async: false,
-                title: 'Verknüpfung löschen?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ja',
-                cancelButtonText: 'Nein'
-            }).then(function (result) {
-                if (result.value) {
-                    var url = 'MeasurementDevices/Delete/' + id;
-                }
-            });
+        function deleteLink(id, e) 
+        {
+            if (confirm('Verknüpfung löschen?') == true) {
+                var url = 'Movies/DeleteLink/' + id;
+                $.post(url);
+                $('#movieDetails').DataTable().ajax.reload();
+            };
+            // Swal.fire({
+            //     title: 'Verknüpfung löschen?',
+            //     showCancelButton: true,
+            //     confirmButtonColor: '#3085d6',
+            //     cancelButtonColor: '#d33',
+            //     confirmButtonText: 'Ja',
+            //     cancelButtonText: 'Nein'
+            // }).then(function(result) {
+            //     if (result.value) {
+            //         var url = 'MeasurementDevices/Delete/' + id;
+            //     };
+            // });
         };
 
 
