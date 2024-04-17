@@ -169,7 +169,8 @@
                     </td>
                     <td>
                         <form>
-                            <button name="id" style="background-color: transparent; color: red; border: hidden" value="@item.Id" asp-action="DeleteLink">Verknüpfung entfernen</button>
+                            @* <button name="id" style="background-color: transparent; color: red; border: hidden" value="@item.Id" asp-action="DeleteLink">Verknüpfung entfernen</button> *@
+                            <button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + @item.Id + ')">Verknüpfung entfernen</button>
                         </form>
                     </td>
                 </tr>
@@ -222,9 +223,10 @@
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
-
+@* <output></output> *@
+<script src="~/js/sweetalert2.js"></script>
 @section Scripts
-    {
+{
     <partial name="_DataTableScripts" />
 
     <script>
@@ -238,6 +240,26 @@
                     footer: false
                 }
             });
-        })
+        });
+
+        function deleteLink(id) {
+            Swal.fire({
+                async: false,
+                title: 'Verknüpfung löschen?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Nein'
+            }).then(function (result) {
+                if (result.value) {
+                    var url = 'MeasurementDevices/Delete/' + id;
+                }
+            });
+        };
+
+
+
     </script>
 }
