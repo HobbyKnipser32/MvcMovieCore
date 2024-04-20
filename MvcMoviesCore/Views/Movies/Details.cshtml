@@ -8,6 +8,7 @@
 
 <div>
     <h4>@Html.DisplayFor(model => model.Name)</h4>
+    <input type="hidden" value="@Model.Id" id="movieID"/>
     <hr />
     <table>
         <tr>
@@ -170,7 +171,7 @@
                     <td>
                         <form>
                             @* <button name="id" style="background-color: transparent; color: red; border: hidden" value="@item.Id" asp-action="DeleteLink">Verknüpfung entfernen</button> *@
-                            <button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + @item.Id + ')">Verknüpfung entfernen</button>
+                            <button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink('@item.Id')">Verknüpfung entfernen</button>
                         </form>
                     </td>
                 </tr>
@@ -231,7 +232,11 @@
 
     <script>
         $(document).ready(function () {
+            var movieId = $('#movieId').val();
             $('#movieDetails').DataTable({
+                ajax: {
+                    url: 'https://localhost:5001/api/MoviesApi/' + movieId
+                },
                 ordering: true,
                 lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
                 iDisplayLength: -1,
@@ -242,12 +247,29 @@
             });
         });
 
-        function deleteLink(id, e) 
-        {
+        function deleteLink(id, e) {
             if (confirm('Verknüpfung löschen?') == true) {
-                var url = 'Movies/DeleteLink/' + id;
-                $.post(url);
-                $('#movieDetails').DataTable().ajax.reload();
+                // var data = { id: id }.serialize();
+                var url = 'https://localhost:5001/api/MoviesApi/' + id;
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {id: id},
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    statusCode: {
+                        404: function () {
+                            alert("function not found");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    },
+                });
+                // $.post(url);
+                // $('#movieDetails').DataTable().ajax.reload();
             };
             // Swal.fire({
             //     title: 'Verknüpfung löschen?',
