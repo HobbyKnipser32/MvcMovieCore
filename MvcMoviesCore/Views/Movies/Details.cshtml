@@ -119,7 +119,7 @@
         </tr>
     </table>
     <h4>Darsteller</h4>
-    <table class="table hover" id="movieDetails">
+    <table class="table hover cell-border compact stripe"" id="movieDetails">
         <thead>
             <tr>
                 <th>Name</th>
@@ -129,7 +129,7 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
+@*         <tbody>
             @{
                 var i = 0;
             }
@@ -168,15 +168,12 @@
                         }
                     </td>
                     <td>
-                        @* <form> *@
-                        @* <button name="id" style="background-color: transparent; color: red; border: hidden" value="@item.Id" asp-action="DeleteLink">Verknüpfung entfernen</button> *@
                         <button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink('@item.Id')">Verknüpfung entfernen</button>
-                        @* </form> *@
                     </td>
                 </tr>
                 i++;
             }
-        </tbody>
+        </tbody> *@
     </table>
     @if (Model.Scenes != null && Model.Scenes.Any())
     {
@@ -184,7 +181,7 @@
         <table class="table">
             <tbody>
                 @{
-                    i = 0;
+                    var i = 0;
                 }
                 @foreach (var scene in Model.Scenes.GroupBy(g => g.Nr).OrderBy(o => o.Key))
                 {
@@ -242,6 +239,7 @@
                         data: 'Person',
                         render: function (data, type, full, meta) {
                             if (data && type === 'display'){
+                                var url = '@Url.Action("Edit", "MeasurementDevices")' + '/' + data;
                                 return '<a asp-controller="Person" asp-action="Details" asp-route-id="' + data.Id + '" >' + data.Name + '</a>';
                             }
                             return '';
@@ -250,12 +248,26 @@
 
                     { data: 'Person.Sex.Name' },
                     { data: 'Person.ActorsAge' },
-                    { data: 'Practices' },
+                    {
+                        data: 'Practices',
+                        render: function (data, type, full, meta) { 
+                            if (type === 'display') {
+                                if (data) {
+                                    return full["Practices"];
+                                }
+                                else if (full['MovieRole']) {
+                                    return full['MovieRole'].Name;
+                                }
+                                return "";
+                            }
+                        }
+                    },
                     {
                         data: 'Id',
                         render: function (data, type, full, meta) { 
                             if (data && type === 'display') {
-                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + data + ')">Verknüpfung entfernen</button>'
+                                var id = "'" + data + "'";
+                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + id + ')">Verknüpfung entfernen</button>'
                             }
                             return '';
                         },
@@ -279,35 +291,40 @@
             });
         });
 
-        function deleteLink(id, e) {
-            if (confirm('Verknüpfung löschen?') == true) {
-                var url = appRootPath + '/api/MoviesApi/' + id;
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    async: false,
-                    statusCode: {
-                        404: function () {
-                            alert("page not found");
-                        }
-                    }
-                })
-            };
-            // Swal.fire({
-            //     title: 'Verknüpfung löschen?',
-            //     showCancelButton: true,
-            //     confirmButtonColor: '#3085d6',
-            //     cancelButtonColor: '#d33',
-            //     confirmButtonText: 'Ja',
-            //     cancelButtonText: 'Nein'
-            // }).then(function(result) {
-            //     if (result.value) {
-            //         var url = 'MeasurementDevices/Delete/' + id;
-            //     };
-            // });
+        function deleteLink(id) {
+            Swal.fire({
+                title: 'Verknüpfung löschen?',
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Nein'
+            }).then(function (result) {
+                if (result.value) {
+                    var url = appRootPath + '/api/MoviesApi/' + id;
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        async: false,
+                        statusCode: {
+                            404: function () {
+                                alert("page not found");
+                            }
+                        },
+                        success: function () {
+                            $('#movieDetails').DataTable().ajax.reload();
+                            Swal.fire({
+                                position: 'top-end',
+                                type: 'success',
+                                text: 'Verknüpfung erfolgreich gelöscht.',
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                        },
+                    })
+                };
+            });
         };
-
-
-
     </script>
 }

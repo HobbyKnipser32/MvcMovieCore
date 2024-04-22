@@ -24,7 +24,7 @@ namespace MvcMoviesCore.ApiController
         public async Task<IActionResult> Get(Guid movieId)
         {
             var movie = await _context.Movies.FirstOrDefaultAsync(f => f.Id.Equals(movieId));
-            var moviePersons = await _context.MoviesPerson.Where(w => w.MoviesId.Equals(movieId)).ToListAsync();
+            var moviePersons = await _context.MoviesPerson.Include(i => i.MovieRole).Where(w => w.MoviesId.Equals(movieId)).ToListAsync();
             foreach (var moviePerson in moviePersons)
             {
                 moviePerson.Person = await _context.Person.Include(i => i.Sex).FirstOrDefaultAsync(f => f.Id == moviePerson.PersonId);
