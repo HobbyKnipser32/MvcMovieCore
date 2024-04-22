@@ -168,10 +168,10 @@
                         }
                     </td>
                     <td>
-                        <form>
-                            @* <button name="id" style="background-color: transparent; color: red; border: hidden" value="@item.Id" asp-action="DeleteLink">Verknüpfung entfernen</button> *@
-                            <button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + @item.Id + ')">Verknüpfung entfernen</button>
-                        </form>
+                        @* <form> *@
+                        @* <button name="id" style="background-color: transparent; color: red; border: hidden" value="@item.Id" asp-action="DeleteLink">Verknüpfung entfernen</button> *@
+                        <button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink('@item.Id')">Verknüpfung entfernen</button>
+                        @* </form> *@
                     </td>
                 </tr>
                 i++;
@@ -231,23 +231,67 @@
 
     <script>
         $(document).ready(function () {
+            const movieId = '@Model.Id';
             $('#movieDetails').DataTable({
-                ordering: true,
-                lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-                iDisplayLength: -1,
-                fixedHeader: {
+                ajax: {
+                    url: appRootPath + '/api/MoviesApi/' + movieId,
+                    dataSrc: ''
+                },
+                columns: [
+                    {
+                        data: 'Person',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display'){
+                                return '<a asp-controller="Person" asp-action="Details" asp-route-id="' + data.Id + '" >' + data.Name + '</a>';
+                            }
+                            return '';
+                        }
+                    },
+
+                    { data: 'Person.Sex.Name' },
+                    { data: 'Person.ActorsAge' },
+                    { data: 'Practices' },
+                    {
+                        data: 'Id',
+                        render: function (data, type, full, meta) { 
+                            if (data && type === 'display') {
+                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + data + ')">Verknüpfung entfernen</button>'
+                            }
+                            return '';
+                        },
+                        searchable: false,
+                        width: '15%'
+                    }
+                                ],
+                    ordering: true,
+                    lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                    iDisplayLength: -1,
+                    fixedHeader: {
                     header: true,
                     footer: false
-                }
+                    },
+                    columnDefs: [
+                    {
+                        targets: -1,
+                        className: 'compact'
+                    }
+                ]
             });
         });
 
-        function deleteLink(id, e) 
-        {
+        function deleteLink(id, e) {
             if (confirm('Verknüpfung löschen?') == true) {
-                var url = 'Movies/DeleteLink/' + id;
-                $.post(url);
-                $('#movieDetails').DataTable().ajax.reload();
+                var url = appRootPath + '/api/MoviesApi/' + id;
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    async: false,
+                    statusCode: {
+                        404: function () {
+                            alert("page not found");
+                        }
+                    }
+                })
             };
             // Swal.fire({
             //     title: 'Verknüpfung löschen?',
