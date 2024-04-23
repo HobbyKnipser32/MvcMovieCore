@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcMoviesCore.Models;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,36 +13,59 @@ namespace MvcMoviesCore.ApiController
     [ApiController]
     public class MoviesApiController : ControllerBase
     {
+
         private readonly MvcMovieCoreContext _context;
 
-        public MoviesApiController(MvcMovieCoreContext context) 
-        { 
+        public MoviesApiController(MvcMovieCoreContext context)
+        {
             _context = context;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IEnumerable<MoviesPerson>> GetMoviePerson(Guid id)
+        [HttpGet("{movieId}")]
+        public async Task<IActionResult> Get(Guid movieId)
         {
-            return await _context.MoviesPerson.Where(w => w.MoviesId.Equals(id)).ToListAsync();
+            var movie = await _context.Movies.FirstOrDefaultAsync(f => f.Id.Equals(movieId));
+            var moviePersons = await _context.MoviesPerson.Include(i => i.MovieRole).Where(w => w.MoviesId.Equals(movieId)).ToListAsync();
+            foreach (var moviePerson in moviePersons)
+            {
+                moviePerson.Person = await _context.Person.Include(i => i.Sex).FirstOrDefaultAsync(f => f.Id == moviePerson.PersonId);
+                if (moviePerson.Person.Obit != null && moviePerson.Person.Obit.Value.Year < movie.YearOfPublication.Value.Year)
+                    moviePerson.Person.ActorsAge = moviePerson.Person.GetActorsAge(moviePerson.Person.Birthday, moviePerson.Person.Obit);
+                else
+                    moviePerson.Person.ActorsAge = moviePerson.Person.GetActorsAgeInMovie(moviePerson.Person.Birthday, movie.YearOfPublication);
+            }
+
+            moviePersons = moviePersons.OrderBy(o => o.Person.Classification).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
+            string jsonResult;
+            try
+            {
+                jsonResult = JsonConvert.SerializeObject(moviePersons, Formatting.Indented,
+                    new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
+            }
+            catch (Exception ex)
+            {
+                jsonResult = string.Empty;
+            }
+            //return Ok();
+            return Ok(jsonResult);
         }
 
         [HttpPost("{id}")]
-        //[HttpPost, ActionName("DeleteLink")]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteLink(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var moviePerson = await _context.MoviesPerson.FindAsync(id);
-            if (moviePerson != null)
+            var moviePerson = await _context.MoviesPerson.FirstOrDefaultAsync(f => f.Id.Equals(id));
+            var scenes = await _context.Scenes.Where(w => w.MoviesPersonsId.Equals(moviePerson.Id)).ToListAsync();
+            if (scenes.Any())
             {
-                var scenes = _context.Scenes.Where(w => w.MoviesPersonsId.Equals(moviePerson.Id)).ToList();
-                if (scenes.Any())
-                {
-                    _context.Scenes.RemoveRange(scenes);
-                    await _context.SaveChangesAsync();
-                }
-                _context.MoviesPerson.Remove(moviePerson);
-                await _context.SaveChangesAsync();
+                _context.Scenes.RemoveRange(scenes);
+                _context.SaveChanges();
             }
+            _context.MoviesPerson.Remove(moviePerson);
+            _context.SaveChanges();
+
             return Ok();
         }
     }
