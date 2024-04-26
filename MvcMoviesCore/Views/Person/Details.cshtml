@@ -134,7 +134,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#personDetails').DataTable({
+            var table = $('#personDetails').DataTable({
                 ordering: true,
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 iDisplayLength: 25,

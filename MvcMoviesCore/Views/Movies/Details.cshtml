@@ -1,4 +1,4 @@
-﻿@model global::MvcMoviesCore.Models.Movies
+﻿@model MvcMoviesCore.Models.Movies
 
 @{
     ViewData["Title"] = "Details";
@@ -6,222 +6,192 @@
 
 <h2>Details</h2>
 
-<div>
-    <h4>@Html.DisplayFor(model => model.Name)</h4>
-    <hr />
-    <table>
+
+<h4>@Html.DisplayFor(model => model.Name)</h4>
+<hr />
+<table>
+    <tr>
+        <td>
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.RunTime)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.RunTime)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Genre)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Genre.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.YearOfPublication)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.YearOfPublication)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.InStock)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.InStock)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.OnWatch)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.OnWatch)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Remark)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Remark)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IMDB)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.IMDB)
+                </dd>
+                <dt>
+                    Zur Datenbank hinzugefügt:
+                </dt>
+                <dd>
+                    @if (Model.Added == null || Model.Added == DateTime.MinValue)
+                    {
+                        string createDate = Model.CreateDate.GetValueOrDefault().ToString("d");
+                        @Html.DisplayFor(model => createDate)
+                    }
+                    else
+                    {
+                        string added = Model.Added.GetValueOrDefault().ToString("d");
+                        @Html.DisplayFor(model => added)
+                    }
+                </dd>
+            </dl>
+        </td>
+        <td>
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Adult)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Adult)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.ThreeD)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.ThreeD)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Owner)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Owner)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Ranking)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Ranking)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.LastView)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.LastView)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.RecordCarrier)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.RecordCarrier.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.StorageLocation)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.StorageLocation.Name)
+                </dd>
+            </dl>
+        </td>
+    </tr>
+</table>
+<h4>Darsteller</h4>
+<table class="table hover cell-border compact stripe" " id="movieDetails">
+    <thead>
         <tr>
-            <td>
-                <dl class="dl-horizontal">
-                    <dt>
-                        @Html.DisplayNameFor(model => model.RunTime)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.RunTime)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Genre)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Genre.Name)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.YearOfPublication)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.YearOfPublication)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.InStock)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.InStock)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.OnWatch)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.OnWatch)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Remark)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Remark)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.IMDB)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.IMDB)
-                    </dd>
-                    <dt>
-                        Zur Datenbank hinzugefügt:
-                    </dt>
-                    <dd>
-                        @if (Model.Added == null || Model.Added == DateTime.MinValue)
-                        {
-                            @Html.DisplayFor(moddel => Model.CreateDate)
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(moddel => Model.Added)
-                        }
-                    </dd>
-                </dl>
-            </td>
-            <td>
-                <dl class="dl-horizontal">
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Adult)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Adult)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.ThreeD)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.ThreeD)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Owner)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Owner)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Ranking)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Ranking)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.LastView)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.LastView)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.RecordCarrier)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.RecordCarrier.Name)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.StorageLocation)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.StorageLocation.Name)
-                    </dd>
-                </dl>
-            </td>
+            <th>Name</th>
+            <th>Geschlecht</th>
+            <th>Alter beim Dreh</th>
+            <th>Praxis</th>
+            <th></th>
         </tr>
-    </table>
-    <h4>Darsteller</h4>
-    <table class="table hover cell-border compact stripe"" id="movieDetails">
+    </thead>
+</table>
+
+@if (Model.Scenes != null && Model.Scenes.Any())
+{
+    @* <h4>Szenen Aufschlüsselung</h4> *@
+    <table class="table hover cell-border compact stripe" id="scenesTable">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Geschlecht</th>
-                <th>Alter beim Dreh</th>
-                <th>Praxis</th>
-                <th></th>
+                <th width="100%">Szenen Aufschlüsselung</th>
             </tr>
         </thead>
-@*         <tbody>
+        <tbody>
             @{
                 var i = 0;
             }
-            @foreach (var item in Model.MoviesPerson)
+            @foreach (var scene in Model.Scenes.GroupBy(g => g.Nr).OrderBy(o => o.Key))
             {
                 <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
                     <td>
-                        <a asp-controller="Person" asp-action="Details" asp-route-id="@item.Person.Id">
-                            @if (item.Person.Classification != null && item.Person.Classification < 8)
+                        Szene @Html.DisplayTextFor(model => scene.Key):&nbsp;
+                        @{
+                            var s = Model.Scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.Classification).ThenBy(o => o.Name).ToList();
+                            var j = 0;
+                            var count = s.Count;
+                        }
+                        @foreach (var t in s)
+                        {
+                            var name = t.Name.Trim();
+                            if (t.Classification < 8)
                             {
-                                <b>@Html.DisplayFor(modelItem => item.Person.Name)</b>
+                                <b>
+                                    @Html.DisplayTextFor(model => name)
+                                </b>
                             }
                             else
                             {
-                                @Html.DisplayFor(modelItem => item.Person.Name)
+                                @Html.DisplayTextFor(model => name)
+
                             }
-                        </a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Person.Sex.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Person.ActorsAge)
-                    </td>
-                    <td>
-                        @if (item.Practices != null)
-                        {
-                            @Html.DisplayFor(modelItem => item.Practices)
-                        }
-                        else
-                        {
-                            if (item.MovieRole != null)
+                            j++;
+                            if (j < count)
                             {
-                                @Html.DisplayFor(modelItem => item.MovieRole.Name)
+                                <text>
+                                    ;&nbsp;
+                                </text>
                             }
+                            
                         }
-                    </td>
-                    <td>
-                        <button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink('@item.Id')">Verknüpfung entfernen</button>
                     </td>
                 </tr>
                 i++;
             }
-        </tbody> *@
+        </tbody>
     </table>
-    @if (Model.Scenes != null && Model.Scenes.Any())
-    {
-        <h4>Szenen Aufschlüsselung</h4>
-        <table class="table">
-            <tbody>
-                @{
-                    var i = 0;
-                }
-                @foreach (var scene in Model.Scenes.GroupBy(g => g.Nr).OrderBy(o => o.Key))
-                {
-                    <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
-                        <td>
-                            Szene @Html.DisplayTextFor(model => scene.Key):&nbsp;
-                            @{
-                                var s = Model.Scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.Classification).ThenBy(o => o.Name).ToList();
-                            }
-                            @foreach (var t in s)
-                            {
-                                if (t.Classification < 8)
-                                {
-                                    <b>
-                                        @Html.DisplayTextFor(model => t.Name)
-                                    </b>
-                                }
-                                else
-                                {
-                                    @Html.DisplayTextFor(model => t.Name)
+}
 
-                                }
-                                <text>
-                                    &nbsp
-                                </text>
-                            }
-                        </td>
-                    </tr>
-                    i++;
-                }
-            </tbody>
-        </table>
-    }
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-@* <output></output> *@
-<script src="~/js/sweetalert2.js"></script>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Index">Back to List</a>
+</p>
+
+<script src="~/js/sweetalert2.js"></script> 
 @section Scripts
 {
     <partial name="_DataTableScripts" />
@@ -229,6 +199,24 @@
     <script>
         $(document).ready(function () {
             const movieId = '@Model.Id';
+            if ($('#scenesTable')) {
+                $('#scenesTable').DataTable({
+                    ordering: true,
+                    lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                    iDisplayLength: -1,
+                    // fixedHeader: {
+                    //     header: true,
+                    //     footer: false
+                    // },
+                    columnDefs: [
+                        {
+                            targets: [0],
+                            searchable: true,
+                            className: 'compact'
+                        }
+                    ]
+                });
+            }
             $('#movieDetails').DataTable({
                 ajax: {
                     url: appRootPath + '/api/MoviesApi/' + movieId,
@@ -238,9 +226,9 @@
                     {
                         data: 'Person',
                         render: function (data, type, full, meta) {
-                            if (data && type === 'display'){
-                                var url = '@Url.Action("Edit", "MeasurementDevices")' + '/' + data;
-                                return '<a asp-controller="Person" asp-action="Details" asp-route-id="' + data.Id + '" >' + data.Name + '</a>';
+                            if (data && type === 'display') {
+                                var url = '@Url.Action("Details", "Person")' + '/' + data.Id;
+                                return '<a href="' + url + '">' + data.Name; /*  + '< /a>'; */
                             }
                             return '';
                         }
@@ -250,7 +238,7 @@
                     { data: 'Person.ActorsAge' },
                     {
                         data: 'Practices',
-                        render: function (data, type, full, meta) { 
+                        render: function (data, type, full, meta) {
                             if (type === 'display') {
                                 if (data) {
                                     return full["Practices"];
@@ -258,33 +246,32 @@
                                 else if (full['MovieRole']) {
                                     return full['MovieRole'].Name;
                                 }
-                                return "";
                             }
+                            return "";
                         }
                     },
                     {
                         data: 'Id',
-                        render: function (data, type, full, meta) { 
+                        render: function (data, type, full, meta) {
                             if (data && type === 'display') {
                                 var id = "'" + data + "'";
-                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + id + ')">Verknüpfung entfernen</button>'
+                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + id + ')">Verknüpfung entfernen</button>';
                             }
                             return '';
                         },
-                        searchable: false,
-                        width: '15%'
                     }
-                                ],
-                    ordering: true,
-                    lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-                    iDisplayLength: -1,
-                    fixedHeader: {
-                    header: true,
-                    footer: false
-                    },
-                    columnDefs: [
+                ],
+                ordering: true,
+                lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                iDisplayLength: -1,
+                // fixedHeader: {
+                //     header: true,
+                //     footer: false
+                // },
+                columnDefs: [
                     {
-                        targets: -1,
+                        targets: [0, 1, 2, 3, 4],
+                        searchable: true,
                         className: 'compact'
                     }
                 ]
@@ -293,7 +280,8 @@
 
         function deleteLink(id) {
             Swal.fire({
-                title: 'Verknüpfung löschen?',
+                position: 'top-end',
+                text: 'Verknüpfung löschen?',
                 type: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
