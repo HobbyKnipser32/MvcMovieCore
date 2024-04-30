@@ -167,8 +167,26 @@
                     dataSrc: ''
                 },
                 columns: [
-                    { data: 'Name' },
-                    { data: 'Film' },
+                    {
+                        data: 'Person',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var url = appRootPath + '/Person/Details/' + data.Id;
+                                return '<a href="' + url + '">' + data.Name; /*  + '< /a>'; */
+                            }
+                            return '';
+                        }
+                    },
+                    {
+                        data: 'Film',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var url = '@Url.Action("Details", "Movies")' + '/' + data.Id;
+                                return '<a href="' + url + '">' + data.Name; /*  + '< /a>'; */
+                            }
+                            return '';
+                        }
+                    },
                     { data: 'Szene' }
                 ],
                 ordering: true,

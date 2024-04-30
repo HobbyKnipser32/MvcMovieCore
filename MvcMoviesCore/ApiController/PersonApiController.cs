@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGeneration.Utils;
 using MvcMoviesCore.Models;
 using Newtonsoft.Json;
 using System;
@@ -54,9 +55,9 @@ namespace MvcMoviesCore.ApiController
                                 {
                                     personScenes.Add(new ViewModelPersonScene()
                                     {
-                                        Film = moviePerson.Movies.Name,
+                                        Film = new Movies() { Id = moviePerson.Movies.Id, Name = moviePerson.Movies.Name },
                                         Szene = sceneCoActor.Scene,
-                                        Name = moviePerson.Person.Name,
+                                        Person = new Person() { Id = moviePerson.Person.Id, Name = moviePerson.Person.Name }
                                     });
                                 }
                             }
@@ -65,11 +66,9 @@ namespace MvcMoviesCore.ApiController
                 }
                 try
                 {
-                    jsonResult = JsonConvert.SerializeObject(personScenes.OrderBy(o => o.Name).ThenBy(t => t.Film).ThenBy(t => t.Szene), Formatting.Indented,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
+                    personScenes = personScenes.OrderBy(o => o.Person.Name).ThenBy(t => t.Film.Name).ThenBy(t => t.Szene).ToList();
+                    var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                    jsonResult = JsonConvert.SerializeObject(personScenes, Formatting.Indented, jsonSerializerSettings);
                 }
                 catch (Exception ex)
                 {

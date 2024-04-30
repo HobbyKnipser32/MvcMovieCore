@@ -184,7 +184,6 @@
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Index">Back to List</a>
 </p>
 
-<script src="~/js/sweetalert2.js"></script> 
 @section Scripts
 {
     <partial name="_DataTableScripts" />
@@ -197,10 +196,10 @@
                     ordering: true,
                     lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
                     iDisplayLength: -1,
-                    // fixedHeader: {
-                    //     header: true,
-                    //     footer: false
-                    // },
+                    fixedHeader: {
+                        header: true,
+                        footer: false
+                    },
                     columnDefs: [
                         {
                             targets: [0],
