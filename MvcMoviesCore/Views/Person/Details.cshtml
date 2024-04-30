@@ -1,16 +1,11 @@
 ﻿@model global::MvcMoviesCore.Models.Person
-@using ReflectionIT.Mvc.Paging
-@*@model IEnumerable<MvcMoviesCore.Models.Movies>*@
-@*@model ReflectionIT.Mvc.Paging.PagingList<MvcMoviesCore.Models.MoviesPerson>*@
-@addTagHelper *, ReflectionIT.Mvc.Paging
 
 @{
     ViewData["Title"] = "Details";
 }
-
-<h2>Details</h2>
-
 <div>
+    <h2>Details</h2>
+    <hr />
     <h4>Person</h4>
     <hr />
     <dl class="dl-horizontal">
@@ -69,59 +64,82 @@
             @Html.DisplayFor(model => model.Sex.Name)
         </dd>
     </dl>
-    <h4>Film(e)</h4>
-    <table class="table display" id="personDetails">
-        <thead>
-            <tr>
-                <th>
-                    Film
-                </th>
-                <th>
-                    Erscheinungsjahr
-                </th>
-                <th>
-                    Alter
-                </th>
-                <th>
-                    Praxis
-                </th>
-                <th>
-                    Bewertung
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.MoviesPerson)
-            {
-                <tr>
-                    <td>
-                        <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.Movies.Id">
-                            @Html.DisplayFor(modelItem => item.Movies.Name)
-                        </a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Movies.YearOfPublication)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Movies.ActorsAge)
-                    </td>
-                    <td>
-                        @if (string.IsNullOrEmpty(item.Practices))
-                        {
-                            @Html.DisplayFor(modelItem => item.MovieRole.Name)
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(modelItem => item.Practices)
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Movies.OnWatch)
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <ul class="nav nav-tabs">
+        <li>
+            <a data-toggle="tab" href="#movies" class="nav-link nav-link-teal active" style="border: 1px solid #00677f">Filme</a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#scenes" class="nav-link nav-link-violett" style="border: 1px solid rgb(108, 27, 123)">Drehpartner</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="movies" class="tab-pane active">
+            <table class="table display" id="personDetails">
+                <thead>
+                    <tr>
+                        <th>
+                            Film
+                        </th>
+                        <th>
+                            Erscheinungsjahr
+                        </th>
+                        <th>
+                            Alter
+                        </th>
+                        <th>
+                            Praxis
+                        </th>
+                        <th>
+                            Bewertung
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.MoviesPerson)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.Movies.Id">
+                                    @Html.DisplayFor(modelItem => item.Movies.Name)
+                                </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Movies.YearOfPublication)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Movies.ActorsAge)
+                            </td>
+                            <td>
+                                @if (string.IsNullOrEmpty(item.Practices))
+                                {
+                                    @Html.DisplayFor(modelItem => item.MovieRole.Name)
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Practices)
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Movies.OnWatch)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="scenes" class="tab-pane">
+            <table id="personScenes" class="table hover cell-border compact stripe display">
+                <thead>
+                    <tr>
+                        <th class="col-3">Person</th>
+                        <th class="col-4">Film</th>
+                        <th class="col-2">Szene</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
@@ -134,13 +152,32 @@
 
     <script>
         $(document).ready(function () {
-            var table = $('#personDetails').DataTable({
+            $('#personDetails').DataTable({
                 ordering: true,
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 iDisplayLength: 25,
                 fixedHeader: {
                     header: true,
                 }
+            });
+            const personId = '@Model.Id';
+            $('#personScenes').DataTable({
+                ajax: {
+                    url: appRootPath + '/api/PersonApi/' + personId,
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'Name' },
+                    { data: 'Film' },
+                    { data: 'Szene' }
+                ],
+                ordering: true,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                iDisplayLength: 25,
+                fixedHeader: {
+                    header: true,
+                }
+
             });
         })
     </script>

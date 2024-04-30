@@ -12,7 +12,7 @@ namespace MvcMoviesCore.Models
         public string ActorsAge { get; set; }
 
         /// <summary>
-        /// The Persons Age to the Movie start
+        /// The Persons Age to the Film start
         /// </summary>
         /// <param name="birthDay">Birthday of the Person</param>
         /// <param name="yearOfPublication">Start of the movie</param>

@@ -120,7 +120,7 @@
         </tr>
     </table>
     <h4>Darsteller</h4>
-    <table class="table hover cell-border compact stripe"" id="movieDetails">
+    <table class="table hover cell-border compact stripe" id="movieDetails">
         <thead>
             <tr>
                 <th>Name</th>
@@ -130,67 +130,25 @@
                 <th></th>
             </tr>
         </thead>
-@*         <tbody>
-            @{
-                var i = 0;
-            }
-            @foreach (var item in Model.MoviesPerson)
-            {
-                <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
-                    <td>
-                        <a asp-controller="Person" asp-action="Details" asp-route-id="@item.Person.Id">
-                            @if (item.Person.Classification != null && item.Person.Classification < 8)
-                            {
-                                <b>@Html.DisplayFor(modelItem => item.Person.Name)</b>
-                            }
-                            else
-                            {
-                                @Html.DisplayFor(modelItem => item.Person.Name)
-                            }
-                        </a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Person.Sex.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Person.ActorsAge)
-                    </td>
-                    <td>
-                        @if (item.Practices != null)
-                        {
-                            @Html.DisplayFor(modelItem => item.Practices)
-                        }
-                        else
-                        {
-                            if (item.MovieRole != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.MovieRole.Name)
-                            }
-                        }
-                    </td>
-                    <td>
-                        <button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink('@item.Id')">Verknüpfung entfernen</button>
-                    </td>
-                </tr>
-                i++;
-            }
-        </tbody> *@
     </table>
     @if (Model.Scenes != null && Model.Scenes.Any())
     {
         <h4>Szenen Aufschlüsselung</h4>
-        <table class="table">
+        <table class="table hover cell-border compact stripe" id="scenesTable">
             <tbody>
                 @{
                     var i = 0;
                 }
                 @foreach (var scene in Model.Scenes.GroupBy(g => g.Nr).OrderBy(o => o.Key))
                 {
+                    var j = 0;
+                    var count = 0;
                     <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
                         <td>
                             Szene @Html.DisplayTextFor(model => scene.Key):&nbsp;
                             @{
                                 var s = Model.Scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.Classification).ThenBy(o => o.Name).ToList();
+                                count = s.Count();
                             }
                             @foreach (var t in s)
                             {
@@ -299,10 +257,10 @@
                 ordering: true,
                 lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
                 iDisplayLength: -1,
-                // fixedHeader: {
-                //     header: true,
-                //     footer: false
-                // },
+                fixedHeader: {
+                    header: true,
+                    footer: false
+                },
                 columnDefs: [
                     {
                         targets: [0, 1, 2, 3, 4],
@@ -332,7 +290,7 @@
                         async: false,
                         statusCode: {
                             404: function () {
-                                alert("page not found");
+                                alert("function not found");
                             }
                         },
                         success: function () {
