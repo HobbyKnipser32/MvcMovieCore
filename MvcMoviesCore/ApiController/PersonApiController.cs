@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGeneration.Utils;
 using MvcMoviesCore.Models;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace MvcMoviesCore.ApiController
 {
@@ -53,11 +55,24 @@ namespace MvcMoviesCore.ApiController
                                 var scenesCoActors = await _context.Scenes.Where(w => w.MoviesPersonsId.Equals(moviePerson.Id) && w.Scene == scene).ToListAsync();
                                 foreach (var sceneCoActor in scenesCoActors)
                                 {
+                                    string person;
+                                    var referer = Request.GetTypedHeaders().Referer;
+                                    var hostUrl = $"{referer.Scheme}://{referer.Host}:{referer.Port}";
+                                    string url = $"{hostUrl}/Person/Details/{moviePerson.Person.Id}";
+                                    if (moviePerson.Person.Classification < 8)
+                                    {
+                                        person = $"<b><a href=\"{url}\">{moviePerson.Person.Name}</a></b>";
+                                    }
+                                    else
+                                    {
+                                        person = $"<a href=\"{url}\">{moviePerson.Person.Name}</a>";
+                                    }
                                     personScenes.Add(new ViewModelPersonScene()
                                     {
                                         Film = new Movies() { Id = moviePerson.Movies.Id, Name = moviePerson.Movies.Name },
                                         Szene = sceneCoActor.Scene,
-                                        Person = new Person() { Id = moviePerson.Person.Id, Name = moviePerson.Person.Name }
+                                        Person = person,
+                                        //Person = new Person() { Id = moviePerson.Person.Id, Name = moviePerson.Person.Name }
                                     });
                                 }
                             }
@@ -66,7 +81,7 @@ namespace MvcMoviesCore.ApiController
                 }
                 try
                 {
-                    personScenes = personScenes.OrderBy(o => o.Person.Name).ThenBy(t => t.Film.Name).ThenBy(t => t.Szene).ToList();
+                    personScenes = personScenes.OrderBy(o => o.Person).ThenBy(t => t.Film.Name).ThenBy(t => t.Szene).ToList();
                     var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
                     jsonResult = JsonConvert.SerializeObject(personScenes, Formatting.Indented, jsonSerializerSettings);
                 }

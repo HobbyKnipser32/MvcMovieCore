@@ -129,7 +129,7 @@
             </table>
         </div>
         <div id="scenes" class="tab-pane">
-            <table id="personScenes" class="table hover cell-border compact stripe display">
+            <table id="personScenes" class="table table-striped table-no-bordered table-hover" style="width: 100%; word-wrap:break-word; table-layout: auto;">
                 <thead>
                     <tr>
                         <th class="col-3">Person</th>
@@ -161,21 +161,24 @@
                 }
             });
             const personId = '@Model.Id';
-            $('#personScenes').DataTable({
+            var groupColumn = 0;
+            var scenesTable = $('#personScenes').DataTable({
+                columnDefs: [{ visible: false, targets: groupColumn }],
+                order: [[groupColumn, 'asc']],
                 ajax: {
                     url: appRootPath + '/api/PersonApi/' + personId,
                     dataSrc: ''
                 },
                 columns: [
                     {
-                        data: 'Person',
-                        render: function (data, type, full, meta) {
-                            if (data && type === 'display') {
-                                var url = appRootPath + '/Person/Details/' + data.Id;
-                                return '<a href="' + url + '">' + data.Name; /*  + '< /a>'; */
-                            }
-                            return '';
-                        }
+                        data: 'Person'
+                        // render: function (data, type, full, meta) {
+                        //     if (data && type === 'display') {
+                        //         var url = appRootPath + '/Person/Details/' + data.Id;
+                        //         return '<a href="' + url + '">' + data.Name; /*  + '< /a>'; */
+                        //     }
+                        //     return '';
+                        // }
                     },
                     {
                         data: 'Film',
@@ -190,12 +193,44 @@
                     { data: 'Szene' }
                 ],
                 ordering: true,
-                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                iDisplayLength: 25,
+                paging: false,
+                searching: false,
+                // lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                // iDisplayLength: 25,
                 fixedHeader: {
                     header: true,
-                }
+                },
+                drawCallback: function (settings) {
+                    var api = this.api();
+                    var rows = api.rows({ page: 'current' }).nodes();
+                    var last = null;
 
+                    api.column(groupColumn, { page: 'current' })
+                        .data()
+                        .each(function (group, i) {
+                            if (last !== group) {
+                                $(rows)
+                                    .eq(i)
+                                    .before(
+                                        '<tr class="group" style="background-color:powderblue;"><td colspan="5">' +
+                                        group +
+                                        '</td></tr>'
+                                    );
+
+                                last = group;
+                            }
+                        });
+                }
+            });
+
+            $('#personDetails tbody').on('click', 'tr.group', function () {
+                var currentOrder = table.order()[0];
+                if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+                    table.order([groupColumn, 'desc']).draw();
+                }
+                else {
+                    table.order([groupColumn, 'asc']).draw();
+                }
             });
         })
     </script>

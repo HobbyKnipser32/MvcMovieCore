@@ -8,7 +8,7 @@
 
 <div>
     <h4>@Html.DisplayFor(model => model.Name)</h4>
-    <input type="hidden" value="@Model.Id" id="movieID"/>
+    <input type="hidden" value="@Model.Id" id="movieID" />
     <hr />
     <table>
         <tr>
@@ -162,27 +162,28 @@
                                 {
                                     @Html.DisplayTextFor(model => t.Name)
 
-                            }
-                            j++;
-                            if (j < count)
-                            {
-                                <text>
-                                    ;&nbsp;
-                                </text>
-                            }
-                            
-                        }
-                    </td>
-                </tr>
-                i++;
-            }
-        </tbody>
-    </table>
-}
+                                }
+                                j++;
+                                if (j < count)
+                                {
+                                    <text>
+                                        ;&nbsp;
+                                    </text>
+                                }
 
-<p>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Index">Back to List</a>
-</p>
+                            }
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    }
+
+    <p>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Index">Back to List</a>
+    </p>
+</div>
 
 @section Scripts
 {

@@ -2,7 +2,7 @@
 {
     public class ViewModelPersonScene
     {
-        public Person Person { get; set; }
+        public string Person { get; set; }
         public Movies Film { get; set; }
         public int Szene { get; set; }
     }
