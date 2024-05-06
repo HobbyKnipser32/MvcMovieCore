@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MvcMoviesCore.Models;
 using ReflectionIT.Mvc.Paging;
+using System.Globalization;
 
 namespace MvcMoviesCore
 {
@@ -35,11 +37,21 @@ namespace MvcMoviesCore
             services.AddDbContext<MvcMovieCoreContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MvcMovieCoreContext")));
 
-            services.AddPaging(option =>
+            const string deDECulture = "de-DE";
+
+            services.Configure<RequestLocalizationOptions>(options =>
             {
-                option.ViewName = "Bootstrap";
-                option.HtmlIndicatorDown = " <span>&darr;</span>";
-                option.HtmlIndicatorUp = " <span>&uarr;</span>";
+                var supportedCultures = new[]
+                {
+                    new CultureInfo(deDECulture),
+                    new CultureInfo("en-US")
+                };
+                options.DefaultRequestCulture = new RequestCulture(deDECulture, deDECulture);
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+                //options.SetDefaultCulture(supportedCultures[0])
+                //    .AddSupportedCultures(supportedCultures)
+                //    .AddSupportedUICultures(supportedCultures);
             });
         }
 

@@ -1,4 +1,3 @@
-using ReflectionIT.Mvc.Paging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -64,9 +63,6 @@ namespace MvcMoviesCore.Models
 
         [NotMapped]
         public List<ViewModelScenes> Scenes { get; set; }
-
-        [NotMapped]
-        public PagingList<MoviesPerson> PagingList { get; set; }
 
         [Required]
         public virtual Genre Genre { get; set; }

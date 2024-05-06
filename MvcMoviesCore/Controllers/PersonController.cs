@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcMoviesCore.Models;
-using ReflectionIT.Mvc.Paging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,10 +15,33 @@ namespace MvcMoviesCore.Controllers
     public class PersonController : Controller
     {
         private readonly MvcMovieCoreContext _context;
+        private IHostingEnvironment _hostingEnvironment;
 
-        public PersonController(MvcMovieCoreContext context)
+        public PersonController(MvcMovieCoreContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
+        }
+
+        public IActionResult Upload()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Upload(IFormFile file)
+        {
+            var fileDic = "File";
+            string filePath = Path.Combine(_hostingEnvironment.WebRootPath , fileDic);
+            if (!Directory.Exists(filePath))
+                Directory.CreateDirectory(filePath);
+            var fileName = file.Name;
+            filePath = Path.Combine(filePath, fileName);
+            using (FileStream fs = System.IO.File.Create(filePath))
+            {
+                file.CopyTo(fs);
+            }
+            return Ok(file);
         }
 
         // GET: Person
@@ -120,7 +145,7 @@ namespace MvcMoviesCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Größe,Gewicht,PersonTypesId")] Person person)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification")] Person person)
         {
             if (id != person.Id)
             {
