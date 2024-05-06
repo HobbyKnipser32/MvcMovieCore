@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,14 @@ namespace MvcMoviesCore.Controllers
     public class PersonController : Controller
     {
         private readonly MvcMovieCoreContext _context;
-        private IHostingEnvironment _hostingEnvironment;
+        private readonly IConfiguration configuration;
+        private readonly bool showAdult;
 
-        public PersonController(MvcMovieCoreContext context, IHostingEnvironment hostingEnvironment)
+        public PersonController(MvcMovieCoreContext context, IConfiguration configuration)
         {
             _context = context;
-            _hostingEnvironment = hostingEnvironment;
+            this.configuration = configuration;
+            showAdult = this.configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
 
         public IActionResult Upload()
@@ -45,7 +48,7 @@ namespace MvcMoviesCore.Controllers
         }
 
         // GET: Person
-        public IActionResult Index(string filter = null, string sortExpression = "Name", int page = 1)
+        public IActionResult Index(string filter = null)
         {
             var persons = _context.Person
                                   .Include(i => i.PersonType)
@@ -56,7 +59,12 @@ namespace MvcMoviesCore.Controllers
             if (!string.IsNullOrWhiteSpace(filter))
                 persons = persons.Where(w => w.Name.Contains(filter));
 
-            //var model = await PagingList.CreateAsync(persons, 20, page, sortExpression, "Name");
+            if (!showAdult)
+            {
+                var personType = _context.PersonType.FirstOrDefault(w => w.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase));
+                if (personType != null)
+                    persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id));
+            }
 
             return View(persons);
         }
