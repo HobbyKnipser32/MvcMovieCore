@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration _configuration
+@{
+    var showAdult = _configuration.GetSection("AppSettings")["ShowAdult"];
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -38,7 +43,10 @@
                     <li><a asp-area="" asp-controller="Movies" asp-action="Index">Filme</a></li>
                     <li><a asp-area="" asp-controller="Person" asp-action="Index">Personen</a></li>
                     <li><a asp-area="" asp-controller="Person" asp-action="Birthdays">Geburtstage</a></li>
-                    <li><a asp-area="" asp-controller="GetRandomAdultMovie" asp-action="Index">Random A Movie</a></li>
+                    @if (showAdult.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        <li><a asp-area="" asp-controller="GetRandomAdultMovie" asp-action="Index">Random A Movie</a></li>
+                    }
                     <li><a asp-area="" asp-controller="GetRandomMovie" asp-action="Index">Random Movie</a></li>
                 </ul>
             </div>

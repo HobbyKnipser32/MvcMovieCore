@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
 using ReflectionIT.Mvc.Paging;
 using System;
@@ -14,18 +15,21 @@ namespace MvcMoviesCore.Controllers
     public class MoviesController : Controller
     {
         private readonly MvcMovieCoreContext _context;
-
+        private readonly IConfiguration _configuration;
         private bool _showAdult;
 
-        public MoviesController(MvcMovieCoreContext context)
+        public MoviesController(MvcMovieCoreContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
+            _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
 
         // GET: Movies
-        public IActionResult Index(string filter, bool adult = true)
+        public IActionResult Index(string filter, bool? adult)
         {
-            _showAdult = adult;
+            if (adult != null)
+                _showAdult = adult.Value;
 
             var movies = _context.Movies
                                  .Include(m => m.Genre)
@@ -43,6 +47,7 @@ namespace MvcMoviesCore.Controllers
             var practices = GetPractices();
             var filterContent = GetFilterContent();
 
+            ViewData["ShowwAdult"] = _showAdult;
             return View(movies);
         }
 

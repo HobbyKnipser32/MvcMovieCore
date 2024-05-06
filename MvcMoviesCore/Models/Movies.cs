@@ -62,6 +62,8 @@ namespace MvcMoviesCore.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal? RunTime { get; set; }
 
+        public long? FileSize { get; set; }
+
         [NotMapped]
         public List<ViewModelScenes> Scenes { get; set; }
 
