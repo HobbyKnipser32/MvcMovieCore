@@ -37,6 +37,38 @@
 
   <ItemGroup>
     <None Include="Views\Shared\MoviesDetailView.razor" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\fonts\material-icons\material-icons.woff2" />
+    <None Include="wwwroot\fonts\material-icons\MaterialIcons-Regular.svg" />
+    <None Include="wwwroot\lib\daterangepicker\daterangepicker.js" />
+    <None Include="wwwroot\lib\devextreme\css\fonts\Roboto-300.woff2" />
+    <None Include="wwwroot\lib\devextreme\css\fonts\Roboto-400.woff2" />
+    <None Include="wwwroot\lib\devextreme\css\fonts\Roboto-500.woff2" />
+    <None Include="wwwroot\lib\devextreme\css\fonts\Roboto-700.woff2" />
+    <None Include="wwwroot\lib\devextreme\css\icons\dxicons.woff2" />
+    <None Include="wwwroot\lib\devextreme\css\icons\dxiconsmaterial.woff2" />
+    <None Include="wwwroot\lib\devextreme\js\dx.all.js" />
+    <None Include="wwwroot\lib\devextreme\js\dx.all.min.js" />
+    <None Include="wwwroot\lib\devextreme\js\localization\dx.messages.de.js" />
+    <None Include="wwwroot\lib\devextreme\js\localization\dx.messages.de.min.js" />
+    <None Include="wwwroot\lib\devextreme\js\localization\dx.messages.en.js" />
+    <None Include="wwwroot\lib\devextreme\js\localization\dx.messages.en.min.js" />
+    <None Include="wwwroot\lib\highlightjs\dataTables.searchHighlight.min.js" />
+    <None Include="wwwroot\lib\highlightjs\jquery.highlight.js" />
+    <None Include="wwwroot\lib\jquery-unobtrusive-ajax\dist\jquery.unobtrusive-ajax.js" />
+    <None Include="wwwroot\lib\jquery-unobtrusive-ajax\dist\jquery.unobtrusive-ajax.min.js" />
+    <None Include="wwwroot\lib\jqueryui\jquery-ui.js" />
+    <None Include="wwwroot\lib\jqueryui\jquery-ui.min.js" />
+    <None Include="wwwroot\lib\moment\datetime-moment.js" />
+    <None Include="wwwroot\lib\moment\de.js" />
+    <None Include="wwwroot\lib\moment\moment-timezone-with-data.js" />
+    <None Include="wwwroot\lib\moment\moment.min.js" />
+    <None Include="wwwroot\lib\underscore.js\underscore-min.js" />
   </ItemGroup>
 
 </Project> 

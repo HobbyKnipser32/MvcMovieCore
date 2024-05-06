@@ -16,14 +16,16 @@ namespace MvcMoviesCore.Controllers
     public class PersonController : Controller
     {
         private readonly MvcMovieCoreContext _context;
-        private readonly IConfiguration configuration;
-        private readonly bool showAdult;
+        private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly bool _showAdult;
 
-        public PersonController(MvcMovieCoreContext context, IConfiguration configuration)
+        public PersonController(MvcMovieCoreContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
-            this.configuration = configuration;
-            showAdult = this.configuration.GetValue<bool>("AppSettings:ShowAdult");
+            _configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
+            _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
 
         public IActionResult Upload()
@@ -59,7 +61,7 @@ namespace MvcMoviesCore.Controllers
             if (!string.IsNullOrWhiteSpace(filter))
                 persons = persons.Where(w => w.Name.Contains(filter));
 
-            if (!showAdult)
+            if (!_showAdult)
             {
                 var personType = _context.PersonType.FirstOrDefault(w => w.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase));
                 if (personType != null)

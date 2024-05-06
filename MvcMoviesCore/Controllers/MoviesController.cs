@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
+using MvcMoviesCore.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -260,7 +261,7 @@ namespace MvcMoviesCore.Controllers
             return _context.Movies.Any(e => e.Id == id);
         }
 
-        private async Task<List<ViewModelScenes>> GetScenes(Guid? movieId)
+        private async Task<List<ScenesViewModel>> GetScenes(Guid? movieId)
         {
             var moviePersons = await _context.MoviesPerson
                 .Where(w => w.MoviesId.Equals(movieId))
@@ -271,7 +272,7 @@ namespace MvcMoviesCore.Controllers
             if (!moviePersons.Any())
                 return null;
 
-            var scenes = new List<ViewModelScenes>();
+            var scenes = new List<ScenesViewModel>();
 
             foreach (var moviePerson in moviePersons)
             {
@@ -280,7 +281,7 @@ namespace MvcMoviesCore.Controllers
                 {
                     foreach (var scene in scenen)
                     {
-                        scenes.Add(new ViewModelScenes
+                        scenes.Add(new ScenesViewModel
                         {
                             Nr = scene.Scene,
                             Name = moviePerson.Person.Name,

@@ -4,108 +4,136 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Movies</h2>
 
-<h4>Movies</h4>
+<h4>Edit</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+            <input type="hidden" asp-for="Id" id="movieId"/>
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Genre" class="control-label"></label>
+                    <select asp-for="GenreId" class="form-control" asp-items="ViewBag.GenreId"></select>
+                    <span asp-validation-for="GenreId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="RecordCarrier" class="control-label">Datenträger</label>
+                    <select asp-for="RecordCarrierId" class="form-control" asp-items="ViewBag.RecordCarrierId">
+                        @if (Model.RecordCarrierId == null)
+                        {
+                            <option selected="selected" value=""></option>
+                        }
+                    </select>
+                    <span asp-validation-for="RecordCarrierId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="StorageLocation" class="control-label">Lagerort</label>
+                    <select asp-for="StorageLocationId" class="form-control" asp-items="ViewBag.StorageLocationId">
+                        @if (Model.StorageLocationId == null)
+                        {
+                            <option selected="selected" value=""></option>
+                        }
+                    </select>
+                    <span asp-validation-for="StorageLocationId" class="text-danger"></span>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="YearOfPublication" class="control-label"></label>
-                <input asp-for="YearOfPublication" class="form-control" />
-                <span asp-validation-for="YearOfPublication" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Genre" class="control-label"></label>
-                <select asp-for="GenreId" class="form-control" asp-items="ViewBag.GenreId"></select>
-                <span asp-validation-for="GenreId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RecordCarrier" class="control-label"></label>
-                <select asp-for="RecordCarrierId" class="form-control" asp-items="ViewBag.RecordCarrierId">
-                    @if (Model.RecordCarrierId == null)
-                    {
-                        <option selected="selected" value=""></option>
-                    }
-                </select>
-                <span asp-validation-for="RecordCarrierId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="InStock" /> @Html.DisplayNameFor(model => model.InStock)
-                    </label>
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="YearOfPublication" class="control-label">Erscheinungsjahr</label>
+                    <input asp-for="YearOfPublication" class="form-control" type="date" />
+                    <span asp-validation-for="YearOfPublication" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="RunTime" class="control-label">Laufzeit</label>
+                    <input asp-for="RunTime" class="form-control" />
+                    <span asp-validation-for="LastView" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="LastView" class="control-label">zuletzt gesehen</label>
+                    <input asp-for="LastView" class="form-control" type="date" />
+                    <span asp-validation-for="LastView" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="InStock" class="control-label">vorhanden</label>
+                    <input asp-for="InStock.HasValue" type="checkbox" class="form-control checkbox" />
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="StorageLocation" class="control-label"></label>
-                <select asp-for="StorageLocationId" class="form-control" asp-items="ViewBag.StorageLocationId">
-                    @if (Model.StorageLocationId == null)
-                    {
-                        <option selected="selected" value=""></option>
-                    }
-                </select>
-                <span asp-validation-for="StorageLocationId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Added" class="control-label"></label>
-                <input asp-for="Added" class="form-control" />
-                <span asp-validation-for="Added" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OnWatch" class="control-label"></label>
-                <input asp-for="OnWatch" class="form-control" />
-                <span asp-validation-for="OnWatch" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Remark" class="control-label"></label>
-                <input asp-for="Remark" class="form-control" />
-                <span asp-validation-for="Remark" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="Adult" /> @Html.DisplayNameFor(model => model.Adult)
-                    </label>
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="Owner" class="control-label">Besitzer</label>
+                    <input asp-for="Owner" class="form-control" />
+                    <span asp-validation-for="Owner" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="OnWatch" class="control-label">auf dem Zettel</label>
+                    <input asp-for="OnWatch" class="form-control" />
+                    <span asp-validation-for="OnWatch" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Added" class="control-label">hinzugefügt</label>
+                    <input asp-for="Added" class="form-control" type="date" />
+                    <span asp-validation-for="Added" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Remark" class="control-label">Bemerkung</label>
+                    <input asp-for="Remark" class="form-control" />
+                    <span asp-validation-for="Remark" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="ThreeD" /> @Html.DisplayNameFor(model => model.ThreeD)
-                    </label>
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="IMDB" class="control-label">IMDB Wertung</label>
+                    <input asp-for="IMDB" class="form-control" />
+                    <span asp-validation-for="IMDB" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Ranking" class="control-label">Wertung</label>
+                    <input asp-for="Ranking" class="form-control" />
+                    <span asp-validation-for="Ranking" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Adult" class="control-label">für Erwachsene</label>
+                    <input asp-for="Adult.HasValue" type="checkbox" class="form-control checkbox" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="ThreeD" class="control-label">3D</label>
+                    <input asp-for="ThreeD.HasValue" type="checkbox" class="form-control checkbox" />
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Owner" class="control-label"></label>
-                <input asp-for="Owner" class="form-control" />
-                <span asp-validation-for="Owner" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="FileSize" class="control-label">Dateigröße</label>
+                    <input asp-for="FileSize" class="form-control" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="IMDB" class="control-label"></label>
-                <input asp-for="IMDB" class="form-control" />
-                <span asp-validation-for="IMDB" class="text-danger"></span>
+            <hr />
+            <div class="row col-md-12" id="actorsDiv">
+                <div class="material-datatables table-responsive">
+                    <table id="actorsTable" class="table table-striped table-no-bordered table-hover" cellspacing="0" style="word-wrap:break-word; table-layout: auto;">
+                        <thead class="text-rose">
+                            <tr>
+                                <th>Darsteller</th>
+                                <th>Rolle</th>
+                                <th class="disabled-sorting text-right" style="width:5px">&nbsp;</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Ranking" class="control-label"></label>
-                <input asp-for="Ranking" class="form-control" />
-                <span asp-validation-for="Ranking" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastView" class="control-label"></label>
-                <input asp-for="LastView" class="form-control" />
-                <span asp-validation-for="LastView" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+            <hr />
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
             </div>
         </form>
     </div>
@@ -116,5 +144,42 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@*     @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    } *@
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function () {
+            const movieId = '@Model.Id';
+            var actorsTable = $('#actorsTable').DataTable({
+                ajax: {
+                    url: appRootPath + '/api/MoviesApi/GetActors/' + movieId,
+                    dataSrc: ''
+                },
+                columns: [
+                    {data: 'Actor'},
+                    {data: 'Role'},
+                    {
+                        defaultContent: '<a class="btn btn-link btn-default btn-just-icon delete"><i class="material-icons">delete</i></a>',
+                        className: 'text-right'
+                    }
+                ],
+                paging: false,
+                fixedHeader: {
+                    header: true,
+                    footer: false
+                },
+                columnDefs: [
+                    {
+                        targets: [0, 1, 2],
+                        searchable: false,
+                        className: 'compact'
+                    }
+                ],
+                bFilter: false
+            });
+        });
+    </script>
+
 }

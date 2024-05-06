@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGeneration.Utils;
 using MvcMoviesCore.Models;
+using MvcMoviesCore.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace MvcMoviesCore.ApiController
         [HttpGet("{personId}")]
         public async Task<IActionResult> Get(Guid personId)
         {
-            List<ViewModelPersonScene> personScenes = new List<ViewModelPersonScene>();
+            List<PersonSceneViewModel> personScenes = new List<PersonSceneViewModel>();
             var personMovies = await _context.MoviesPerson.Where(w => w.PersonId.Equals(personId)).ToListAsync();
             string jsonResult;
             var scenes = new List<int>();
@@ -67,7 +68,7 @@ namespace MvcMoviesCore.ApiController
                                     {
                                         person = $"<a href=\"{url}\">{moviePerson.Person.Name}</a>";
                                     }
-                                    personScenes.Add(new ViewModelPersonScene()
+                                    personScenes.Add(new PersonSceneViewModel()
                                     {
                                         Film = new Movies() { Id = moviePerson.Movies.Id, Name = moviePerson.Movies.Name },
                                         Szene = sceneCoActor.Scene,

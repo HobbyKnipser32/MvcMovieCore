@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MvcMoviesCore.ViewModels;
 
 namespace MvcMoviesCore.Models
 {
@@ -17,7 +18,7 @@ namespace MvcMoviesCore.Models
         [Required(ErrorMessage = "Der Filmtitel ist erforderlich")]
         public string Name { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:yyyy}")]
         public DateTime? YearOfPublication { get; set; }
 
         public Guid GenreId { get; set; }
@@ -28,7 +29,7 @@ namespace MvcMoviesCore.Models
 
         public Guid? StorageLocationId { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime? Added { get; set; }
 
         public string OnWatch { get; set; }
@@ -47,7 +48,7 @@ namespace MvcMoviesCore.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal? Ranking { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:D}")]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:D}")]
         public DateTime? LastView { get; set; }
 
         public DateTime? CreateDate { get; set; }
@@ -64,7 +65,7 @@ namespace MvcMoviesCore.Models
         public long? FileSize { get; set; }
 
         [NotMapped]
-        public List<ViewModelScenes> Scenes { get; set; }
+        public List<ScenesViewModel> Scenes { get; set; }
 
         [Required]
         public virtual Genre Genre { get; set; }
