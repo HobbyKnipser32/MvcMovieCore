@@ -46,7 +46,7 @@ namespace MvcMoviesCore.ApiController
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 jsonResult = string.Empty;
             }
@@ -85,12 +85,11 @@ namespace MvcMoviesCore.ApiController
                 jsonResult = JsonConvert.SerializeObject(moviePersons, Formatting.Indented, jsonSerializerSettings);
                 return Ok(jsonResult);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Ok(string.Empty);
             }
         }
-
 
         [HttpPost("{id}")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)

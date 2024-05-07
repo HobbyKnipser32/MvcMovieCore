@@ -86,7 +86,7 @@ namespace MvcMoviesCore.ApiController
                     var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
                     jsonResult = JsonConvert.SerializeObject(personScenes, Formatting.Indented, jsonSerializerSettings);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     jsonResult = string.Empty;
                 }

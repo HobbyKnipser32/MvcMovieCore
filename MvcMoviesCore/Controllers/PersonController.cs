@@ -17,10 +17,10 @@ namespace MvcMoviesCore.Controllers
     {
         private readonly MvcMovieCoreContext _context;
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly bool _showAdult;
 
-        public PersonController(MvcMovieCoreContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public PersonController(MvcMovieCoreContext context, IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
             _configuration = configuration;
