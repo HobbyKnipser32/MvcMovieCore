@@ -36,7 +36,7 @@ namespace MvcMoviesCore.Models
 
         public string Remark { get; set; }
 
-        public bool? Adult { get; set; }
+        public bool Adult { get; set; }
 
         public bool? ThreeD { get; set; }
 

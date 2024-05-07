@@ -83,7 +83,7 @@ namespace MvcMoviesCore.Controllers
 
             movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Classification).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
 
-            movie.Scenes = await GetScenes(id);
+            movie.Scenes = await GetScenesAsync(id);
 
             return View(movie);
         }
@@ -114,6 +114,8 @@ namespace MvcMoviesCore.Controllers
             ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(o => o.Name), "Id", "Name", movie.GenreId);
             ViewData["RecordCarrierId"] = new SelectList(_context.RecordCarrier.OrderBy(o => o.Name), "Id", "Name", movie.RecordCarrierId);
             ViewData["StorageLocationId"] = new SelectList(_context.StorageLocation.OrderBy(o => o.Name), "Id", "Name", movie.StorageLocationId);
+            ViewData["Actors"] = GetActors();
+            ViewData["Roles"] = GetRoles();
             return View(movie);
         }
 
@@ -133,6 +135,9 @@ namespace MvcMoviesCore.Controllers
             ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(o => o.Name), "Id", "Name", movies.GenreId);
             ViewData["RecordCarrierId"] = new SelectList(_context.RecordCarrier.OrderBy(o => o.Name), "Id", "Name", movies.RecordCarrierId);
             ViewData["StorageLocationId"] = new SelectList(_context.StorageLocation.OrderBy(o => o.Name), "Id", "Name", movies.StorageLocationId);
+            ViewData["Actors"] = GetActors();
+            ViewData["Roles"] = GetRoles();
+
             return View(movies);
         }
 
@@ -175,7 +180,7 @@ namespace MvcMoviesCore.Controllers
         }
 
         // GET: Movies/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> DeleteAsync(Guid? id)
         {
             if (id == null)
             {
@@ -198,7 +203,7 @@ namespace MvcMoviesCore.Controllers
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmedAsync(Guid id)
         {
             var movie = await _context.Movies.FindAsync(id);
             var moviesPerson = _context.MoviesPerson.Where(w => w.MoviesId == movie.Id).ToList();
@@ -219,7 +224,7 @@ namespace MvcMoviesCore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> DeleteLink(Guid? id)
+        public async Task<IActionResult> DeleteLinkAsync(Guid? id)
         {
             if (id == null)
                 return NotFound();
@@ -238,7 +243,7 @@ namespace MvcMoviesCore.Controllers
 
         [HttpPost, ActionName("DeleteLink")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteLinkConfirmed(Guid id)
+        public async Task<IActionResult> DeleteLinkConfirmedAsync(Guid id)
         {
             var moviePerson = await _context.MoviesPerson.FindAsync(id);
             if (moviePerson != null)
@@ -256,12 +261,24 @@ namespace MvcMoviesCore.Controllers
             //return RedirectToAction(nameof(Index));
         }
 
+        #region private functions
+
+        private List<SelectListItem> GetRoles()
+        {
+            return PrepareListWithNull(_context.MovieRole.Distinct().OrderBy(o => o.Name).Select(s => new SelectListItem(s.Name, s.Id.ToString())).ToList());
+        }
+
+        private List<SelectListItem> GetActors()
+        {
+            return PrepareListWithNull(_context.Person.Distinct().OrderBy(o => o.Name).Select(s => new SelectListItem(s.Name, s.Id.ToString())).ToList());
+        }
+
         private bool MoviesExists(Guid id)
         {
             return _context.Movies.Any(e => e.Id == id);
         }
 
-        private async Task<List<ScenesViewModel>> GetScenes(Guid? movieId)
+        private async Task<List<ScenesViewModel>> GetScenesAsync(Guid? movieId)
         {
             var moviePersons = await _context.MoviesPerson
                 .Where(w => w.MoviesId.Equals(movieId))
@@ -295,9 +312,9 @@ namespace MvcMoviesCore.Controllers
             //var szenen = new List<string>();
             //foreach (var scene in scenes.GroupBy(g => g.Nr).OrderBy(o => o.Key))
             //{
-            //    var s = scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.cl.Sex).ThenBy(o => o.Name).ToList();
+            //    var x = scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.cl.Sex).ThenBy(o => o.Name).ToList();
             //    string szene = $"Szene {scene.Key}: ";
-            //    foreach (var t in s)
+            //    foreach (var t in x)
             //    {
             //        szene += $"{t.Name}, ";
             //    }
@@ -343,7 +360,7 @@ namespace MvcMoviesCore.Controllers
             if (genres.Any())
             {
                 foreach (var genre in genres)
-                { 
+                {
                     var g = genre.Name.Split(".");
                     if (g.Any())
                     {
@@ -369,5 +386,13 @@ namespace MvcMoviesCore.Controllers
             }
             return filterContent.OrderBy(o => o).ToList();
         }
+
+        private static List<SelectListItem> PrepareListWithNull(List<SelectListItem> items)
+        {
+            items.Insert(0, new SelectListItem(null, null));
+            return items.ToList();
+        }
+
+        #endregion
     }
 }

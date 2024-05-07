@@ -44,7 +44,7 @@ namespace MvcMoviesCore.Controllers
                     .Include(i => i.RecordCarrier)
                     .Include(i => i.StorageLocation)
                     .Include(i => i.Genre)
-                    .Where(w => w.Adult.Value == false && w.LastView == null)
+                    .Where(w => w.Adult == false && w.LastView == null)
                     .OrderByDescending(o => o.CreateDate)
                     .ThenBy(t => t.Name)
                     .Take(20)
