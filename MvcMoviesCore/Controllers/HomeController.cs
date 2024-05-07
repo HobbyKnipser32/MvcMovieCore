@@ -1,35 +1,35 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
+//using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
+//using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace MvcMoviesCore.Controllers
 {
     public class HomeController : Controller
     {
         private readonly MvcMovieCoreContext _context;
-        private readonly IConfiguration configuration;
-        private readonly bool showAdult;
+        private readonly IConfiguration _configuration;
+        private readonly bool _showAdult;
 
         public HomeController(MvcMovieCoreContext context, IConfiguration configuration)
         {
             _context = context;
-            this.configuration = configuration;
-            showAdult = this.configuration.GetValue<bool>("AppSettings:ShowAdult");
+            _configuration = configuration;
+            _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
 
         public IActionResult Index()
         {
             IQueryable<Movies> movies;
 
-            if (showAdult)
+            if (_showAdult)
                 movies = _context.Movies
                     .Include(m => m.Genre)
                     .Include(m => m.RecordCarrier)

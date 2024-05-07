@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
@@ -7,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MvcMoviesCore.Models;
-using ReflectionIT.Mvc.Paging;
 using System.Globalization;
 
 namespace MvcMoviesCore
@@ -22,6 +22,7 @@ namespace MvcMoviesCore
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        [System.Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
@@ -36,6 +37,16 @@ namespace MvcMoviesCore
 
             services.AddDbContext<MvcMovieCoreContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MvcMovieCoreContext")));
+
+            services.AddControllers();
+
+            //var mapperConfig = new MapperConfiguration(mc =>
+            //{
+            //    mc.AddProfile(new MappingProfile());
+            //});
+
+            //IMapper mapper = mapperConfig.CreateMapper();
+
 
             const string deDECulture = "de-DE";
 
@@ -68,16 +79,22 @@ namespace MvcMoviesCore
                 app.UseHsts();
             }
 
+            app.UseRouting();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            //app.UseEndpoints(endpoints => endpoints.MapControllers(nameof: "default", pattern: "{controller=Home}/{action=Index}/{id?}"));
+            //app.MapControllerRoute(
+            //    name: "default",
+            //    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //});
         }
     }
 }
