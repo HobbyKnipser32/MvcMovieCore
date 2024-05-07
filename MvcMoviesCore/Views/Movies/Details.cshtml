@@ -274,7 +274,7 @@
 
         function deleteLink(id) {
             Swal.fire({
-                position: 'top-end',
+                position: inherit;
                 text: 'Verknüpfung löschen?',
                 type: 'question',
                 showCancelButton: true,
@@ -297,7 +297,7 @@
                         success: function () {
                             $('#movieDetails').DataTable().ajax.reload();
                             Swal.fire({
-                                position: 'top-end',
+                                //position: 'top-end',
                                 type: 'success',
                                 text: 'Verknüpfung erfolgreich gelöscht.',
                                 showConfirmButton: false,

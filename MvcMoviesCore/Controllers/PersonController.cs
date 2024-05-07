@@ -63,7 +63,7 @@ namespace MvcMoviesCore.Controllers
 
             if (!_showAdult)
             {
-                var personType = _context.PersonType.FirstOrDefault(w => w.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase));
+                var personType = _context.PersonType.ToList().FirstOrDefault(w => w.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase));
                 if (personType != null)
                     persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id));
             }
