@@ -39,6 +39,10 @@
             <th>
                 Speicherort
             </th>
+            <th>
+                Filegröße [kb]
+            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -72,6 +76,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.StorageLocation.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileSizeInKB)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

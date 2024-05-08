@@ -62,7 +62,22 @@ namespace MvcMoviesCore.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal? RunTime { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:N0}")]
         public long? FileSize { get; set; }
+
+        [NotMapped]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:N0}")]
+        public long? FileSizeInKB
+        {
+            get { return  FileSize / (long)Math.Pow(2,10); }
+        }
+
+        [NotMapped]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:N0}")]
+        public long? FileSizeInMB
+        {
+            get { return FileSize / (long)Math.Pow(2, 20); }
+        }
 
         [NotMapped]
         public List<ScenesViewModel> Scenes { get; set; }

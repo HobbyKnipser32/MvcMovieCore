@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAPICodePack.Shell;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using MvcMoviesCore.Models;
 using MvcMoviesCore.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace MvcMoviesCore.Controllers
 {
@@ -24,6 +27,8 @@ namespace MvcMoviesCore.Controllers
             _configuration = configuration;
             _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
+
+        #region public functions
 
         // GET: Movies
         public IActionResult Index(string filter, bool? adult)
@@ -88,7 +93,7 @@ namespace MvcMoviesCore.Controllers
             return View(movie);
         }
 
-        // GET: Movies/Create   9   
+        // GET: Movies/Create
         public IActionResult Create()
         {
             ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(o => o.Name), "Id", "Name");
@@ -261,6 +266,47 @@ namespace MvcMoviesCore.Controllers
             //return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> FileSizes()
+        {
+            const string moviesDirectory = @"Y:\Videothek\Filme";
+
+            if (!Directory.Exists(moviesDirectory))
+            {
+
+            }
+
+            List<Movies> updateMovies = new List<Movies>();
+
+            var movies = await _context.Movies.Where(w => w.Adult == false).ToListAsync();
+            if (movies.Count != 0)
+            {
+                List<string> allowedFileExtensions = [".avi", ".m4v", ".mkv", ".mp4"];
+                var dirInfo = new DirectoryInfo(moviesDirectory);
+                var filesInDirectory = dirInfo.GetFiles("*", SearchOption.AllDirectories);
+                foreach (var file in filesInDirectory)
+                {
+                    if (allowedFileExtensions.Contains(file.Extension))
+                    {
+                        var fileName = file.Name.Substring(0, file.Name.Length - 4);
+                        var movie = movies.FirstOrDefault(f => f.Name.Equals(fileName) && (f.FileSize == null || f.RunTime == null || f.RunTime == 0));
+                        if (movie != null)
+                        {
+                            movie.FileSize = file.Length;
+                            movie.Added ??= file.LastWriteTime;
+                            movie.RunTime ??= GetVideoDuration(file.FullName);
+                            _context.Update(movie);
+                            updateMovies.Add(movie);
+                        }
+                    }
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            return View(updateMovies);
+        }
+
+        #endregion
+
         #region private functions
 
         private List<SelectListItem> GetRoles()
@@ -391,6 +437,26 @@ namespace MvcMoviesCore.Controllers
         {
             items.Insert(0, new SelectListItem(null, null));
             return items.ToList();
+        }
+
+        private static decimal GetVideoDuration(string filePath)
+        {
+            try
+            {
+                using var shell = ShellObject.FromParsingName(filePath);
+                IShellProperty prop = shell.Properties.System.Media.Duration;
+                var t = TimeSpan.FromTicks((long)(ulong)prop.ValueAsObject);
+                var hour = t.Hours;
+                var minute = t.Minutes;
+                var second = decimal.Round((decimal)t.Seconds / 60, 2);
+
+                decimal runTime = hour * 60 + minute + second;
+                return runTime;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
 
         #endregion

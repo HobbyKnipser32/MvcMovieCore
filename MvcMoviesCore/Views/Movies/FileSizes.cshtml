@@ -1,0 +1,83 @@
+﻿@model IEnumerable<MvcMoviesCore.Models.Movies>
+
+@{
+    ViewData["Title"] = "FileSizes";
+}
+
+<h2>FileSizes</h2>
+
+<table class="table" id="fileSizeTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.YearOfPublication)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InStock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Added)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastView)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RunTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FileSize)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YearOfPublication)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InStock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Added)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastView)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RunTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FileSizeInKB)
+            </td>
+            
+        </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function () {
+            $('#fileSizeTable').DataTable({
+                ordering: true,
+                lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                iDisplayLength: 20,
+                fixedHeader: {
+                    header: true,
+                },
+                bFilter: false
+            });
+        })
+    </script>
+}
