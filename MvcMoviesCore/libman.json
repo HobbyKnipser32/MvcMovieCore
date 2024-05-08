@@ -13,6 +13,14 @@
     {
       "library": "sweetalert2@11.10.8",
       "destination": "wwwroot/lib/sweetalert2/"
+    },
+    {
+      "library": "devextreme@23.2.6",
+      "destination": "wwwroot/devextreme/"
+    },
+    {
+      "library": "apexcharts@3.49.0",
+      "destination": "wwwroot/apexcharts/"
     }
   ]
 }

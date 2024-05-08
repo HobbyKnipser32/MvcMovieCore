@@ -1,6 +1,7 @@
 ﻿@inject Microsoft.Extensions.Configuration.IConfiguration _configuration
 @{
     var showAdult = _configuration.GetSection("AppSettings")["ShowAdult"];
+    var sidebarImagePath = Context.Request.PathBase + "/images/Movie.jpg";
 }
 
 <!DOCTYPE html>
@@ -9,11 +10,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Movies</title>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <link href="~/fonts/fontawesome/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <link href="~/css/jquery.dm-uploader.min.css" rel="stylesheet" />
+    <link href="~/css/toggle-switch.css" rel="stylesheet" />
+    <link href="~/css/daterangepicker.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/dataTables.searchHighlight.css" />
     <environment include="Development">
         <link href="~/lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
         <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
         <link href="~/lib/sweetalert2/sweetalert2.css" rel="stylesheet" />
+        <link href="~/lib/devextreme/css/dx.light.css" rel="stylesheet" />
+        <link href="~/apexcharts/apexcharts.css" rel="stylesheet" />
         <link href="~/css/robotoFonts-material-icons.css" rel="stylesheet" />
         <link href="~/css/site.css" rel="stylesheet" />
     </environment>
@@ -22,67 +32,143 @@
         <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
         <link href="~/lib/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" />
         <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+        <link href="~/lib/devextreme/css/dx.light.min.css" rel="stylesheet" />
+        <link href="~/apexcharts/apexcharts.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
     </environment>
 </head>
-<body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">MvcMoviesCore</a>
+<body class="dx-viewport">
+    <div class="wrapper">
+        <div class="sidebar" data-color="rose" data-background-color="white" data-image="@sidebarImagePath">
+            <div class="logo">
+                <a class="simple-text logo-mini mt-3">
+                    <img src="@sidebarImagePath" width="60" height="60" />
+                </a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/movie.jpg" width="50" height="50" /> </a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Movies</a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                            <a asp-controller="Movies" asp-action="Index" class="dropdown-item">Show Movies</a>
-
-                        </div>
+            <div class="sidebar-wrapper">
+                <ul class="nav">
+                    <li class="nav-item" is-active-route asp-controller="Home" asp-action="Index" id="homeNav">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <span class="sidebar-normal">Home</span>
+                        </a>
                     </li>
-                    <li><a asp-area="" asp-controller="Person" asp-action="Index">Personen</a></li>
-                    <li><a asp-area="" asp-controller="Person" asp-action="Birthdays">Geburtstage</a></li>
-                    @if (showAdult.Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        <li><a asp-area="" asp-controller="GetRandomAdultMovie" asp-action="Index">Random A Movie</a></li>
-                    }
-                    <li><a asp-area="" asp-controller="GetRandomMovie" asp-action="Index">Random Movie</a></li>
+                    <li class="nav-item" is-active-route asp-controller="Home" asp-action="About">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">
+                            <span class="sidebar-normal">About</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
-    </nav>
+    </div>
+    @*  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+    <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    </button>
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">MvcMoviesCore</a>
+    </div>
+    <div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+    <li><a asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/movie.jpg" width="50" height="50" /> </a></li>
+    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+    <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Movies</a>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+    <a asp-controller="Movies" asp-action="Index" class="dropdown-item">Show Movies</a>
+
+    </div>
+    </li>
+    <li><a asp-area="" asp-controller="Person" asp-action="Index">Personen</a></li>
+    <li><a asp-area="" asp-controller="Person" asp-action="Birthdays">Geburtstage</a></li>
+    @if (showAdult.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+    {
+    <li><a asp-area="" asp-controller="GetRandomAdultMovie" asp-action="Index">Random A Movie</a></li>
+    }
+    <li><a asp-area="" asp-controller="GetRandomMovie" asp-action="Index">Random Movie</a></li>
+    </ul>
+    </div>
+    </div>
+    </nav> *@
 
     <partial name="_CookieConsentPartial" />
-
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2024 - MvcMoviesCore</p>
-        </footer>
+    <div class="main-panel">
+        <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-minimize">
+                        <button id="minimizeSidebar" class="btn btn-just-icon btn-white btn-fab btn-round">
+                            <i class=""></i>
+                            <i class="fas fa-angle-double-left visible-on-sidebar-regular"></i>
+                            <i class="fas fa-angle-double-right visible-on-sidebar-mini"></i>
+                            <div class="ripple-container"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container body-content">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+            <hr />
+            <footer>
+                <p>&copy; 2024 - MvcMoviesCore</p>
+            </footer>
+        </div>
     </div>
-
     <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/sweetalert2.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery/jquery.js"></script>
     </environment>
     <environment exclude="Development">
+        <script src="~/lib/jquery/jquery.min.js"></script>
+    </environment>
+    <script src="~/lib/moment/moment.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap-material-design.min.js" asp-append-version="true"></script>
+    <script src="~/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/js/sweetalert2.js"></script>
+    <script src="~/js/bootstrap-notify.js"></script>
+    <script src="~/js/bootstrap-selectpicker.js"></script>
+    <script src="~/js/select2.min.js"></script>
+    <script src="~/js/bootstrap-datetimepicker.min.js"></script>
+    @* <script src="~/js/jquery.dm-uploader.min.js"></script> *@
+    <script src="~/js/polyfill.js"></script>
+    <script src="~/js/serializeJSON.js"></script>
+    <script src="~/js/chips.js"></script>
+    <script src="~/js/sweetalert2.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.js"></script>
+    <script src="~/lib/underscore.js/underscore-min.js"></script>
+    <script src="~/lib/highlightjs/jquery.highlight.js"></script>
+    <script src="~/lib/highlightjs/dataTables.searchHighlight.min.js"></script>
+    <script src="~/lib/jquery-unobtrusive-ajax/dist/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/moment/de.js"></script>
+    <script src="~/lib/moment/moment-timezone-with-data.js"></script>
+    <script src="~/lib/daterangepicker/daterangepicker.js"></script>
+    <environment include="Development">
+        <script src="~/apexcharts/apexcharts.js"></script>
+        <script src="~/js/material-dashboard.js?v=2.1.0" type="text/javascript"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/devextreme/js/dx.all.js"></script>
+        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/apexcharts/apexcharts.min.js"></script>
+        <script src="~/js/material-dashboard.min.js?v=2.1.0" type="text/javascript"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/lib/devextreme/js/dx.all.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/jquery/jquery.min.js"></script>
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery"
@@ -95,10 +181,75 @@
                 crossorigin="anonymous"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+
+    <partial name="_ValidationScripts" />
+    <partial name="_DatepickerInitScript" />
+    <partial name="_Select2InitScript" />
+    <partial name="_FileUploaderHelperScript" />
+
     <script>
         var appRootPath = '@Context.Request.PathBase';
+        var miniSideBarStoreVar = 'isMiniSidebarVisible';
+
+        var setSidebarMode = function (isMiniModeOn) {
+            if (isMiniModeOn == "false") {
+                $('body').removeClass('sidebar-mini');
+                md.misc.sidebar_mini_active = false;
+            } else {
+                $('body').addClass('sidebar-mini');
+                md.misc.sidebar_mini_active = true;
+            }
+
+            // we simulate the window Resize so the charts will get updated in realtime.
+            var simulateWindowResize = setInterval(function () {
+                window.dispatchEvent(new Event('resize'));
+            }, 180);
+
+            // we stop the simulation of Window Resize after the animations are completed
+            setTimeout(function () {
+                clearInterval(simulateWindowResize);
+            }, 1000);
+
+        }
+
+        if ($('#masterdata > ul > li').hasClass('active')) {
+
+            $('#masterdataNavLink').click();
+
+            $('#masterdataNav').addClass('active');
+
+            $('#masterdataNavLink').attr("aria-expanded", "true");
+        }
+        if ($('#measurements > ul > li').hasClass('active')) {
+
+            $('#measurementsNavLink').click();
+
+            $('#measurementsNav').addClass('active');
+
+            $('#measurementsNavLink').attr("aria-expanded", "true");
+        }
+        if ($('#administration > ul > li').hasClass('active')) {
+
+            $('#adminNavLink').click();
+
+            $('#adminNav').addClass('active');
+
+            $('#adminNavLink').attr("aria-expanded", "true");
+        }
+        if ($('#vehicleFilters > ul > li').hasClass('active')) {
+
+            $('#vehiclesNavLink').click();
+
+            $('#vehiclesNav').addClass('active');
+
+            $('#vehiclesNavLink').attr("aria-expanded", "true");
+        }
+
+        if ($('.sidebar').is(':visible')) {
+            var showMiniSidebar = window.localStorage ? localStorage.getItem(miniSideBarStoreVar) : false;
+            showMiniSidebar ? setSidebarMode(showMiniSidebar) : setSidebarMode(false);
+        }
     </script>
     @RenderSection("Scripts", required: false)
 </body>

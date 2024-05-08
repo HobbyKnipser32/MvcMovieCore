@@ -1,0 +1,141 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<script>
+    /*
+   * Helper functions for file upload
+   */
+
+    // Updates a file progress, depending on the parameters it may animate it or change the color.
+    function ui_multi_update_file_progress(id, percent, color, active) {
+        color = (typeof color === 'undefined' ? false : color);
+        active = (typeof active === 'undefined' ? true : active);
+
+        var bar = $('#' + id).find('div.progress-bar');
+
+        bar.width(percent + '%').attr('aria-valuenow', percent);
+        bar.toggleClass('progress-bar-striped progress-bar-animated', active);
+
+        if (percent === 0) {
+            bar.html('');
+        } else {
+            bar.html(percent + '%');
+        }
+
+        if (color !== false) {
+            bar.removeClass('bg-success bg-info bg-warning bg-danger');
+            bar.addClass('bg-' + color);
+        }
+    }
+
+    //Configure display for upload buttons
+    function ConfigureUploadButtons(buttonClassName, targetTableId) {
+
+        var uploadButtons = $(targetTableId).find(buttonClassName);
+        for (i = 0; i < uploadButtons.length; i++) {
+            var elem = $(uploadButtons[i]);
+            var table = $(targetTableId).DataTable();
+            var row = $(elem).parents('tr')[0];
+            var data = table.row(row).data();
+
+            if (data && $(data[0]).val() && $(data[0]).val() != empty_guid) {
+                if (elem.hasClass('disabled'))
+                    elem.removeClass('disabled');
+            }
+            else {
+                if (!elem.hasClass('disabled'))
+                    elem.addClass('disabled');
+            }
+        }
+    }
+
+    //Configure display , url for download buttons
+    function ConfigureDownloadButtons(buttonClassName, downloadUrl, targetTableId) {
+        var downloadButtons = $(targetTableId).find(buttonClassName);
+        for (i = 0; i < downloadButtons.length; i++) {
+
+            var elem = $(downloadButtons[i]);
+            var documentId = $(elem).children('input').val();
+
+            if (documentId) {
+                elem.attr("href", downloadUrl + "?documentId=" + documentId);
+                if (elem.hasClass('disabled'))
+                    elem.removeClass('disabled');
+
+                if (!elem.hasClass('btn-success'))
+                    elem.addClass('btn-success');
+            }
+            else {
+                if (elem.hasClass('btn-success'))
+                    elem.removeClass('btn-success');
+
+                if (!elem.hasClass('disabled'))
+                    elem.addClass('disabled');
+            }
+        }
+    }
+
+    //Loads the document uploader modal
+    function LoadDocumentUploader(containerId, loadUrl, loadData,
+                                  uploadUrl, uploadData,
+        modalTitleContainerId, modalTitle, targetTableId,
+        callback) {
+
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            type: "get",
+            url: loadUrl,
+            traditional: true,
+            data: loadData,
+            success: function (content) {
+                $(modalTitleContainerId).text(modalTitle);
+                $(containerId).html(content);
+                var table = $(targetTableId).DataTable();
+
+                $("#fileInput").dmUploader({
+                    url: uploadUrl,
+                    method: 'POST',
+                    extraData: uploadData,
+                    onInit: function () {
+                        console.log('Callback: Plugin initialized');
+                    },
+                    onUploadProgress: function (id, percent) {
+                        ui_multi_update_file_progress("fileInput", percent);
+                    },
+                    onUploadSuccess: function (id, data) {
+                        table.row(editRowIndex).data(TrToData(data)).draw();
+                        editRowIndex = -1;
+                        if (typeof callback === "function") {
+                            callback();
+                        }
+
+                        $("#UploadDocumentPopup").modal('hide');
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        Swal.fire(
+                            '@Localizer["FileUploadSucceded"]',
+                            '',
+                            'success'
+                        );
+                    },
+                    onUploadError: function (id, message) {
+                        $("#UploadDocumentPopup").modal('hide');
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        Swal.fire(
+                            '@Localizer["FileUploadFailed"]',
+                            message,
+                            'error'
+                        );
+                    }
+
+                });
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
+
+
+    }
+</script>

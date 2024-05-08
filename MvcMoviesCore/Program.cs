@@ -20,6 +20,10 @@ namespace MvcMoviesCore
             builder.Services.AddDbContext<MvcMovieCoreContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("MvcMovieCoreContext")));
 
+            builder.Services.AddMvc();
+
+            builder.Services.AddControllersWithViews().AddViewLocalization();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
