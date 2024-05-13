@@ -91,7 +91,6 @@ namespace MvcMoviesCore.ApiController
             }
         }
 
-
         [HttpPost("{id}")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {

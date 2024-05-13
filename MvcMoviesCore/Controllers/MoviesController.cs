@@ -17,9 +17,15 @@ namespace MvcMoviesCore.Controllers
 {
     public class MoviesController : Controller
     {
+        #region private fields
+
         private readonly MvcMovieCoreContext _context;
         private readonly IConfiguration _configuration;
         private bool _showAdult;
+
+        #endregion
+
+        #region constructor
 
         public MoviesController(MvcMovieCoreContext context, IConfiguration configuration)
         {
@@ -27,6 +33,8 @@ namespace MvcMoviesCore.Controllers
             _configuration = configuration;
             _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
+
+        #endregion
 
         #region public functions
 

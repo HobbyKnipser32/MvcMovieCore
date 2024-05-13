@@ -42,10 +42,16 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a asp-area="" asp-controller="Movies" asp-action="FileSizes" class="nav-link px-0">
+                                            <span class="d-none d-sm-inline">Dateigröße ermittlen</span>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a asp-area="" asp-controller="GetRandomMovie" asp-action="Index" class="nav-link px-0">
                                             <span class="d-none d-sm-inline">zufälliger Filme</span>
                                         </a>
                                     </li>
+
                                     @if (showAdult.Equals("true", StringComparison.CurrentCultureIgnoreCase))
                                     {
                                         <li>
