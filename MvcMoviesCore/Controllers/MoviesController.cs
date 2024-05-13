@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAPICodePack.Shell;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using MvcMoviesCore.Models;
 using MvcMoviesCore.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace MvcMoviesCore.Controllers
 {
@@ -24,6 +27,8 @@ namespace MvcMoviesCore.Controllers
             _configuration = configuration;
             _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
+
+        #region public functions
 
         // GET: Movies
         public IActionResult Index(string filter, bool? adult)
@@ -88,7 +93,7 @@ namespace MvcMoviesCore.Controllers
             return View(movie);
         }
 
-        // GET: Movies/Create   9   
+        // GET: Movies/Create
         public IActionResult Create()
         {
             ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(o => o.Name), "Id", "Name");
@@ -261,7 +266,62 @@ namespace MvcMoviesCore.Controllers
             //return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult FileSizes()
+        {
+            string moviesDirectory = _configuration.GetValue<string>("AppSettings:MoviesDirectory");
+            string moviesAdultDirectory = @"Y:\Errors\Filme";
+            List<Movies> updateMovies = [];
+
+            if (_showAdult)
+            {
+                updateMovies.AddRange(FileSizes(moviesAdultDirectory, true));
+            }
+            updateMovies.AddRange(FileSizes(moviesDirectory, false));
+
+            return View(updateMovies);
+        }
+
+        #endregion
+
         #region private functions
+
+        private List<Movies> FileSizes(string moviesPath, bool showAdult)
+        {
+            List<Movies> updateMovies = [];
+
+            if (!Directory.Exists(moviesPath))
+            {
+                return updateMovies;
+            }
+
+            var movies = _context.Movies.Where(w => w.Adult == showAdult).ToList();
+            if (movies.Count != 0)
+            {
+                List<string> allowedFileExtensions = [".asf", ".avi", ".divx", ".flv", ".m4v", ".mkv", ".mov", ".mp4", ".mpeg", ".mpg", ".wmv"];
+                var dirInfo = new DirectoryInfo(moviesPath);
+                var filesInDirectory = dirInfo.GetFiles("*", SearchOption.AllDirectories);
+                foreach (var file in filesInDirectory)
+                {
+                    if (allowedFileExtensions.Contains(file.Extension.ToLower()))
+                    {
+                        var fileName = file.Name.Substring(0, file.Name.Length - file.Extension.Length);
+                        var movie = movies.FirstOrDefault(f => fileName.Contains(f.Name, StringComparison.CurrentCultureIgnoreCase) && (f.FileSize == null || f.RunTime == null || f.RunTime == 0));
+                        if (movie != null)
+                        {
+                            movie.FileSize = file.Length;
+                            movie.Added ??= file.LastWriteTime;
+                            movie.RunTime ??= GetVideoDuration(file.FullName);
+                            _context.Update(movie);
+                            updateMovies.Add(movie);
+                        }
+                    }
+                }
+                _context.SaveChanges();
+            }
+
+            return updateMovies;
+        }
+
 
         private List<SelectListItem> GetRoles()
         {
@@ -391,6 +451,26 @@ namespace MvcMoviesCore.Controllers
         {
             items.Insert(0, new SelectListItem(null, null));
             return items.ToList();
+        }
+
+        private static decimal GetVideoDuration(string filePath)
+        {
+            try
+            {
+                using var shell = ShellObject.FromParsingName(filePath);
+                IShellProperty prop = shell.Properties.System.Media.Duration;
+                var t = TimeSpan.FromTicks((long)(ulong)prop.ValueAsObject);
+                var hour = t.Hours;
+                var minute = t.Minutes;
+                var second = decimal.Round((decimal)t.Seconds / 60, 2);
+
+                decimal runTime = hour * 60 + minute + second;
+                return runTime;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
 
         #endregion
