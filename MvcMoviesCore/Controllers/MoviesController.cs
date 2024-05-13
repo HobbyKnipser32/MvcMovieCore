@@ -266,29 +266,46 @@ namespace MvcMoviesCore.Controllers
             //return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> FileSizes()
+        public IActionResult FileSizes()
         {
-            const string moviesDirectory = @"Y:\Videothek\Filme";
+            string moviesDirectory = _configuration.GetValue<string>("AppSettings:MoviesDirectory");
+            string moviesAdultDirectory = @"Y:\Errors\Filme";
+            List<Movies> updateMovies = [];
 
-            if (!Directory.Exists(moviesDirectory))
+            if (_showAdult)
             {
+                updateMovies.AddRange(FileSizes(moviesAdultDirectory, true));
+            }
+            updateMovies.AddRange(FileSizes(moviesDirectory, false));
 
+            return View(updateMovies);
+        }
+
+        #endregion
+
+        #region private functions
+
+        private List<Movies> FileSizes(string moviesPath, bool showAdult)
+        {
+            List<Movies> updateMovies = [];
+
+            if (!Directory.Exists(moviesPath))
+            {
+                return updateMovies;
             }
 
-            List<Movies> updateMovies = new List<Movies>();
-
-            var movies = await _context.Movies.Where(w => w.Adult == false).ToListAsync();
+            var movies = _context.Movies.Where(w => w.Adult == showAdult).ToList();
             if (movies.Count != 0)
             {
-                List<string> allowedFileExtensions = [".avi", ".m4v", ".mkv", ".mp4"];
-                var dirInfo = new DirectoryInfo(moviesDirectory);
+                List<string> allowedFileExtensions = [".asf", ".avi", ".divx", ".flv", ".m4v", ".mkv", ".mov", ".mp4", ".mpeg", ".mpg", ".wmv"];
+                var dirInfo = new DirectoryInfo(moviesPath);
                 var filesInDirectory = dirInfo.GetFiles("*", SearchOption.AllDirectories);
                 foreach (var file in filesInDirectory)
                 {
-                    if (allowedFileExtensions.Contains(file.Extension))
+                    if (allowedFileExtensions.Contains(file.Extension.ToLower()))
                     {
-                        var fileName = file.Name.Substring(0, file.Name.Length - 4);
-                        var movie = movies.FirstOrDefault(f => f.Name.Equals(fileName) && (f.FileSize == null || f.RunTime == null || f.RunTime == 0));
+                        var fileName = file.Name.Substring(0, file.Name.Length - file.Extension.Length);
+                        var movie = movies.FirstOrDefault(f => fileName.Contains(f.Name, StringComparison.CurrentCultureIgnoreCase) && (f.FileSize == null || f.RunTime == null || f.RunTime == 0));
                         if (movie != null)
                         {
                             movie.FileSize = file.Length;
@@ -299,15 +316,12 @@ namespace MvcMoviesCore.Controllers
                         }
                     }
                 }
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
 
-            return View(updateMovies);
+            return updateMovies;
         }
 
-        #endregion
-
-        #region private functions
 
         private List<SelectListItem> GetRoles()
         {
