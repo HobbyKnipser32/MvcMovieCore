@@ -37,7 +37,7 @@ namespace MvcMoviesCore.Controllers
         public IActionResult Upload(IFormFile file)
         {
             var fileDic = "File";
-            string filePath = Path.Combine(_hostingEnvironment.WebRootPath , fileDic);
+            string filePath = Path.Combine(_hostingEnvironment.WebRootPath, fileDic);
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
             var fileName = file.Name;
@@ -63,10 +63,12 @@ namespace MvcMoviesCore.Controllers
 
             if (!_showAdult)
             {
-                var personType = _context.PersonType.FirstOrDefault(w => w.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase));
+                var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
                 if (personType != null)
                     persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id));
             }
+
+            persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
 
             return View(persons);
         }
