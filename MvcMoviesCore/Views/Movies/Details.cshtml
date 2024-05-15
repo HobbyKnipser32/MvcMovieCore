@@ -1,190 +1,170 @@
 ﻿@model MvcMoviesCore.Models.Movies
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Details - ";
 }
+<div class="container-fluid">
+    <h2>Details</h2>
 
-<h2>Details</h2>
-
-<div>
-    <h4>@Html.DisplayFor(model => model.Name)</h4>
-    <input type="hidden" value="@Model.Id" id="movieID" />
-    <hr />
-    <table>
-        <tr>
-            <td>
-                <dl class="dl-horizontal">
-                    <dt>
-                        @Html.DisplayNameFor(model => model.RunTime)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.RunTime)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Genre)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Genre.Name)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.YearOfPublication)
-                    </dt>
-                    <dd>
+    <div>
+        <h4>@Html.DisplayFor(model => model.Name)</h4>
+        <input type="hidden" value="@Model.Id" id="movieID" />
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label asp-for="YearOfPublication" class="control-label">Erscheinungsjahr: </label>
                         @Html.DisplayFor(model => model.YearOfPublication)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.InStock)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.InStock)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.OnWatch)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.OnWatch)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Remark)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Remark)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.IMDB)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.IMDB)
-                    </dd>
-                    <dt>
-                        Zur Datenbank hinzugefügt:
-                    </dt>
-                    <dd>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="Genre" class="control-label">Genre: </label>
+                        @Html.DisplayFor(model => model.Genre.Name)
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="RecordCarrier.Name" class="control-label">Datenträger: </label>
+                        @Html.DisplayFor(model => model.RecordCarrier.Name)
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="InStock" class="control-label">vorhanden: </label>
+                        @Html.CheckBox("inStock", Model.InStock.GetValueOrDefault())
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label asp-for="StorageLocation" class="control-label">Lagerort: </label>
+                        @Html.DisplayFor(model => model.StorageLocation.Name)
+                    </div>
+                    <div class="form-group col-md-3">
                         @if (Model.Added == null || Model.Added == DateTime.MinValue)
                         {
-                            @Html.DisplayFor(moddel => Model.CreateDate)
+                            <label asp-for="CreateDate" class="control-label">hinzugefügt: </label>
+                            @Html.DisplayFor(model => model.CreateDate.Value)
                         }
                         else
                         {
-                            @Html.DisplayFor(moddel => Model.Added)
+                            <label asp-for="Added" class="control-label">hinzugefügt: </label>
+                            @Html.DisplayFor(model => model.Added.Value)
                         }
-                    </dd>
-                </dl>
-            </td>
-            <td>
-                <dl class="dl-horizontal">
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Adult)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Adult)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.ThreeD)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.ThreeD)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Owner)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Owner)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Ranking)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Ranking)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.LastView)
-                    </dt>
-                    <dd>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="OnWatch" class="control-label">auf der Uhr: </label>
+                        @Html.DisplayFor(model => model.OnWatch)
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="LastView" class="control-label">zuletzt gesehen: </label>
                         @Html.DisplayFor(model => model.LastView)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.RecordCarrier)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.RecordCarrier.Name)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.StorageLocation)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.StorageLocation.Name)
-                    </dd>
-                </dl>
-            </td>
-        </tr>
-    </table>
-    <h4>Darsteller</h4>
-    <table class="table hover cell-border compact stripe" id="movieDetails">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Geschlecht</th>
-                <th>Alter beim Dreh</th>
-                <th>Praxis</th>
-                <th></th>
-            </tr>
-        </thead>
-    </table>
-    @if (Model.Scenes != null && Model.Scenes.Any())
-    {
-        <h4>Szenen Aufschlüsselung</h4>
-        <table class="table hover cell-border compact stripe" id="scenesTable">
-            <tbody>
-                @{
-                    var i = 0;
-                }
-                @foreach (var scene in Model.Scenes.GroupBy(g => g.Nr).OrderBy(o => o.Key))
-                {
-                    var j = 0;
-                    var count = 0;
-                    <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
-                        <td>
-                            Szene @Html.DisplayTextFor(model => scene.Key):&nbsp;
-                            @{
-                                var s = Model.Scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.Classification).ThenBy(o => o.Name).ToList();
-                                count = s.Count();
-                            }
-                            @foreach (var t in s)
-                            {
-                                if (t.Classification < 8)
-                                {
-                                    <b>
-                                        @Html.DisplayTextFor(model => t.Name)
-                                    </b>
-                                }
-                                else
-                                {
-                                    @Html.DisplayTextFor(model => t.Name)
-
-                                }
-                                j++;
-                                if (j < count)
-                                {
-                                    <text>
-                                        ;&nbsp;
-                                    </text>
-                                }
-
-                            }
-                        </td>
-                    </tr>
-                    i++;
-                }
-            </tbody>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label asp-for="LastView" class="control-label">zuletzt gesehen</label>
+                        <input asp-for="LastView" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="IMDB" class="control-label">Wertung IMDB</label>
+                        <input asp-for="IMDB" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="Ranking" class="control-label">Wertung</label>
+                        <input asp-for="Ranking" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="Remark" class="control-label"></label>
+                        <input asp-for="Remark" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label asp-for="RunTime" class="control-label"></label>
+                        <input asp-for="RunTime" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="FileSize" class="control-label"></label>
+                        <input asp-for="FileSize" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="FilePath" class="control-label"></label>
+                        <input asp-for="FilePath" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <h4>Darsteller</h4>
+        <table class="table hover cell-border compact stripe" id="movieDetails">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Geschlecht</th>
+                    <th>Alter beim Dreh</th>
+                    <th>Praxis</th>
+                    <th></th>
+                </tr>
+            </thead>
         </table>
-    }
+        @if (Model.Scenes != null && Model.Scenes.Any())
+        {
+            <hr />
+            <h4>Szenen Aufschlüsselung</h4>
+            <table class="table hover cell-border compact stripe" id="scenesTable">
+                <tbody>
+                    @{
+                        var i = 0;
+                    }
+                    @foreach (var scene in Model.Scenes.GroupBy(g => g.Nr).OrderBy(o => o.Key))
+                    {
+                        var j = 0;
+                        var count = 0;
+                        <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
+                            <td>
+                                Szene @Html.DisplayTextFor(model => scene.Key):&nbsp;
+                                @{
+                                    var s = Model.Scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.Classification).ThenBy(o => o.Name).ToList();
+                                    count = s.Count();
+                                }
+                                @foreach (var t in s)
+                                {
+                                    if (t.Classification < 8)
+                                    {
+                                        <b>
+                                            @Html.DisplayTextFor(model => t.Name)
+                                        </b>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayTextFor(model => t.Name)
 
-    <p>
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Index">Back to List</a>
-    </p>
+                                    }
+                                    j++;
+                                    if (j < count)
+                                    {
+                                        <text>
+                                            ;&nbsp;
+                                        </text>
+                                    }
+
+                                }
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+            <hr />
+        }
+
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Index">Back to List</a>
+        </p>
+    </div>
 </div>
-
 @section Scripts
 {
     <partial name="_DataTableScripts" />
@@ -195,6 +175,8 @@
             if ($('#scenesTable')) {
                 $('#scenesTable').DataTable({
                     ordering: true,
+                    paging: false,
+                    bFilter: false,
                     lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
                     iDisplayLength: -1,
                     fixedHeader: {

@@ -30,6 +30,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.FileSize)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FilePath)
+            </th>
+
         </tr>
     </thead>
     <tbody>
@@ -37,28 +41,30 @@
         {
             <tr>
                 <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.YearOfPublication)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InStock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Added)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastView)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RunTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FileSizeInKB)
-            </td>
-            
-        </tr>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.YearOfPublication)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InStock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Added)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastView)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RunTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileSizeInKB)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FilePath)
+                </td>
+            </tr>
         }
     </tbody>
 </table>

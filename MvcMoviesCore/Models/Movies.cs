@@ -65,6 +65,8 @@ namespace MvcMoviesCore.Models
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:N0}")]
         public long? FileSize { get; set; }
 
+        public string FilePath { get; set; }
+
         [NotMapped]
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:N0}")]
         public long? FileSizeInKB

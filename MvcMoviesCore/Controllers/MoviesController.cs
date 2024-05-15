@@ -277,7 +277,7 @@ namespace MvcMoviesCore.Controllers
         public IActionResult FileSizes()
         {
             string moviesDirectory = _configuration.GetValue<string>("AppSettings:MoviesDirectory");
-            string moviesAdultDirectory = @"Y:\Errors\Filme";
+            string moviesAdultDirectory = @"\\192.168.0.254\ErrorLogs\Errors\Filme"; // @"Y:\Errors\Filme";
             List<Movies> updateMovies = [];
 
             if (_showAdult)
@@ -302,7 +302,7 @@ namespace MvcMoviesCore.Controllers
                 return updateMovies;
             }
 
-            var movies = _context.Movies.Where(w => w.Adult == showAdult).ToList();
+            var movies = _context.Movies.Include(i => i.Genre).Where(w => w.Adult == showAdult).ToList();
             if (movies.Count != 0)
             {
                 List<string> allowedFileExtensions = [".asf", ".avi", ".divx", ".flv", ".m4v", ".mkv", ".mov", ".mp4", ".mpeg", ".mpg", ".wmv"];
@@ -312,13 +312,28 @@ namespace MvcMoviesCore.Controllers
                 {
                     if (allowedFileExtensions.Contains(file.Extension.ToLower()))
                     {
-                        var fileName = file.Name.Substring(0, file.Name.Length - file.Extension.Length);
-                        var movie = movies.FirstOrDefault(f => fileName.Contains(f.Name, StringComparison.CurrentCultureIgnoreCase) && (f.FileSize == null || f.RunTime == null || f.RunTime == 0));
+                        var fileName = file.Name[..^file.Extension.Length];
+                        Movies movie = new();
+                        if (showAdult)
+                        {
+                            movie = movies.FirstOrDefault(f => fileName.Contains(f.Name, StringComparison.CurrentCultureIgnoreCase)
+                                && fileName.Contains(f.Genre?.Name, StringComparison.CurrentCultureIgnoreCase)
+                                && (f.FileSize == null || f.FileSize == 0 || f.RunTime == null || f.RunTime == 0 || string.IsNullOrEmpty(f.FilePath)));
+                        }
+                        else
+                        {
+                            movie = movies.FirstOrDefault(f => fileName.Contains(f.Name, StringComparison.CurrentCultureIgnoreCase)
+                                && file.DirectoryName.Contains(f.YearOfPublication.Value.Year.ToString())
+                                && (f.FileSize == null || f.FileSize == 0 || f.RunTime == null || f.RunTime == 0 || string.IsNullOrEmpty(f.FilePath)));
+                        }
                         if (movie != null)
                         {
                             movie.FileSize = file.Length;
+                            movie.FilePath = file.DirectoryName;
                             movie.Added ??= file.LastWriteTime;
                             movie.RunTime ??= GetVideoDuration(file.FullName);
+                            movie.ChangeDate = DateTime.Now;
+                            movie.ChangeUser = Environment.UserName;
                             _context.Update(movie);
                             updateMovies.Add(movie);
                         }
