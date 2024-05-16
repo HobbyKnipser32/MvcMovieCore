@@ -19,23 +19,25 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label class="control-label">Name:</label>
-                        <input asp-for="Name" class="form-control" />
+                        <label class="col-form-label">Name:</label>
+                        <input asp-for="Name" class="col-form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Geschlecht:</label>
-                        <select asp-for="SexId" class="form-control" asp-items="@sexId"></select>
+                        <label class="col-form-label">Geschlecht:</label>
+                        <div class="col-form-label">
+                            <select asp-for="SexId" class="select2-dropdown col-form-control" asp-items="@sexId"></select>
+                        </div>
                         <span asp-validation-for="SexId" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Geburtstag:</label>
-                        <input type="date" asp-for="Birthday" class="form-control" />
+                        <label class="col-form-label">Geburtstag:</label>
+                        <input type="date" asp-for="Birthday" class="col-form-control" />
                         <span asp-validation-for="Birthday" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Todestag:</label>
-                        <input type="date" asp-for="Obit" class="form-control" />
+                        <label class="col-form-label">Todestag:</label>
+                        <input type="date" asp-for="Obit" class="col-form-control" />
                         <span asp-validation-for="Obit" class="text-danger"></span>
                     </div>
                 </div>
@@ -43,23 +45,23 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label class="control-label">Nationalität:</label>
-                        <select asp-for="NationalityId" class="form-control" asp-items="@nationalityId"></select>
+                        <label class="col-control-label">Nationalität:</label>
+                        <select asp-for="NationalityId" class="select2-dropdown col-form-control" asp-items="@nationalityId"></select>
                         <span asp-validation-for="NationalityId" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Größe:</label>
-                        <input type="text" asp-for="Height" class="form-control" />
+                        <label class="col-control-label">Größe:</label>
+                        <input type="text" asp-for="Height" class="col-form-control" />
                         <span asp-validation-for="Height" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Gewicht:</label>
-                        <input type="number" asp-for="Weight" class="form-control" />
+                        <label class="col-control-label">Gewicht:</label>
+                        <input type="number" asp-for="Weight" class="col-form-control" />
                         <span asp-validation-for="Weight" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Rolle</label>
-                        <select asp-for="PersonTypesId" class="form-control" asp-items="@personTypesId"></select>
+                        <label class="col-control-label">Rolle</label>
+                        <select asp-for="PersonTypesId" class="select2-dropdown col-form-control" asp-items="@personTypesId"></select>
                         <span asp-validation-for="PersonTypesId" class="text-danger"></span>
                     </div>
                 </div>

@@ -73,8 +73,8 @@ namespace MvcMoviesCore.ApiController
                 var viewModel = new MoviePersonsViewModel()
                 {
                     Actor = movieRole.Person.Name,
-                    Role = movieRole.MovieRole.Name,
-                    MovieRoleId = movieRole.MovieRole.Id
+                    Role = movieRole.MovieRole?.Name,
+                    MovieRoleId = (Guid)(movieRole.MovieRole?.Id)
                 };
                 moviePersons.Add(viewModel);
             }

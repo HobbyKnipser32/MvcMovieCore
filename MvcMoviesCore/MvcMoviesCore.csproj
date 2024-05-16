@@ -70,6 +70,11 @@
     <None Include="wwwroot\lib\moment\moment-timezone-with-data.js" />
     <None Include="wwwroot\lib\moment\moment.min.js" />
     <None Include="wwwroot\lib\underscore.js\underscore-min.js" />
+    <None Include="wwwroot\material-dashboard\scss\material-dashboard\plugins\free\plugins.scss" />
+    <None Include="wwwroot\material-dashboard\scss\material-dashboard\plugins\free\_flatpickr.scss" />
+    <None Include="wwwroot\material-dashboard\scss\material-dashboard\plugins\free\_nouislider.scss" />
+    <None Include="wwwroot\material-dashboard\scss\material-dashboard\plugins\free\_perfect-scrollbar.scss" />
+    <None Include="wwwroot\material-dashboard\scss\material-dashboard\plugins\free\_prism.scss" />
   </ItemGroup>
 
 </Project> 

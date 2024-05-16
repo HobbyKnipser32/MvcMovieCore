@@ -1,69 +1,63 @@
 ﻿@model global::MvcMoviesCore.Models.Person
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Person-Details";
 }
 <div>
-    <h2>Details</h2>
+    <h2>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.ActorsAge))</h2>
     <hr />
-    <h4>Person</h4>
+    <h3>Details</h3>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
+                    @Html.DisplayFor(model => model.Sex.Name)
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="ActorsAge" class="control-label">aktuelles Alter: </label>
+                    @Html.DisplayFor(model => model.ActorsAge)
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Birthday" class="control-label">Geburtstag: </label>
+                    @Html.DisplayFor(model => model.Birthday)
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Obit" class="control-label">Todestag: </label>
+                    @Html.DisplayFor(model => model.Obit)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
+                    @Html.DisplayFor(model => model.Nationality.Name)
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Height" class="control-label">Größe: </label>
+                    @Html.DisplayFor(model => model.Height)
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Weight" class="control-label">Gewicht: </label>
+                    @Html.DisplayFor(model => model.Weight)
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="PersonType.Name" class="control-label">Type: </label>
+                    @Html.DisplayFor(model => model.PersonType.Name)
+                </div>
+            </div>
+        </div>
+        @* <dl class="dl-vertical">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+        </dl> *@
+    </div>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Birthday)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Birthday)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Obit)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Obit)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ActorsAge)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ActorsAge)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Nationality)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Nationality.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Height)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Height)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Weight)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Weight)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PersonType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PersonType.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Sex)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Sex.Name)
-        </dd>
-    </dl>
     <ul class="nav nav-tabs">
         <li>
             <a data-toggle="tab" href="#movies" class="nav-link nav-link-teal active" style="border: 1px solid #00677f">Filme</a>
@@ -78,21 +72,18 @@
             <table class="table display" id="personDetails">
                 <thead>
                     <tr>
-                        <th>
-                            Film
-                        </th>
-                        <th>
-                            Erscheinungsjahr
-                        </th>
-                        <th>
-                            Alter
-                        </th>
-                        <th>
-                            Praxis
-                        </th>
-                        <th>
-                            Bewertung
-                        </th>
+                        <th>Film</th>
+                        <th>Erscheinungsjahr</th>
+                        <th>Alter</th>
+                        @if (Model.PersonType.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            <th>Praxis</th>
+                        }
+                        else
+                        {
+                            <th>Rolle</th>
+                        }
+                        <th>Bewertung</th>
                     </tr>
                 </thead>
                 <tbody>
