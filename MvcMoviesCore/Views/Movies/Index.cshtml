@@ -27,7 +27,7 @@
             <th>
                 On View
             </th>
-            <th>
+            <th width="240px">
                 zuletzt gesehen
             </th>
             <th>
@@ -42,7 +42,7 @@
             <th>
                 Filegröße [kb]
             </th>
-
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -50,7 +50,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td width="300px">
                     <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
                 </td>
                 <td>
@@ -81,9 +81,10 @@
                     @Html.DisplayFor(modelItem => item.FileSizeInKB)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC;"></i></a>
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fa-shake" style="color: #ff0000;"></i></a>
                 </td>
             </tr>
         }

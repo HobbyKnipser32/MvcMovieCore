@@ -40,12 +40,12 @@
                         @if (Model.Added == null || Model.Added == DateTime.MinValue)
                         {
                             <label asp-for="CreateDate" class="control-label">hinzugefügt: </label>
-                            @Html.DisplayFor(model => model.CreateDate.Value)
+                            @Html.DisplayFor(model => model.CreateDate)
                         }
                         else
                         {
                             <label asp-for="Added" class="control-label">hinzugefügt: </label>
-                            @Html.DisplayFor(model => model.Added.Value)
+                            @Html.DisplayFor(model => model.Added)
                         }
                     </div>
                     <div class="form-group col-md-3">
@@ -241,7 +241,8 @@
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
                                 var id = "'" + data + "'";
-                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + id + ')">Verknüpfung entfernen</button>';
+                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + id + ')" title="Verknüpfung löschen">' +
+                                            '<i class="fa-solid fa-eraser fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
                         },

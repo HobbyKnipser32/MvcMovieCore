@@ -51,7 +51,7 @@ namespace MvcMoviesCore.Models
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:D}")]
         public DateTime? LastView { get; set; }
         
-        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:dd.MM.yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:d}")]
         public DateTime? CreateDate { get; set; }
 
         public string CreateUser { get; set; }

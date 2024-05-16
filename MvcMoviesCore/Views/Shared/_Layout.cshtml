@@ -21,6 +21,8 @@
     <link href="~/lib/devextreme/css/dx.light.min.css" rel="stylesheet" />
     <link href="~/css/daterangepicker.css" rel="stylesheet" />
     <link href="~/css/datatables.searchhighlight.css" rel="stylesheet" />
+    @* <link href="~/fonts/fontawesome/css/all.min.css" rel="stylesheet" /> *@
+    <link href="~/fonts/fontawesome-free-6.5.2-web/css/all.min.css" rel="stylesheet" />
     <link href="~/MvcMoviesCore.styles.css" asp-append-version="true" rel="stylesheet" />
     <environment include="Development">
         <link href="~/css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
@@ -127,6 +129,11 @@
                                         <span class="sidebar-normal">Lagerort</span>
                                     </a>
                                 </li>
+                                <li class="nav-item" is-active-route asp-controller="Nationalities" asp-action="Index">
+                                    <a asp-area="" asp-controller="Nationalities" asp-action="Index" class="nav-link">
+                                        <span class="sidebar-normal">Nationalitäten</span>
+                                    </a>
+                                </li>
                                 <li class="nav-item" is-active-route asp-controller="Genres" asp-action="Index">
                                     <a asp-area="" asp-controller="Genres" asp-action="Index" class="nav-link">
                                         <span class="sidebar-normal">Rolle</span>
@@ -192,6 +199,7 @@
     <script src="~/lib/highlightjs/datatables.searchhighlight.min.js"></script>
     <script src="~/lib/highlightjs/jquery.highlight.js"></script>
     <script src="~/lib/devextreme/js/dx.all.min.js"></script>
+    <script src="~/fonts/fontawesome-free-6.5.2-web/js/fontawesome.min.js"></script>
     <environment include="Development">
         <script src="~/js/material-dashboard.js?v=2.1.0" type="text/javascript"></script>
         <!-- Dictionary files for supported languages -->

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<MvcMoviesCore.Models.Nationality>
+
+@{
+    ViewData["Title"] = "Nationalitäten";
+}
+
+<table class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;" id="nationalitiesIndex">
+    <thead>
+        <tr>
+            <th>Nationalität</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">
+                        <i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+                    </a>
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id">
+                        <i class="fa-regular fa-trash-can fa-shake" style="color: #ff0000; --fa-animation-duration: 2s;"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+                    {
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function () {
+            $('#nationalitiesIndex').DataTable({
+                ordering: true,
+                fixedHeader: {
+                    header: true,
+                    footer: false
+                },
+            });
+        })
+    </script>
+}

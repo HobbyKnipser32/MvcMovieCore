@@ -9,7 +9,7 @@ namespace MvcMoviesCore.Models
     {
         public Nationality()
         {
-            Person = new HashSet<Person>();
+            Person = [];
         }
 
         public Guid Id { get; set; }
