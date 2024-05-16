@@ -16,6 +16,11 @@ namespace MvcMoviesCore.Models
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
+        [NotMapped]
+        public int Count {  get; set; }
+
         public virtual ICollection<Person> Person { get; set; }
     }
 }

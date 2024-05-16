@@ -4,49 +4,100 @@
     ViewData["Title"] = "Nationalitäten";
 }
 
-<table class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;" id="nationalitiesIndex">
+<table id="nationalitiesIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
     <thead>
         <tr>
             <th>Nationalität</th>
+            <th>Beschreibung</th>
+            <th>Anzahl</th>
             <th></th>
             <th></th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">
-                        <i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
-                    </a>
-                </td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id">
-                        <i class="fa-regular fa-trash-can fa-shake" style="color: #ff0000; --fa-animation-duration: 2s;"></i>
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
 </table>
 
 @section Scripts
-                    {
+{
     <partial name="_DataTableScripts" />
 
     <script>
         $(document).ready(function () {
             $('#nationalitiesIndex').DataTable({
+                ajax: {
+                    url: appRootPath + '/api/NationalityApi',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'Name' },
+                    { data: 'Description' },
+                    { data: 'Count' },
+                    {
+                        data: 'Id',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var url = '@Url.Action("Edit", "Nationalities")' + '/' + data;
+                                return '<a href="' + url + '" title="Nationalität bearbeiten">' +
+                                    '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>';
+                            }
+                            return '';
+                        }
+                    },
+                    {
+                        data: 'Id',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var id = "'" + data + "'";
+                                return '<button name="id" style="background-color: transparent; color: red; border: hidden"' +
+                                    'onClick="deleteLink(' + id + ')" title="Nationalität löschen">' +
+                                    '<i class="fa-regular fa-trash-can fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>' ;
+                            }
+                            return '';
+                        }
+                    },
+                ],
                 ordering: true,
                 fixedHeader: {
                     header: true,
                     footer: false
                 },
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                iDisplayLength: 10,
             });
         })
+
+        function deleteLink(id) {
+            Swal.fire({
+                text: 'Nationalität löschen?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Nein'
+            }).then(function (result) {
+                if (result.value) {
+                    var url = appRootPath + '/api/NationalityApi/' + id;
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        async: false,
+                        statusCode: {
+                            404: function () {
+                                alert("function not found");
+                            }
+                        },
+                        success: function () {
+                            $('#nationalitiesIndex').DataTable().ajax.reload();
+                            Swal.fire({
+                                icon: 'success',
+                                text: 'Nationalität erfolgreich gelöscht.',
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                        },
+                    })
+                };
+            });
+        };
     </script>
 }
