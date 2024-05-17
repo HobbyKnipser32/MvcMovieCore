@@ -1,20 +1,30 @@
 ﻿@model global::MvcMoviesCore.Models.Genre
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create - Genre";
 }
 
-<h2>Create</h2>
+<h2>Genre</h2>
 
-<h4>Genre</h4>
+<h4>Create</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Genre: </label>
                 <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Beschreibung: </label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsAdult" class="control-label">nur für Erwachsene:</label>
+                <input asp-for="IsAdult" type="checkbox" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -24,10 +34,8 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<p>
+    <a asp-action="Index" title="zurück zur Liste">
+        <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+    </a>
+</p>

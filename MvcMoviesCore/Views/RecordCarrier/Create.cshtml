@@ -1,13 +1,13 @@
-﻿@model MvcMoviesCore.Models.Nationality
+﻿@model MvcMoviesCore.Models.RecordCarrier
 
 @{
-    ViewData["Title"] = "Edit - Nationalität";
+    ViewData["Title"] = "Hinzufügen - Datenträger";
 }
 
-<h2>Edit</h2>
+<h2>Datenträger</h2>
 
-<h4>Nationalität</h4>
-
+<h4>Hinzufügen</h4>
+<hr />
 <form class="card-form-horizontal" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
@@ -15,12 +15,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label class="form-label">Name:</label>
                         <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-6">
                         <label class="form-label">Beschreibung:</label>
                         <input asp-for="Description" class="form-control" />
                         <span asp-validation-for="Description" class="text-danger"></span>
@@ -29,10 +29,14 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group col-md-3">
-                    <input asp-controller="Nationalities" asp-action="Edit" type="submit" value="Save" class="btn btn-default" />
+                    <input asp-controller="RecordCarrier" asp-action="Create" type="submit" value="Save" class="btn btn-default" />
                 </div>
             </div>
         </div>
     </div>
 </form>
-<a asp-action="Index" title="zurück zur Liste"><i class="fa-regular fa-circle-left fa-shake fa-xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i></a>
+<p>
+    <a asp-action="Index" title="zurück zur Liste">
+        <i class="fa-regular fa-circle-left fa-shake fa-xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+    </a>
+</p>

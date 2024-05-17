@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
 using System;
 using System.Linq;
@@ -10,16 +11,20 @@ namespace MvcMoviesCore.Controllers
     public class GenresController : Controller
     {
         private readonly MvcMovieCoreContext _context;
+        private readonly IConfiguration _configuration;
+        private readonly bool _showAdult;
 
-        public GenresController(MvcMovieCoreContext context)
+        public GenresController(MvcMovieCoreContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
+            _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
 
         // GET: Genres
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Genre.OrderBy(o => o.Name).ToListAsync());
+            return View();
         }
 
         // GET: Genres/Details/5
@@ -50,7 +55,7 @@ namespace MvcMoviesCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Genre genre)
+        public async Task<IActionResult> Create([Bind("Name,Description,IsAdult")] Genre genre)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +88,7 @@ namespace MvcMoviesCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name")] Genre genre)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description,IsAdult")] Genre genre)
         {
             if (id != genre.Id)
             {

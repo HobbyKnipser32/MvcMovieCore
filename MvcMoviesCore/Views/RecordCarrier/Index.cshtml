@@ -1,21 +1,20 @@
-﻿@model IEnumerable<Genre>
+﻿@model IEnumerable<MvcMoviesCore.Models.RecordCarrier>
 
 @{
-    ViewData["Title"] = "Genre";
+    ViewData["Title"] = "Datenträger";
 }
-<h2>Genre</h2>
 <p>
-    <a asp-action="Create" title="Genre hinzufügen">
+    <a asp-action="Create" title="Datenträger hinzufügen">
         <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
     </a>
 </p>
-<table id="genreIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
+
+<table id="recordCarrierIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
     <thead>
         <tr>
             <th>Datenträger</th>
             <th>Beschreibung</th>
             <th>Anzahl</th>
-            <th></th>
             <th></th>
             <th></th>
         </tr>
@@ -28,9 +27,9 @@
 
     <script>
         $(document).ready(function () {
-            $('#genreIndex').DataTable({
+            $('#recordCarrierIndex').DataTable({
                 ajax: {
-                    url: appRootPath + '/api/GenreApi',
+                    url: appRootPath + '/api/RecordCarrierApi',
                     dataSrc: ''
                 },
                 columns: [
@@ -38,22 +37,11 @@
                     { data: 'Description' },
                     { data: 'Count' },
                     {
-                        data: 'IsAdult',
-                        render: function (data, type, full, meta) {
-                            if (data == true) {
-                                return '<input type="checkbox" checked disabled>';
-                            } else {
-                                return '<input type="checkbox" disabled>';
-                            }
-                            return data;
-                        }
-                    },
-                    {
                         data: 'Id',
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
-                                var url = '@Url.Action("Edit", "Genres")' + '/' + data;
-                                return '<a href="' + url + '" title="Genre bearbeiten">' +
+                                var url = '@Url.Action("Edit", "RecordCarrier")' + '/' + data;
+                                return '<a href="' + url + '" title="Datenträger bearbeiten">' +
                                     '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
@@ -75,6 +63,7 @@
                 ordering: true,
                 fixedHeader: {
                     header: true,
+                    footer: false
                 },
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 iDisplayLength: 10,
@@ -83,7 +72,7 @@
 
         function deleteLink(id) {
             Swal.fire({
-                text: 'Genre löschen?',
+                text: 'Datenträger löschen?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -92,7 +81,7 @@
                 cancelButtonText: 'Nein'
             }).then(function (result) {
                 if (result.value) {
-                    var url = appRootPath + '/api/GenreApi/' + id;
+                    var url = appRootPath + '/api/RecordCarrierApi/' + id;
                     $.ajax({
                         url: url,
                         type: 'POST',
@@ -103,10 +92,10 @@
                             }
                         },
                         success: function () {
-                            $('#genreIndex').DataTable().ajax.reload();
+                            $('#recordCarrierIndex').DataTable().ajax.reload();
                             Swal.fire({
                                 icon: 'success',
-                                text: 'Genre erfolgreich gelöscht.',
+                                text: 'Datenträger erfolgreich gelöscht.',
                                 showConfirmButton: false,
                                 timer: 2000
                             })

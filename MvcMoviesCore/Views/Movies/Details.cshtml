@@ -270,9 +270,8 @@
 
         function deleteLink(id) {
             Swal.fire({
-                position: 'top-end',
                 text: 'Verknüpfung löschen?',
-                type: 'question',
+                icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
@@ -293,8 +292,7 @@
                         success: function () {
                             $('#movieDetails').DataTable().ajax.reload();
                             Swal.fire({
-                                position: 'top-end',
-                                type: 'success',
+                                icon: 'success',
                                 text: 'Verknüpfung erfolgreich gelöscht.',
                                 showConfirmButton: false,
                                 timer: 2000

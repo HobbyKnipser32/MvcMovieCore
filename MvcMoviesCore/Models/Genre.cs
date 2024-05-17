@@ -1,20 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcMoviesCore.Models
 {
     public partial class Genre
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Genre()
-        {
-            Movies = new HashSet<Movies>();
-        }
-    
+        public Genre() { }
+
         public Guid Id { get; set; }
+
         public string Name { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Movies> Movies { get; set; }
+
+        public string Description { get; set; }
+
+        public bool IsAdult { get; set; } = false;
+
+        [NotMapped]
+        public int Count { get; set; }
+
+        public virtual ICollection<Movies> Movies { get; set; } = new HashSet<Movies>();
     }
 }

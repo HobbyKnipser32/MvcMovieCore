@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcMoviesCore.Models
 {
@@ -6,12 +7,17 @@ namespace MvcMoviesCore.Models
     {
         public RecordCarrier()
         {
-            this.Movies = new HashSet<Movies>();
+            Movies = new HashSet<Movies>();
         }
     
         public System.Guid Id { get; set; }
 
         public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        [NotMapped]
+        public int Count {  get; set; } 
     
         public virtual ICollection<Movies> Movies { get; set; }
     }
