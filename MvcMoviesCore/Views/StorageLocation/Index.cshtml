@@ -1,0 +1,109 @@
+﻿@model IEnumerable<MvcMoviesCore.Models.StorageLocation>
+
+@{
+    ViewData["Title"] = "Lagerorte";
+}
+<h2>Lagerorte</h2>
+<p>
+    <a asp-action="Create" title="Lagerort hinzufügen">
+        <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
+    </a>
+</p>
+
+<table id="storageLocationIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
+    <thead>
+        <tr>
+            <th>Lagerort</th>
+            <th>Beschreibung</th>
+            <th>Anzahl</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+@section Scripts
+{
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function () {
+            $('#storageLocationIndex').DataTable({
+                ajax: {
+                    url: appRootPath + '/api/StorageLocationApi',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'Name' },
+                    { data: 'Description' },
+                    { data: 'Count' },
+                    {
+                        data: 'Id',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var url = '@Url.Action("Edit", "StorageLocation")' + '/' + data;
+                                return '<a href="' + url + '" title="Lagerort bearbeiten">' +
+                                    '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>';
+                            }
+                            return '';
+                        }
+                    },
+                    {
+                        data: 'Id',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var id = "'" + data + "'";
+                                return '<button name="id" style="background-color: transparent; color: red; border: hidden"' +
+                                    'onClick="deleteLink(' + id + ')" title="Lagerort löschen">' +
+                                    '<i class="fa-regular fa-trash-can fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
+                            }
+                            return '';
+                        }
+                    },
+                ],
+                ordering: true,
+                fixedHeader: {
+                    header: true,
+                    footer: false
+                },
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                iDisplayLength: 10,
+            });
+        })
+
+        function deleteLink(id) {
+            Swal.fire({
+                text: 'Lagerort löschen?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Nein'
+            }).then(function (result) {
+                if (result.value) {
+                    var url = appRootPath + '/api/StorageLocationApi/' + id;
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        async: false,
+                        statusCode: {
+                            404: function () {
+                                alert("function not found");
+                            }
+                        },
+                        success: function () {
+                            $('#storageLocationIndex').DataTable().ajax.reload();
+                            Swal.fire({
+                                icon: 'success',
+                                text: 'Lagerort erfolgreich gelöscht.',
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                        },
+                    })
+                };
+            });
+        };
+    </script>
+}

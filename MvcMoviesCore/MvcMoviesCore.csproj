@@ -2189,8 +2189,4 @@
     <None Include="wwwroot\material-dashboard\scss\material-dashboard\plugins\free\_prism.scss" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\StorageLocation\" />
-  </ItemGroup>
-
 </Project> 
