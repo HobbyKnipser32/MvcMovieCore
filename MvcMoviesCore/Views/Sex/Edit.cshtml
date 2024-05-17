@@ -1,21 +1,21 @@
-﻿@model MvcMoviesCore.Models.Nationality
+﻿@model MvcMoviesCore.Models.Sex
 
 @{
-    ViewData["Title"] = "Edit - Nationalität";
+    ViewData["Title"] = "Edit - Geschlecht";
 }
 
-<h2>Nationalität</h2>
+<h2>Datenträger</h2>
 
-<h4>Edit</h4>
-
-<form asp-action="Edit" method="post" class="card-form-horizontal">
+<h4>Editt</h4>
+<hr />
+<form class="card-form-horizontal" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label class="form-label">Name:</label>
                         <input asp-for="Name" class="form-control" autocomplete="off" />
                         <span asp-validation-for="Name" class="text-danger"></span>
@@ -25,17 +25,15 @@
                         <input asp-for="Description" class="form-control" autocomplete="off" />
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-2">
-                        <button type="submit" title="speichern" class="fa-regular fa-floppy-disk fa-bounce fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
-                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group col-md-3">
+                    <input asp-controller="Sex" asp-action="Edit" type="submit" value="Save" class="btn btn-default" />
                 </div>
             </div>
         </div>
     </div>
 </form>
-<hr />
-<p>
-    <a asp-action="Index" title="zurück zur Liste">
-        <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
-    </a>
-</p>
+
+<a asp-action="Index" title="zurück zur Liste"><i class="fa-regular fa-circle-left fa-shake fa-xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i></a>

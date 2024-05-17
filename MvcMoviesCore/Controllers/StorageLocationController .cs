@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
 using System;
 using System.Linq;
@@ -9,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MvcMoviesCore.Controllers
 {
-    public class NationalitiesController : Controller
+    public class StorageLocationController : Controller
     {
         #region fields
 
@@ -17,9 +15,9 @@ namespace MvcMoviesCore.Controllers
 
         #endregion
 
-        #region constructor
+        #region contructor
 
-        public NationalitiesController(MvcMovieCoreContext context)
+        public StorageLocationController(MvcMovieCoreContext context)
         {
             _context = context;
         }
@@ -31,18 +29,6 @@ namespace MvcMoviesCore.Controllers
         public IActionResult Index()
         {
             return View();
-            //var nationalities = _context.Nationalities.ToList();
-            //if (nationalities.Count != 0)
-            //{
-            //    var persons = _context.Person.GroupBy(g => g.NationalityId).ToList();
-            //    foreach (var person in persons)
-            //    {
-            //        var nationality = nationalities.FirstOrDefault(f => f.Id.Equals(person.Key));
-            //        if (nationality != null)
-            //            nationality.Count = person.Count();
-            //    }
-            //}
-            //return View(nationalities);
         }
 
         [HttpGet]
@@ -53,19 +39,19 @@ namespace MvcMoviesCore.Controllers
                 return NotFound();
             }
 
-            var nationality = await _context.Nationalities.FindAsync(id);
-            if (nationality == null)
+            var storageLocation = await _context.StorageLocation.FindAsync(id);
+            if (storageLocation == null)
             {
                 return NotFound();
             }
-            return View(nationality);
+            return View(storageLocation);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description")] Nationality nationality)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description")] StorageLocation storageLocation)
         {
-            if (id != nationality.Id)
+            if (id != storageLocation.Id)
             {
                 return NotFound();
             }
@@ -74,12 +60,12 @@ namespace MvcMoviesCore.Controllers
             {
                 try
                 {
-                    _context.Update(nationality);
+                    _context.Update(storageLocation);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!NationalityExists(nationality.Id))
+                    if (!StorageLocationExists(storageLocation.Id))
                     {
                         return NotFound();
                     }
@@ -90,7 +76,7 @@ namespace MvcMoviesCore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(nationality);
+            return View(storageLocation);
         }
 
         public IActionResult Create()
@@ -98,29 +84,27 @@ namespace MvcMoviesCore.Controllers
             return View();
         }
 
-        // POST: Genres/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description")] Nationality nationality)
+        public async Task<IActionResult> Create([Bind("Name,Description")] StorageLocation storageLocation)
         {
             if (ModelState.IsValid)
             {
-                nationality.Id = Guid.NewGuid();
-                _context.Add(nationality);
+                storageLocation.Id = Guid.NewGuid();
+                _context.Add(storageLocation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(nationality);
+            return View(storageLocation);
         }
+
         #endregion
 
         #region private functions
 
-        private bool NationalityExists(Guid id)
+        private bool StorageLocationExists(Guid id)
         {
-            return _context.Nationalities.Any(x => x.Id == id);
+            return _context.StorageLocation.Any(x => x.Id == id);
         }
 
         #endregion

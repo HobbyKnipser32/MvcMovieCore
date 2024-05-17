@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
+using System.Threading.Tasks;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MvcMoviesCore.Controllers
 {
-    public class RecordCarrierController : Controller
+    public class SexController : Controller
     {
         #region fields
 
@@ -18,7 +17,7 @@ namespace MvcMoviesCore.Controllers
 
         #region contructor
 
-        public RecordCarrierController(MvcMovieCoreContext context)
+        public SexController(MvcMovieCoreContext context)
         {
             _context = context;
         }
@@ -26,7 +25,7 @@ namespace MvcMoviesCore.Controllers
         #endregion
 
         #region public functions
-
+        
         public IActionResult Index()
         {
             return View();
@@ -40,19 +39,19 @@ namespace MvcMoviesCore.Controllers
                 return NotFound();
             }
 
-            var recordCarrier = await _context.RecordCarrier.FindAsync(id);
-            if (recordCarrier == null)
+            var sex = await _context.Sex.FindAsync(id);
+            if (sex == null)
             {
                 return NotFound();
             }
-            return View(recordCarrier);
+            return View(sex);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description")] RecordCarrier recordCarrier)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description")] Sex sex)
         {
-            if (id != recordCarrier.Id)
+            if (id != sex.Id)
             {
                 return NotFound();
             }
@@ -61,12 +60,12 @@ namespace MvcMoviesCore.Controllers
             {
                 try
                 {
-                    _context.Update(recordCarrier);
+                    _context.Update(sex);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RecordCarrierExists(recordCarrier.Id))
+                    if (!SexExists(sex.Id))
                     {
                         return NotFound();
                     }
@@ -77,7 +76,7 @@ namespace MvcMoviesCore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(recordCarrier);
+            return View(sex);
         }
 
         public IActionResult Create()
@@ -87,25 +86,25 @@ namespace MvcMoviesCore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description")] RecordCarrier recordCarrier)
+        public async Task<IActionResult> Create([Bind("Name,Description")] Sex sex)
         {
             if (ModelState.IsValid)
             {
-                recordCarrier.Id = Guid.NewGuid();
-                _context.Add(recordCarrier);
+                sex.Id = Guid.NewGuid();
+                _context.Add(sex);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(recordCarrier);
+            return View(sex);
         }
 
         #endregion
 
         #region private functions
 
-        private bool RecordCarrierExists(Guid id)
+        private bool SexExists(Guid id)
         {
-            return _context.RecordCarrier.Any(x => x.Id == id);
+            return _context.Sex.Any(x => x.Id == id);
         }
 
         #endregion

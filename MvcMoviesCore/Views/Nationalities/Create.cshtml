@@ -1,28 +1,28 @@
 ﻿@model MvcMoviesCore.Models.Nationality
 
 @{
-    ViewData["Title"] = "Edit - Nationalität";
+    ViewData["Title"] = "Hinzufügen - Nationalität";
 }
 
 <h2>Nationalität</h2>
 
-<h4>Edit</h4>
-
-<form asp-action="Edit" method="post" class="card-form-horizontal">
+<h4>Hinzufügen</h4>
+<hr />
+<form asp-action="Create" method="post" class="card-form-horizontal" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="form-group col-md-3">
-                        <label class="form-label">Name:</label>
-                        <input asp-for="Name" class="form-control" autocomplete="off" />
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Nationalität:</label>
+                        <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">Beschreibung:</label>
-                        <input asp-for="Description" class="form-control" autocomplete="off" />
+                        <input asp-for="Description" class="form-control" />
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-2">
@@ -33,7 +33,6 @@
         </div>
     </div>
 </form>
-<hr />
 <p>
     <a asp-action="Index" title="zurück zur Liste">
         <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>

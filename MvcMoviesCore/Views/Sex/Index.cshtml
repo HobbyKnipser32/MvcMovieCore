@@ -1,18 +1,19 @@
-﻿@model IEnumerable<MvcMoviesCore.Models.Nationality>
+﻿@model IEnumerable<MvcMoviesCore.Models.Sex>
 
 @{
-    ViewData["Title"] = "Nationalitäten";
+    ViewData["Title"] = "Geschlechter";
 }
-<h2>Nationalitäten</h2>
+<h2>Geschlechter</h2>
 <p>
-    <a asp-action="Create" title="Nationalität hinzufügen">
+    <a asp-action="Create" title="Geschlecht hinzufügen">
         <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
     </a>
 </p>
-<table id="nationalitiesIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
+
+<table id="sexIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
     <thead>
         <tr>
-            <th>Nationalität</th>
+            <th>Geschlecht</th>
             <th>Beschreibung</th>
             <th>Anzahl</th>
             <th></th>
@@ -27,9 +28,9 @@
 
     <script>
         $(document).ready(function () {
-            $('#nationalitiesIndex').DataTable({
+            $('#sexIndex').DataTable({
                 ajax: {
-                    url: appRootPath + '/api/NationalityApi',
+                    url: appRootPath + '/api/SexApi',
                     dataSrc: ''
                 },
                 columns: [
@@ -40,8 +41,8 @@
                         data: 'Id',
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
-                                var url = '@Url.Action("Edit", "Nationalities")' + '/' + data;
-                                return '<a href="' + url + '" title="Nationalität bearbeiten">' +
+                                var url = '@Url.Action("Edit", "Sex")' + '/' + data;
+                                return '<a href="' + url + '" title="Geschlecht bearbeiten">' +
                                     '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
@@ -53,8 +54,8 @@
                             if (data && type === 'display') {
                                 var id = "'" + data + "'";
                                 return '<button name="id" style="background-color: transparent; color: red; border: hidden"' +
-                                    'onClick="deleteLink(' + id + ')" title="Nationalität löschen">' +
-                                    '<i class="fa-regular fa-trash-can fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>' ;
+                                    'onClick="deleteLink(' + id + ')" title="Geschlecht löschen">' +
+                                    '<i class="fa-regular fa-trash-can fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
                         }
@@ -72,7 +73,7 @@
 
         function deleteLink(id) {
             Swal.fire({
-                text: 'Nationalität löschen?',
+                text: 'Geschlecht löschen?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -81,7 +82,7 @@
                 cancelButtonText: 'Nein'
             }).then(function (result) {
                 if (result.value) {
-                    var url = appRootPath + '/api/NationalityApi/' + id;
+                    var url = appRootPath + '/api/SexApi/' + id;
                     $.ajax({
                         url: url,
                         type: 'POST',
@@ -92,10 +93,10 @@
                             }
                         },
                         success: function () {
-                            $('#nationalitiesIndex').DataTable().ajax.reload();
+                            $('#sexIndex').DataTable().ajax.reload();
                             Swal.fire({
                                 icon: 'success',
-                                text: 'Nationalität erfolgreich gelöscht.',
+                                text: 'Geschlecht erfolgreich gelöscht.',
                                 showConfirmButton: false,
                                 timer: 2000
                             })
