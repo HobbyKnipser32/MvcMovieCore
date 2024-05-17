@@ -13,13 +13,22 @@ namespace MvcMoviesCore.ApiController
     [ApiController]
     public class PersonTypesApiController : ControllerBase
     {
+        #region fields
 
         private readonly MvcMovieCoreContext _context;
+
+        #endregion
+
+        #region constructors
 
         public PersonTypesApiController(MvcMovieCoreContext context)
         {
             _context = context;
         }
+
+        #endregion
+
+        #region public fields
 
         public async Task<IActionResult> Get()
         {
@@ -42,11 +51,31 @@ namespace MvcMoviesCore.ApiController
         [HttpPost("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var personTypes = await _context.PersonType.FirstOrDefaultAsync(f => f.Id.Equals(id));
-            _context.PersonType.Remove(personTypes);
+            var personType = await _context.PersonType.FirstOrDefaultAsync(f => f.Id.Equals(id));
+
+            if (personType == null) 
+            {
+                return BadRequest("Konnte Personentyp nicht finden.");
+            }
+            if (IsPersonTypeUsed(id))
+            {
+                return BadRequest("Personentyp kann nicht gelöscht werden.");
+            }
+            _context.PersonType.Remove(personType);
             _context.SaveChanges();
 
             return Ok();
         }
+
+        #endregion
+
+        #region private fields
+
+        private bool IsPersonTypeUsed(Guid id)
+        {
+            return _context.Person.Any(a => a.PersonTypesId.Equals(id));
+        }
+
+        #endregion
     }
 }

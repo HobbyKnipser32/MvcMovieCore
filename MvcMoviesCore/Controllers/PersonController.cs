@@ -15,10 +15,16 @@ namespace MvcMoviesCore.Controllers
 {
     public class PersonController : Controller
     {
+        #region fields
+
         private readonly MvcMovieCoreContext _context;
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly bool _showAdult;
+
+        #endregion
+
+        #region constructor
 
         public PersonController(MvcMovieCoreContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
@@ -27,6 +33,10 @@ namespace MvcMoviesCore.Controllers
             _hostingEnvironment = hostingEnvironment;
             _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
+
+        #endregion
+
+        #region puclic functions
 
         public IActionResult Upload()
         {
@@ -241,7 +251,7 @@ namespace MvcMoviesCore.Controllers
             if (birthday == DateTime.MinValue)
                 birthday = DateTime.Today;
 
-            var persons = new List<Person>();
+            List<Person> persons = [];
 
             if (year > 0)
             {
@@ -293,13 +303,21 @@ namespace MvcMoviesCore.Controllers
                 person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.YearOfPublication).ThenBy(t => t.Movies.Name).Take(5).ToList();
             }
             //ViewData["BirthDay"] = birthday.ToShortDateString();
+            if (!_showAdult)
+                persons = persons.Where(w => !w.PersonType.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase)).ToList();
 
             return View(persons);
         }
+
+        #endregion
+
+        #region private functions
 
         private bool PersonExists(Guid id)
         {
             return _context.Person.Any(e => e.Id.Equals(id));
         }
+
+        #endregion
     }
 }
