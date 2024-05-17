@@ -1,14 +1,45 @@
 ﻿@model global::MvcMoviesCore.Models.Genre
 
 @{
-    ViewData["Title"] = "Create - Genre";
+    ViewData["Title"] = "Hinzufügen - Genre";
 }
 
 <h2>Genre</h2>
 
-<h4>Create</h4>
+<h4>Hinzufügen</h4>
 <hr />
-<div class="row">
+
+<form asp-action="Create" method="post" class="card-form-horizontal">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Genre:</label>
+                        <input asp-for="Name" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Beschreibung:</label>
+                        <input asp-for="Description" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">nur für Erwachsene::</label>
+                        <input asp-for="IsAdult" type="checkbox" />
+                        <span asp-validation-for="IsAdult" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <button type="submit" title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@* <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -19,20 +50,20 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label">Beschreibung: </label>
-                <input asp-for="Name" class="form-control" autocomplete="off" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="Description" class="form-control" autocomplete="off" />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="IsAdult" class="control-label">nur für Erwachsene:</label>
                 <input asp-for="IsAdult" type="checkbox" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <span asp-validation-for="IsAdult" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>
     </div>
-</div>
+</div> *@
 
 <p>
     <a asp-action="Index" title="zurück zur Liste">

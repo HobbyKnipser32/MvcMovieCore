@@ -6,7 +6,7 @@
 
 <h2>Lagerort</h2>
 
-<h4>Editt</h4>
+<h4>Edit</h4>
 <hr />
 <form asp-action="Edit" class="card-form-horizontal" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -26,12 +26,15 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-2">
-                        <button type="submit" title="speichern" class="fa-regular fa-floppy-disk fa-bounce fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
+                        <button type="submit" title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </form>
-
-<a asp-action="Index" title="zurück zur Liste"><i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i></a>
+<p>
+    <a asp-action="Index" title="zurück zur Liste">
+        <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+    </a>
+</p>
