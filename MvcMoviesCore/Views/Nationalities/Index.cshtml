@@ -100,6 +100,14 @@
                                 timer: 2000
                             })
                         },
+                        error: function (response) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Nationalität konnte nicht gelöscht werden!',
+                                footer: response.responseText
+                            })
+                        }
                     })
                 };
             });
