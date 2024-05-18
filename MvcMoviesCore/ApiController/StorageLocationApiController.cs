@@ -42,8 +42,15 @@ namespace MvcMoviesCore.ApiController
         [HttpPost("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var storageLocations = await _context.StorageLocation.FirstOrDefaultAsync(f => f.Id.Equals(id));
-            _context.StorageLocation.Remove(storageLocations);
+            var storageLocation = await _context.StorageLocation.FirstOrDefaultAsync(f => f.Id.Equals(id));
+
+            if (storageLocation == null)
+                return BadRequest("Lagerort nicht gefunden!");
+
+            if (await _context.Movies.AnyAsync(a => a.StorageLocationId.Equals(storageLocation.Id)))
+                return BadRequest("Lagerort wird verwendet und kann daher nicht gelöscht werden!");
+
+            _context.StorageLocation.Remove(storageLocation);
             _context.SaveChanges();
 
             return Ok();

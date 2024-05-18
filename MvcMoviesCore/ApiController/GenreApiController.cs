@@ -57,10 +57,26 @@ namespace MvcMoviesCore.ApiController
         public async Task<IActionResult> Delete(Guid id)
         {
             var genre = await _context.Genre.FirstOrDefaultAsync(f => f.Id.Equals(id));
+
+            if (genre == null)
+                return BadRequest("Konnte Genre nicht finden!");
+
+            if (IsGenreUsed(id))
+                return BadRequest("Genre wird verwendet und kann daher nicht gelöscht werden!");
+
             _context.Genre.Remove(genre);
             _context.SaveChanges();
 
             return Ok();
         }
+
+        #region private fields
+
+        private bool IsGenreUsed(Guid id)
+        {
+            return _context.Movies.Any(a => a.GenreId.Equals(id));
+        }
+
+        #endregion
     }
 }

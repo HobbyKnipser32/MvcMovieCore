@@ -42,8 +42,15 @@ namespace MvcMoviesCore.ApiController
         [HttpPost("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var sexs = await _context.Sex.FirstOrDefaultAsync(f => f.Id.Equals(id));
-            _context.Sex.Remove(sexs);
+            var sex = await _context.Sex.FirstOrDefaultAsync(f => f.Id.Equals(id));
+
+            if (sex == null)
+                return BadRequest("Geschlecht nicht gefunden!");
+
+            if (await _context.Person.AnyAsync(a => a.SexId.Equals(sex.Id)))
+                return BadRequest("Geschlecht wird verwendet und kann daher nicht gelöscht werden!");
+
+            _context.Sex.Remove(sex);
             _context.SaveChanges();
 
             return Ok();

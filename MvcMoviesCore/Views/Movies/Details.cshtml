@@ -96,14 +96,14 @@
         <hr />
         <ul class="nav nav-tabs">
             <li>
-                <a data-toggle="tab" href="#actors" class="nav-link nav-link-teal active" style="border: 1px solid #00677f">Darsteller</a>
+                <a data-toggle="tab" href="#actorsTab" class="nav-link nav-link-teal active" style="border: 1px solid #00677f">Darsteller</a>
             </li>
             <li>
-                <a data-toggle="tab" href="#scenes" class="nav-link nav-link-violett" style="border: 1px solid rgb(108, 27, 123)">Szenen</a>
+                <a data-toggle="tab" href="#scenesTab" class="nav-link nav-link-violett" style="border: 1px solid rgb(108, 27, 123)">Szenen</a>
             </li>
         </ul>
         <div class="tab-content">
-            <div id="actors" class="tab-pane active">
+            <div id="actorsTab" class="tab-pane active">
                 <hr />
                 <h4>Darsteller</h4>
                 <table class="table hover cell-border compact stripe" id="movieDetails">
@@ -118,7 +118,7 @@
                     </thead>
                 </table>
             </div>
-            <div id="scenes" class="tab-pane">
+            <div id="scenesTab" class="tab-pane">
                 @if (Model.Scenes != null && Model.Scenes.Any())
                 {
                     <hr />

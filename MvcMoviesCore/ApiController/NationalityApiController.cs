@@ -47,10 +47,26 @@ namespace MvcMoviesCore.ApiController
         public async Task<IActionResult> Delete(Guid id)
         {
             var nationality = await _context.Nationalities.FirstOrDefaultAsync(f=>f.Id.Equals(id));
+
+            if (nationality == null)
+                return BadRequest("Kann Nationalität nicht finden!");
+
+            if (IsNationalityUsed(id))
+                return BadRequest("Nationalität wird verwendet und kann daher nicht gelöscht werden!");
+
             _context.Nationalities.Remove(nationality);
             _context.SaveChanges();
 
             return Ok();
         }
+
+        #region private fields
+
+        private bool IsNationalityUsed(Guid id)
+        {
+            return _context.Person.Any(a => a.NationalityId.Equals(id));
+        }
+
+        #endregion
     }
 }

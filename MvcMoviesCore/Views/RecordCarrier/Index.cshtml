@@ -101,6 +101,14 @@
                                 timer: 2000
                             })
                         },
+                        error: function (response) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Datenträger konnte nicht gelöscht werden!',
+                                footer: response.responseText,
+                            })
+                        }
                     })
                 };
             });

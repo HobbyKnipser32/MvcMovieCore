@@ -42,8 +42,15 @@ namespace MvcMoviesCore.ApiController
         [HttpPost("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var recordCarriers = await _context.RecordCarrier.FirstOrDefaultAsync(f=>f.Id.Equals(id));
-            _context.RecordCarrier.Remove(recordCarriers);
+            var recordCarrier = await _context.RecordCarrier.FirstOrDefaultAsync(f=>f.Id.Equals(id));
+
+            if (recordCarrier == null)
+                return BadRequest("Datenträger nicht gefunden!");
+
+            if (await _context.Movies.AnyAsync(a => a.RecordCarrierId.Equals(recordCarrier.Id)))
+                return BadRequest("Datenträger wird verwendet und kann daher nicht gelöscht werden!");
+
+            _context.RecordCarrier.Remove(recordCarrier);
             _context.SaveChanges();
 
             return Ok();
