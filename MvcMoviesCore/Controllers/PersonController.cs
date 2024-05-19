@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using MvcMoviesCore.Models;
 using System;
 using System.Collections.Generic;
@@ -19,18 +20,18 @@ namespace MvcMoviesCore.Controllers
 
         private readonly MvcMovieCoreContext _context;
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IHostEnvironment _hostEnvironment;
         private readonly bool _showAdult;
 
         #endregion
 
         #region constructor
 
-        public PersonController(MvcMovieCoreContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public PersonController(MvcMovieCoreContext context, IConfiguration configuration, IHostEnvironment hostEnvironment)
         {
             _context = context;
             _configuration = configuration;
-            _hostingEnvironment = hostingEnvironment;
+            _hostEnvironment = hostEnvironment;
             _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
 
@@ -47,7 +48,7 @@ namespace MvcMoviesCore.Controllers
         public IActionResult Upload(IFormFile file)
         {
             var fileDic = "File";
-            string filePath = Path.Combine(_hostingEnvironment.WebRootPath, fileDic);
+            string filePath = Path.Combine(_hostEnvironment.ContentRootPath, fileDic);
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
             var fileName = file.Name;
