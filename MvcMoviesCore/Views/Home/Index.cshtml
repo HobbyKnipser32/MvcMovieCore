@@ -9,7 +9,7 @@
     <hr />
     <h2>New</h2>
     <div>
-        <table class="table table-striped">
+        <table class="table table-striped" id="homeIndex">
             <thead>
                 <tr>
                     <th>
@@ -64,3 +64,22 @@
         </table>
     </div>
 </div>
+@section Scripts
+{
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function () {
+            $('#homeIndex').DataTable({
+                ordering: true,
+                ajax: false,
+                paging: false,
+                searching: false,
+                fixedHeader: {
+                    header: true,
+                    footer: false
+                },
+            });
+        })
+    </script>
+}

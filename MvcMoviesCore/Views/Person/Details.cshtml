@@ -2,60 +2,75 @@
 
 @{
     ViewData["Title"] = "Person-Details";
+    var imgSrc = $"/Original/{Model.Id.ToString()}.jpg";
 }
 <div>
     <h2>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.ActorsAge))</h2>
     <hr />
-    <h3>Details</h3>
     <div class="row">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="form-group col-md-3">
-                    <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
-                    @Html.DisplayFor(model => model.Sex.Name)
-                </div>
-                <div class="form-group col-md-3">
-                    <label asp-for="ActorsAge" class="control-label">aktuelles Alter: </label>
-                    @Html.DisplayFor(model => model.ActorsAge)
-                </div>
-                <div class="form-group col-md-3">
-                    <label asp-for="Birthday" class="control-label">Geburtstag: </label>
-                    @Html.DisplayFor(model => model.Birthday)
-                </div>
-                <div class="form-group col-md-3">
-                    <label asp-for="Obit" class="control-label">Todestag: </label>
-                    @Html.DisplayFor(model => model.Obit)
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="media">
+                        <img src="@imgSrc" alt="ziehe ein Bild hier hin" />
+                    </div>
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
-            <div class="row">
-                <div class="form-group col-md-3">
-                    <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
-                    @Html.DisplayFor(model => model.Nationality.Name)
-                </div>
-                <div class="form-group col-md-3">
-                    <label asp-for="Height" class="control-label">Größe: </label>
-                    @Html.DisplayFor(model => model.Height)
-                </div>
-                <div class="form-group col-md-3">
-                    <label asp-for="Weight" class="control-label">Gewicht: </label>
-                    @Html.DisplayFor(model => model.Weight)
-                </div>
-                <div class="form-group col-md-3">
-                    <label asp-for="PersonType.Name" class="control-label">Type: </label>
-                    @Html.DisplayFor(model => model.PersonType.Name)
+       
+        <div class="col-sm-9">
+            <div class="card">
+                <div class="card-body">
+                   <div class="col-sm-9">
+                        <div class="row">
+                            <div class="form-group col-sm-3">
+                                <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
+                                @Html.DisplayFor(model => model.Sex.Name)
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label asp-for="ActorsAge" class="control-label">aktuelles Alter: </label>
+                                @Html.DisplayFor(model => model.ActorsAge)
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label asp-for="Birthday" class="control-label">Geburtstag: </label>
+                                @Html.DisplayFor(model => model.Birthday)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="row">
+                            <div class="form-group col-sm-3">
+                                <label asp-for="PersonType.Name" class="control-label">Type: </label>
+                                @Html.DisplayFor(model => model.PersonType.Name)
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
+                                @Html.DisplayFor(model => model.Nationality.Name)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="row">
+                            <div class="form-group col-sm-3">
+                                <label asp-for="Obit" class="control-label">Todestag: </label>
+                                @Html.DisplayFor(model => model.Obit)
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label asp-for="Height" class="control-label">Größe: </label>
+                                @Html.DisplayFor(model => model.Height)
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label asp-for="Weight" class="control-label">Gewicht: </label>
+                                @Html.DisplayFor(model => model.Weight)
+                            </div>
+                        </div>
+                    </div> 
                 </div>
             </div>
         </div>
-        @* <dl class="dl-vertical">
-            <dt>
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-        </dl> *@
     </div>
     <hr />
     <ul class="nav nav-tabs">

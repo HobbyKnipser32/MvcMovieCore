@@ -13,9 +13,6 @@
     <title>@ViewData["Title"] - Movies</title>
     <link href="~/MvcMoviesCore.styles.css" asp-append-version="true" rel="stylesheet" />
 
-    @* <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" /> *@
-
     <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/bootstrap/css/bootstrap-utilities.min.css" rel="stylesheet" />
     <link href="~/bootstrap/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" />
@@ -26,165 +23,17 @@
     <link href="~/css/datatables.searchhighlight.css" rel="stylesheet" />
     <link href="~/fonts/fontawesome-free-6.5.2-web/css/all.min.css" rel="stylesheet" />
 
-
-    @* <link href="~/fonts/fontawesome/css/all.min.css" rel="stylesheet" /> *@
-    @* <link href="~/lib/devextreme/css/dx.light.min.css" rel="stylesheet" /> *@
-    @* <link href="~/css/daterangepicker.css" rel="stylesheet" /> *@
-    @* <link href="~/fonts/fontawesome/css/all.min.css" rel="stylesheet" /> *@
-
     <environment include="Development">
-        @* <link href="~/css/material-dashboard.css?v=2.1.0" rel="stylesheet" /> *@
+        <link href="~/css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
         <link href="~/css/site.css" rel="stylesheet" />
     </environment>
     <environment exclude="Development">
-        @* <link href="~/css/material-dashboard.min.css" asp-append-version="true" rel="stylesheet" /> *@
+        <link href="~/css/material-dashboard.min.css" asp-append-version="true" rel="stylesheet" />
         <link href="~/css/site.min.css" asp-append-version="true" rel="stylesheet" />
     </environment>
 </head>
-@* <body class="dx-viewport dx-device-desktop dx-device-generic dx-theme-generic dx-theme-generic-typography dx-color-scheme-light sidebar-mini"> *@
 <body>
-    @* <div class="wrapper">
-        <div class="sidebar" data-color="rose" data-background-color="white">
-            <div class="logo">
-                <a class="simple-text logo-mini mt-3">
-                    <img src="~/images/movie_30.jpg" />
-                </a>
-                <a asp-controller="Home" asp-action="Index" class="simple-text logo-normal">
-                    <h3 class="text-info">Movies</h3>
-                </a>
-            </div>
-            <div class="sidebar-wrapper">
-                <ul class="nav">
-                    <li class="nav-item" is-active-route asp-controller="Home" asp-action="Index">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                            <i class="fas fa-home" style="color: #74C0FC;"></i><p>Home</p>
-                        </a>
-                    </li>
-                    <li class="nav-item" id="moviesNav">
-                        <a class="nav-link" data-toggle="collapse" href="#movies" aria-expanded="false" id="moviesNavLink">
-                            <i class="fas fa-film" style="color: #74C0FC;"></i></i><p>Filme<b class="caret"></b></p>
-                        </a>
-                        <div id="movies" class="collapse">
-                            <ul class="nav nav-border-left">
-                                <li class="nav-item" is-active-route asp-controller="Movies" asp-action="Index">
-                                    <a class="nav-link" asp-area="" asp-controller="Movies" asp-action="Index">
-                                        <span class="sidebar-normal">zeige alle Filme</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item" is-active-route asp-controller="GetRandomMovie" asp-action="Index">
-                                    <a asp-area="" asp-controller="GetRandomMovie" asp-action="Index" class="nav-link">
-                                        <span class="sidebar-normal">zufälliger Filme</span>
-                                    </a>
-                                </li>
-                                @if (showAdult.Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                                {
-                                    <li class="nav-item" is-active-route asp-controller="GetRandomAdultMovie" asp-action="Index">
-                                        <a asp-area="" asp-controller="GetRandomAdultMovie" asp-action="Index" class="nav-link">
-                                            <span class="d-none d-sm-inline">zufälliger E-Filme</span>
-                                        </a>
-                                    </li>
-                                }
-                                <li class="nav-item" is-active-route asp-controller="Movies" asp-action="FileSizes">
-                                    <a asp-area="" asp-controller="Movies" asp-action="FileSizes" class="nav-link">
-                                        <span class="sidebar-normal">Dateigröße ermittlen</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item" id="personNav">
-                        <a class="nav-link" data-toggle="collapse" href="#person" aria-expanded="false" id="personNavLink">
-                            <i class="fas fa-users" style="color: #74C0FC;"></i><p>Personen<b class="caret"></b></p>
-                        </a>
-                        <div id="person" class="collapse">
-                            <ul class="nav nav-border-left">
-                                <li class="nav-item" is-active-route asp-controller="Person" asp-action="Index">
-                                    <a asp-area="" asp-controller="Person" asp-action="Index" class="nav-link">
-                                        <span class="sidebar-normal">zeige alle Personen</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item" is-active-route asp-controller="Person" asp-action="Birthdays">
-                                    <a asp-area="" asp-controller="Person" asp-action="Birthdays" class="nav-link">
-                                        <span class="sidebar-normal">Geburtstage</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item" id="stammdatenNav">
-                        <a class="nav-link" data-toggle="collapse" href="#stammdaten" aria-expanded="false" id="stammdatenNavLink">
-                            <i class="fas fa-tools" style="color: #74C0FC;"></i>
-                            <p>Stammdaten<b class="caret"></b></p>
-                        </a>
-                        <div id="stammdaten" class="collapse">
-                            <ul class="nav nav-border-left">
-                                <li class="nav-item" is-active-route asp-controller="RecordCarrier" asp-action="Index">
-                                    <a asp-area="" asp-controller="RecordCarrier" asp-action="Index" class="nav-link">
-                                        <span class="sidebar-normal">Datenträger</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item" is-active-route asp-controller="Genres" asp-action="Index">
-                                    <a asp-area="" asp-controller="Genres" asp-action="Index" class="nav-link">
-                                        <span class="sidebar-normal">Genre</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item" is-active-route asp-controller="Sex" asp-action="Index">
-                                    <a asp-area="" asp-controller="Sex" asp-action="Index" class="nav-link">
-                                        <span class="sidebar-normal">Geschlecht</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item" is-active-route asp-controller="StorageLocation" asp-action="Index">
-                                    <a asp-area="" asp-controller="StorageLocation" asp-action="Index" class="nav-link">
-                                        <span class="sidebar-normal">Lagerort</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item" is-active-route asp-controller="Nationalities" asp-action="Index">
-                                    <a asp-area="" asp-controller="Nationalities" asp-action="Index" class="nav-link">
-                                        <span class="sidebar-normal">Nationalitäten</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item" is-active-route asp-controller="PersonTypes" asp-action="Index">
-                                    <a asp-area="" asp-controller="PersonTypes" asp-action="Index" class="nav-link">
-                                        <span class="sidebar-normal">Personentypen</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="main-panel">
-            <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
-                <div class="container-fluid">
-                    <div class="navbar-wrapper">
-                        <div class="navbar-minimize">
-                            <button id="minimizeSidebar" class="btn btn-just-icon btn-white btn-fab btn-round">
-                                <i class=""></i>
-                                <i class="fas fa-angle-double-left visible-on-sidebar-regular"></i>
-                                <i class="fas fa-angle-double-right visible-on-sidebar-mini"></i>
-                                <div class="ripple-container"></div>
-                            </button>
-                        </div>
-                    </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="navbar-toggler-icon icon-bar"></span>
-                        <span class="navbar-toggler-icon icon-bar"></span>
-                        <span class="navbar-toggler-icon icon-bar"></span>
-                    </button>
-                </div>
-            </nav>
-            <div class="content">
-                <div class="container-fluid">
-                    @RenderBody()
-                </div>
-            </div>
-        </div>
-    </div> *@
-
-    <div class="offcanvas offcanvas-start w-25" tabindex="-1" id="offcanvas" data-bs-keyboard="false" data-bs-backdrop="false">
+    <div class="offcanvas offcanvas-start w-15" tabindex="-1" id="offcanvas" data-bs-keyboard="false" data-bs-backdrop="false">
         <div class="offcanvas-header">
             <h6 class="offcanvas-title d-none d-sm-block" id="offcanvas">Menu</h6>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -192,93 +41,106 @@
         <div class="offcanvas-body px-0">
             <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start" id="menu">
                 <li class="nav-item">
-                    <a href="#" class="nav-link text-truncate">
-                        <i class="fs-5 bi-house"></i><span class="ms-1 d-none d-sm-inline">Home</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#submenu1" data-bs-toggle="collapse" class="nav-link text-truncate">
-                        <i class="fs-5 bi-speedometer2"></i><span class="ms-1 d-none d-sm-inline">Movies</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-truncate">
-                        <i class="fs-5 bi-table"></i><span class="ms-1 d-none d-sm-inline">Orders</span>
+                    <a asp-controller="home" asp-action="Index" class="nav-link text-truncate">
+                        <i class="fas fa-home" style="color: #3a5788;"></i><span class="ms-1 d-none d-sm-inline" style="color: #3a5788;">Home</span>
                     </a>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="nav-link dropdown-toggle  text-truncate" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fs-5 bi-bootstrap"></i><span class="ms-1 d-none d-sm-inline">Bootstrap</span>
+                        <i class="fas fa-film" style="color: #3a5788;"></i><span class="ms-1 d-none d-sm-inline">Filme</span>
                     </a>
                     <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdown">
-                        <li><a class="dropdown-item" href="#">New project...</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a asp-controller="Movies" asp-action="Index" class="dropdown-item">alle anzeigen ...</a></li>
+                        <li><a asp-controller="GetRandomMovie" asp-action="Index" class="dropdown-item">zufälliger Film</a></li>
+                        @if (showAdult.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            <li><a asp-controller="GetRandomAdultMovie" asp-action="Index" class="dropdown-item">zufälliger FSK18 Film</a></li>
+                        }
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        <li><a asp-controller="Movies" asp-action="FileSizes" class="dropdown-item">Dateigrößen ermittlen</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#" class="nav-link text-truncate">
-                        <i class="fs-5 bi-grid"></i><span class="ms-1 d-none d-sm-inline">Products</span>
+                <li class="dropdown">
+                    <a href="#" class="nav-link dropdown-toggle  text-truncate" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-users" style="color: #3a5788;"></i><span class="ms-1 d-none d-sm-inline">Personen</span>
                     </a>
+                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdown">
+                        <li><a asp-controller="Person" asp-action="Index" class="dropdown-item">alle anzeigen ...</a></li>
+                        <li><a asp-controller="Person" asp-action="Birthdays" class="dropdown-item">Geburtstag</a></li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="#" class="nav-link text-truncate">
-                        <i class="fs-5 bi-people"></i><span class="ms-1 d-none d-sm-inline">Customers</span>
+                <li class="dropdown">
+                    <a href="#" class="nav-link dropdown-toggle  text-truncate" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-tools" style="color: #3a5788"></i><span class="ms-1 d-none d-sm-inline">Stammdaten</span>
                     </a>
+                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdown">
+                        <li>
+                            <<a asp-controller="RecordCarrier" asp-action="Index" class="dropdown-item">Datenträger</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Genres" asp-action="Index" class="dropdown-item">Genre</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Sex" asp-action="FileSizes" class="dropdown-item">Geschlecht</a>
+                        </li>
+                        <li>
+                            <a asp-controller="StorageLocation" asp-action="FileSizes" class="dropdown-item">Lagerort</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Nationalities" asp-action="FileSizes" class="dropdown-item">Nationalitäten</a>
+                        </li>
+                        <li>
+                            <a asp-controller="PersonTypes" asp-action="FileSizes" class="dropdown-item">Personentypen</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col min-vh-100 p-4">
+            <div class="col min-vh-10 p-4">
                 <!-- toggler -->
-                <button class="btn float-left" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" role="button">
+                <button class="float-left" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" role="button" style="background-color: transparent; border-style: none;">
                     <i class="fa-solid fa-bars fa-flip" style="color: #3a5788; --fa-animation-duration: 2s" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"></i>
                 </button>
-                <main role="main" class="pb-3">
-                    @RenderBody()
-                </main>
             </div>
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-    </div>
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
 
-    <script src="~/js/popper.min.js"></script>
-    <script src="~/js/bootstrap-material-design.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/daterangepicker/daterangepicker.js"></script>
+    <script src="~/lib/devextreme/js/dx.all.min.js"></script>
+    <script src="~/lib/highlightjs/datatables.searchhighlight.min.js"></script>
+    <script src="~/lib/highlightjs/jquery.highlight.js"></script>
     <script src="~/lib/jquery-unobtrusive-ajax/dist/jquery.unobtrusive-ajax.min.js"></script>
-    <script src="~/js/perfect-scrollbar.jquery.min.js"></script>
-    <script src="~/sweetalert2/sweetalert2.min.js" type="text/javascript"></script>
-    <script src="~/js/bootstrap-notify.js"></script>
-    <script src="~/js/bootstrap-selectpicker.js"></script>
-    <script src="~/js/select2.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/lib/moment/moment.min.js"></script>
     <script src="~/lib/moment/de.js"></script>
     <script src="~/lib/moment/moment-timezone-with-data.js"></script>
-    <script src="~/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="~/js/jquery.dm-uploader.min.js"></script>
-    <script src="~/js/polyfill.js"></script>
-    <script src="~/js/serializejson.js"></script>
-    <script src="~/lib/daterangepicker/daterangepicker.js"></script>
-    <script src="~/js/chips.js"></script>
-    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/lib/underscore.js/underscore-min.js"></script>
-    <script src="~/lib/highlightjs/datatables.searchhighlight.min.js"></script>
-    <script src="~/lib/highlightjs/jquery.highlight.js"></script>
-    <script src="~/lib/devextreme/js/dx.all.min.js"></script>
+
+    <script src="~/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/js/bootstrap-material-design.min.js"></script>
+    <script src="~/js/bootstrap-notify.js"></script>
+    <script src="~/js/bootstrap-selectpicker.js"></script>
+    <script src="~/js/chips.js"></script>
+    <script src="~/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/js/polyfill.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/jquery.dm-uploader.min.js"></script>
+    <script src="~/js/select2.min.js"></script>
+    <script src="~/js/serializejson.js"></script>
+
     <script src="~/fonts/fontawesome-free-6.5.2-web/js/fontawesome.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/sweetalert2/sweetalert2.min.js" type="text/javascript"></script>
     <environment include="Development">
         <script src="~/js/material-dashboard.js?v=2.1.0" type="text/javascript"></script>
         <!-- Dictionary files for supported languages -->
@@ -300,33 +162,6 @@
 
     <script>
         var appRootPath = '@Context.Request.PathBase';
-        var miniSideBarStoreVar = 'isMiniSidebarVisible';
-
-        var setSidebarMode = function (isMiniModeOn) {
-            if (isMiniModeOn == "false") {
-                $('body').removeClass('sidebar-mini');
-                md.misc.sidebar_mini_active = false;
-            } else {
-                $('body').addClass('sidebar-mini');
-                md.misc.sidebar_mini_active = true;
-            }
-
-            // we simulate the window Resize so the charts will get updated in realtime.
-            var simulateWindowResize = setInterval(function () {
-                window.dispatchEvent(new Event('resize'));
-            }, 180);
-
-            // we stop the simulation of Window Resize after the animations are completed
-            setTimeout(function () {
-                clearInterval(simulateWindowResize);
-            }, 1000);
-
-        }
-
-        if ($('.sidebar').is(':visible')) {
-            var showMiniSidebar = window.localStorage ? localStorage.getItem(miniSideBarStoreVar) : false;
-            showMiniSidebar ? setSidebarMode(showMiniSidebar) : setSidebarMode(false);
-        }
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
