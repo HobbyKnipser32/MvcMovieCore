@@ -11,30 +11,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <title>@ViewData["Title"] - Movies</title>
+    <link href="~/MvcMoviesCore.styles.css" asp-append-version="true" rel="stylesheet" />
+
+    @* <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" /> *@
+
     <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/bootstrap/css/bootstrap-utilities.min.css" rel="stylesheet" />
     <link href="~/bootstrap/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" />
+    <link href="~/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
     <link href="~/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
-    <link href="~/fonts/fontawesome/css/all.min.css" rel="stylesheet" />
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <link href="~/css/toggle-switch.css" rel="stylesheet" />
-    <link href="~/lib/devextreme/css/dx.light.min.css" rel="stylesheet" />
-    <link href="~/css/daterangepicker.css" rel="stylesheet" />
     <link href="~/css/datatables.searchhighlight.css" rel="stylesheet" />
-    @* <link href="~/fonts/fontawesome/css/all.min.css" rel="stylesheet" /> *@
     <link href="~/fonts/fontawesome-free-6.5.2-web/css/all.min.css" rel="stylesheet" />
-    <link href="~/MvcMoviesCore.styles.css" asp-append-version="true" rel="stylesheet" />
+
+
+    @* <link href="~/fonts/fontawesome/css/all.min.css" rel="stylesheet" /> *@
+    @* <link href="~/lib/devextreme/css/dx.light.min.css" rel="stylesheet" /> *@
+    @* <link href="~/css/daterangepicker.css" rel="stylesheet" /> *@
+    @* <link href="~/fonts/fontawesome/css/all.min.css" rel="stylesheet" /> *@
+
     <environment include="Development">
-        <link href="~/css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
+        @* <link href="~/css/material-dashboard.css?v=2.1.0" rel="stylesheet" /> *@
         <link href="~/css/site.css" rel="stylesheet" />
     </environment>
     <environment exclude="Development">
-        <link href="~/css/material-dashboard.min.css" asp-append-version="true" rel="stylesheet" />
+        @* <link href="~/css/material-dashboard.min.css" asp-append-version="true" rel="stylesheet" /> *@
         <link href="~/css/site.min.css" asp-append-version="true" rel="stylesheet" />
     </environment>
 </head>
-<body class="dx-viewport dx-device-desktop dx-device-generic dx-theme-generic dx-theme-generic-typography dx-color-scheme-light sidebar-mini">
-    <div class="wrapper">
+@* <body class="dx-viewport dx-device-desktop dx-device-generic dx-theme-generic dx-theme-generic-typography dx-color-scheme-light sidebar-mini"> *@
+<body>
+    @* <div class="wrapper">
         <div class="sidebar" data-color="rose" data-background-color="white">
             <div class="logo">
                 <a class="simple-text logo-mini mt-3">
@@ -173,7 +182,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> *@
 
     <div class="offcanvas offcanvas-start w-25" tabindex="-1" id="offcanvas" data-bs-keyboard="false" data-bs-backdrop="false">
         <div class="offcanvas-header">
@@ -269,6 +278,7 @@
     <script src="~/lib/highlightjs/jquery.highlight.js"></script>
     <script src="~/lib/devextreme/js/dx.all.min.js"></script>
     <script src="~/fonts/fontawesome-free-6.5.2-web/js/fontawesome.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <environment include="Development">
         <script src="~/js/material-dashboard.js?v=2.1.0" type="text/javascript"></script>
         <!-- Dictionary files for supported languages -->

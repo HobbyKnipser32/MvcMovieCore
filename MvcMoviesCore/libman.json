@@ -9,6 +9,10 @@
     {
       "library": "sweetalert2@11.11.0",
       "destination": "wwwroot/sweetalert2/"
+    },
+    {
+      "library": "bootstrap-icons@1.11.3",
+      "destination": "wwwroot/bootstrap-icons/"
     }
   ]
 }
