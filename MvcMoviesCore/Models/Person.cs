@@ -46,9 +46,9 @@ namespace MvcMoviesCore.Models
 
         public Guid PersonTypesId { get; set; }
 
-        public DateTime? StartOfBusiness { get; set; }
+        public int? StartOfBusiness { get; set; }
 
-        public DateTime? EndOfBusiness { get; set; }
+        public int? EndOfBusiness { get; set; }
 
         public string BMI
         {

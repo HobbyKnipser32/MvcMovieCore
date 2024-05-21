@@ -103,13 +103,13 @@
                                 </div>
                                 <div class="form-group col-sm-3">
                                     <label for="startOfBusiness" class="form-label">Start of Business:</label>
-                                    <input type="date" asp-for="StartOfBusiness" class="form-control" id="startOfBusiness" />
+                                    <input type="number" asp-for="StartOfBusiness" class="form-control" id="startOfBusiness" min="1940" max="@DateTime.Now.Year-18" />
                                     <span asp-validation-for="StartOfBusiness" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-3">
                                     <label for="endOfBusiness" class="form-label">End of Business:</label>
-                                    <input type="date" asp-for="EndOfBusiness" class="form-control" id="endOfBusiness" />
-                                    <span asp-validation-for="EndOfBusiness" class="text-danger"></span>
+                                    <input type="number" asp-for="EndOfBusiness" class="form-control" id="endOfBusiness" />
+                                    <span asp-validation-for="EndOfBusiness" class="text-danger" min="1940" max="@DateTime.Now.Year"></span>
                                 </div>
                             </div>
                         </div>
