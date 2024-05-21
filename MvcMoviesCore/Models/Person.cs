@@ -40,7 +40,15 @@ namespace MvcMoviesCore.Models
 
         public int? Classification { get; set; }
 
+        public string CupSize { get; set; }
+
+        public bool FakeBoobs { get; set; } = false;
+
         public Guid PersonTypesId { get; set; }
+
+        public DateTime? StartOfBusiness { get; set; }
+
+        public DateTime? EndOfBusiness { get; set; }
 
         public string BMI
         {

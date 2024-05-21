@@ -5,6 +5,9 @@
     var personTypesId = ViewData["PersonTypesId"] as IEnumerable<SelectListItem>;
     var sexId = ViewData["SexId"] as IEnumerable<SelectListItem>;
     var nationalityId = ViewData["NationalityId"] as IEnumerable<SelectListItem>;
+    var adultPersonType = ViewData["AdultPersonType"];
+    var imgSrc = $"/Original/{Model.Id.ToString()}.jpg";
+    var person = Model.Name;
 }
 
 <h2>Edit</h2>
@@ -14,70 +17,118 @@
 <form class="card-form-horizontal" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
+
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label class="col-form-label">Name:</label>
-                        <input asp-for="Name" class="col-form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="col-form-label">Geschlecht:</label>
-                        <div class="col-form-label">
-                            <select asp-for="SexId" class="select2-dropdown col-form-control" asp-items="@sexId"></select>
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="media">
+                            <img src="@imgSrc" alt="@person" />
                         </div>
-                        <span asp-validation-for="SexId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="col-form-label">Geburtstag:</label>
-                        <input type="date" asp-for="Birthday" class="col-form-control" />
-                        <span asp-validation-for="Birthday" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="col-form-label">Todestag:</label>
-                        <input type="date" asp-for="Obit" class="col-form-control" />
-                        <span asp-validation-for="Obit" class="text-danger"></span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label class="col-control-label">Nationalität:</label>
-                        <select asp-for="NationalityId" class="select2-dropdown col-form-control" asp-items="@nationalityId"></select>
-                        <span asp-validation-for="NationalityId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="col-control-label">Größe:</label>
-                        <input type="text" asp-for="Height" class="col-form-control" />
-                        <span asp-validation-for="Height" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="col-control-label">Gewicht:</label>
-                        <input type="number" asp-for="Weight" class="col-form-control" />
-                        <span asp-validation-for="Weight" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="col-control-label">Rolle</label>
-                        <select asp-for="PersonTypesId" class="select2-dropdown col-form-control" asp-items="@personTypesId"></select>
-                        <span asp-validation-for="PersonTypesId" class="text-danger"></span>
+            <div class="col-sm-9">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="form-group col-sm-4">
+                                    <label for="name" class="form-label">Name:</label>
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger" id="name"></span>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="nationalityId" class="form-label">Nationalität:</label>
+                                    <select asp-for="NationalityId" class="form-select" asp-items="@nationalityId" id="nationalityId"></select>
+                                    <span asp-validation-for="NationalityId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="sexId" class="form-label">Geschlecht:</label>
+                                    <select asp-for="SexId" class="form-select" asp-items="@sexId" id="sexId"></select>
+                                    <span asp-validation-for="SexId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="form-group col-sm-4">
+                                    <label for="birthday" class="form-label">Geburtstag:</label>
+                                    <input type="date" asp-for="Birthday" class="form-control" id="birthday" />
+                                    <span asp-validation-for="Birthday" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="obit" class="form-label">Todestag:</label>
+                                    <input type="date" asp-for="Obit" class="form-control" id="obit" />
+                                    <span asp-validation-for="Obit" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="personTypeId" class="form-label">Rolle:</label>
+                                    <select asp-for="PersonTypesId" class="form-select" asp-items="@personTypesId" id="personTypeId"></select>
+                                    <span asp-validation-for="PersonTypesId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label for="height" class="form-label">Größe:</label>
+                                    <input type="number" asp-for="Height" class="form-control" id="height" />
+                                    <span asp-validation-for="Height" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="weight" class="form-label">Gewicht:</label>
+                                    <input type="number" asp-for="Weight" class="form-control" id="weight" />
+                                    <span asp-validation-for="Weight" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="classification" class="form-label">Klassifizierung:</label>
+                                    <input type="number" asp-for="Classification" class="form-control" min="1" max="12" value="10" id="classification" />
+                                    <span asp-validation-for="Classification" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="display:none" id="adultStuff">
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <label for="cupSize" class="form-label">Cupsize:</label>
+                                    <input asp-for="CupSize" class="form-control" id="height" itemid="cupSize" />
+                                    <span asp-validation-for="CupSize" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="fakeBoobs" class="form-label">Fakeboobs:</label>
+                                    <input type="checkbox" asp-for="FakeBoobs" class="form-checkbox" id="fakeBoobs" />
+                                    <span asp-validation-for="FakeBoobs" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="startOfBusiness" class="form-label">Start of Business:</label>
+                                    <input type="date" asp-for="StartOfBusiness" class="form-control" id="startOfBusiness" />
+                                    <span asp-validation-for="StartOfBusiness" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="endOfBusiness" class="form-label">End of Business:</label>
+                                    <input type="date" asp-for="EndOfBusiness" class="form-control" id="endOfBusiness" />
+                                    <span asp-validation-for="EndOfBusiness" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <a asp-action="Upload"><button class="btn btn-file">Foto hinzufügen</button></a>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <input asp-action="Edit" type="submit" value="Save" class="btn btn-default" />
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <a asp-action="Upload"><button class="btn btn-file">Foto hinzufügen</button></a>
+                </div>
+                <div class="form-group col-md-3">
+                    <input asp-action="Edit" type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+
     </div>
 </form>
 
@@ -85,8 +136,27 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@* @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-} *@
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var adultPersonType = '@adultPersonType';
+            var modelPersonType = '@Model.PersonTypesId.ToString()';
+
+            if (modelPersonType === adultPersonType) {
+                $('#adultStuff').show();
+            }
+            else {
+                $('#adultStuff').hide();
+            };
+
+            $('#personTypeId').change(function () {
+                if ($('#personTypeId').val() === adultPersonType) {
+                    $('#adultStuff').show();
+                }
+                else {
+                    $('#adultStuff').hide();
+                };
+            });
+        })
+    </script>
+}

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Person-Details";
     var imgSrc = $"/Original/{Model.Id.ToString()}.jpg";
+    var person = Model.Name;
 }
 <div>
     <h2>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.ActorsAge))</h2>
@@ -12,7 +13,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="media">
-                        <img src="@imgSrc" alt="ziehe ein Bild hier hin" />
+                        <img src="@imgSrc" alt="@person" />
                     </div>
                     <h5 class="card-title">Special title treatment</h5>
                     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
@@ -20,11 +21,11 @@
                 </div>
             </div>
         </div>
-       
+
         <div class="col-sm-9">
             <div class="card">
                 <div class="card-body">
-                   <div class="col-sm-9">
+                    <div class="col-sm-9">
                         <div class="row">
                             <div class="form-group col-sm-3">
                                 <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
@@ -67,7 +68,7 @@
                                 @Html.DisplayFor(model => model.Weight)
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>

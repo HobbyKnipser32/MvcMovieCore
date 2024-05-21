@@ -160,6 +160,7 @@ namespace MvcMoviesCore.Controllers
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", person.PersonTypesId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", person.SexId);
             ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
+            ViewData["AdultPersonType"] = GetAdultPersonTypeId();
             return View(person);
         }
 
@@ -317,6 +318,14 @@ namespace MvcMoviesCore.Controllers
         private bool PersonExists(Guid id)
         {
             return _context.Person.Any(e => e.Id.Equals(id));
+        }
+
+        private string GetAdultPersonTypeId()
+        {
+            var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
+            if (personType != null)
+                return personType.Id.ToString();
+            return string.Empty;
         }
 
         #endregion
