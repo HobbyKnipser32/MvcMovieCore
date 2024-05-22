@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using MvcMoviesCore.Models;
 using System;
 using System.Collections.Generic;
@@ -20,18 +19,19 @@ namespace MvcMoviesCore.Controllers
 
         private readonly MvcMovieCoreContext _context;
         private readonly IConfiguration _configuration;
-        private readonly IHostEnvironment _hostEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly bool _showAdult;
+        private const string _originalFileDictonary = @"Images\Original";
 
         #endregion
 
         #region constructor
 
-        public PersonController(MvcMovieCoreContext context, IConfiguration configuration, IHostEnvironment hostEnvironment)
+        public PersonController(MvcMovieCoreContext context, IConfiguration configuration, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             _configuration = configuration;
-            _hostEnvironment = hostEnvironment;
+            _webHostEnvironment = hostEnvironment;
             _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
 
@@ -47,11 +47,10 @@ namespace MvcMoviesCore.Controllers
         [HttpPost]
         public IActionResult Upload(IFormFile file)
         {
-            var fileDic = "File";
-            string filePath = Path.Combine(_hostEnvironment.ContentRootPath, fileDic);
+            string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, _originalFileDictonary);
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
-            var fileName = file.Name;
+            var fileName = file.FileName;
             filePath = Path.Combine(filePath, fileName);
             using (FileStream fs = System.IO.File.Create(filePath))
             {
@@ -113,24 +112,24 @@ namespace MvcMoviesCore.Controllers
             }
 
             person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication).ToList();
-
+            
+            ViewData["AdultPersonType"] = GetAdultPersonTypeId();
             return View(person);
         }
 
-        // GET: Person/Create
         public IActionResult Create()
         {
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name");
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name");
+            ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["AdultPersonType"] = GetAdultPersonTypeId();
             return View();
         }
 
-        // POST: Person/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,SexId,Birthday,Obit,Nationality,Größe,Gewicht,PersonTypesId")] Person person)
+        public async Task<IActionResult> Create(
+            [Bind("Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness")] Person person)
         {
             if (ModelState.IsValid)
             {
@@ -141,6 +140,8 @@ namespace MvcMoviesCore.Controllers
             }
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", person.PersonTypesId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", person.SexId);
+            ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["AdultPersonType"] = GetAdultPersonTypeId();
             return View(person);
         }
 
@@ -157,10 +158,13 @@ namespace MvcMoviesCore.Controllers
             {
                 return NotFound();
             }
+            person.ActorsAge = person.GetActorsAge(person.Birthday, person.Obit);
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", person.PersonTypesId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", person.SexId);
             ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
+            ViewData["ImageSource"] = Path.Combine(_webHostEnvironment.WebRootPath, _originalFileDictonary, person.Id.ToString() + ".jpg");
+
             return View(person);
         }
 
@@ -169,7 +173,8 @@ namespace MvcMoviesCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification")] Person person)
+        public async Task<IActionResult> Edit(Guid id, 
+            [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness")] Person person)
         {
             if (id != person.Id)
             {
@@ -198,6 +203,8 @@ namespace MvcMoviesCore.Controllers
             }
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", person.PersonTypesId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", person.SexId);
+            ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
+            ViewData["AdultPersonType"] = GetAdultPersonTypeId();
             return View(person);
         }
 

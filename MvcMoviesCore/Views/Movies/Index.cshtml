@@ -81,10 +81,10 @@
                     @Html.DisplayFor(modelItem => item.FileSizeInKB)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC;"></i></a>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC;  --fa-animation-duration: 2s;"></i></a>
                 </td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fa-shake" style="color: #ff0000;"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fa-shake" style="color: #ff0000; --fa-animation-duration: 2s;"></i></a>
                 </td>
             </tr>
         }

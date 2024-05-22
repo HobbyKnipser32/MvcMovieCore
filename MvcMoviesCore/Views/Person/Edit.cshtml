@@ -5,14 +5,16 @@
     var personTypesId = ViewData["PersonTypesId"] as IEnumerable<SelectListItem>;
     var sexId = ViewData["SexId"] as IEnumerable<SelectListItem>;
     var nationalityId = ViewData["NationalityId"] as IEnumerable<SelectListItem>;
-    var adultPersonType = ViewData["AdultPersonType"];
-    var imgSrc = $"/Original/{Model.Id.ToString()}.jpg";
-    var person = Model.Name;
+    var adultPersonType = ViewData["AdultPersonType"].ToString();
+    var imgSrc = ViewData["ImageSource"].ToString();
+    var personName = Model.Name;
+    var minValue = Model.Birthday.GetValueOrDefault().Year + 18;
+    var maxValue = DateTime.Now.Year;
 }
 
-<h2>Edit</h2>
+<h2>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.ActorsAge))</h2>
 
-<h4>Person</h4>
+<h4>bearbeiten</h4>
 <hr />
 <form class="card-form-horizontal" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -23,9 +25,20 @@
             <div class="col-sm-3">
                 <div class="card">
                     <div class="card-body">
-                        <div class="media">
-                            <img src="@imgSrc" alt="@person" />
-                        </div>
+                        @if (System.IO.File.Exists(imgSrc))
+                        {
+                            <div class="media">
+                                <img src="@imgSrc" alt="@personName" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-sm-12" id="dropzone">
+                                <div action="/Person/Upload" class="dropzone" id="uploader">
+                                    
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -36,7 +49,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-4">
                                     <label for="name" class="form-label">Name:</label>
-                                    <input asp-for="Name" class="form-control" />
+                                    <input asp-for="Name" id ="name" class="form-control" />
                                     <span asp-validation-for="Name" class="text-danger" id="name"></span>
                                 </div>
                                 <div class="form-group col-sm-4">
@@ -84,7 +97,7 @@
                                 </div>
                                 <div class="form-group col-sm-4">
                                     <label for="classification" class="form-label">Klassifizierung:</label>
-                                    <input type="number" asp-for="Classification" class="form-control" min="1" max="12" value="10" id="classification" />
+                                    <input type="number" asp-for="Classification" class="form-control" min="1" max="12" id="classification" />
                                     <span asp-validation-for="Classification" class="text-danger"></span>
                                 </div>
                             </div>
@@ -103,13 +116,13 @@
                                 </div>
                                 <div class="form-group col-sm-3">
                                     <label for="startOfBusiness" class="form-label">Start of Business:</label>
-                                    <input type="number" asp-for="StartOfBusiness" class="form-control" id="startOfBusiness" min="1940" max="@DateTime.Now.Year-18" />
+                                    <input type="number" asp-for="StartOfBusiness" class="form-control" id="startOfBusiness" min="@minValue" max="@maxValue" />
                                     <span asp-validation-for="StartOfBusiness" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-3">
                                     <label for="endOfBusiness" class="form-label">End of Business:</label>
                                     <input type="number" asp-for="EndOfBusiness" class="form-control" id="endOfBusiness" />
-                                    <span asp-validation-for="EndOfBusiness" class="text-danger" min="1940" max="@DateTime.Now.Year"></span>
+                                    <span asp-validation-for="EndOfBusiness" class="text-danger" min="@minValue" max="@maxValue"></span>
                                 </div>
                             </div>
                         </div>
@@ -121,10 +134,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="form-group col-md-3">
-                    <a asp-action="Upload"><button class="btn btn-file">Foto hinzufügen</button></a>
-                </div>
-                <div class="form-group col-md-3">
-                    <input asp-action="Edit" type="submit" value="Save" class="btn btn-default" />
+                    <button type="submit" title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
                 </div>
             </div>
         </div>
@@ -132,9 +142,11 @@
     </div>
 </form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<p>
+    <a asp-action="Index" title="zurück zur Liste">
+        <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+    </a>
+</p>
 
 @section Scripts {
     <script>
@@ -157,6 +169,24 @@
                     $('#adultStuff').hide();
                 };
             });
-        })
+        });
+
+        function save() {
+            var person = {
+                "Name": $('#name').val(),
+                "NationalityId": $('#nationalityId').val(),
+                "SexId": $('#sexId').val(),
+                "Birthday": $('#birthday').val(),
+                "Obit": $('#obit').val(),
+                "PersonTypeId": $('#personTypeId').val(),
+                "Height": $('#').val(),
+            weight
+            classification
+            cupSize
+            fakeBoobs
+            startOfBusiness
+            endOfBusiness
+            }
+        };
     </script>
 }

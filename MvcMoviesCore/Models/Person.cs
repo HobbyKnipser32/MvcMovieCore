@@ -50,11 +50,13 @@ namespace MvcMoviesCore.Models
 
         public int? EndOfBusiness { get; set; }
 
+        public string Image { get; set; }
+
         public string BMI
         {
             get
             {
-                if (this.Height == null || this.Weight == null)
+                if (Height == null || Weight == null)
                     return string.Empty;
                 
                 var bmi = Weight.GetValueOrDefault() / (Height.GetValueOrDefault() * Height.GetValueOrDefault());

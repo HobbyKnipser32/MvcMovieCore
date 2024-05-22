@@ -2,11 +2,13 @@
 
 @{
     ViewData["Title"] = "Person-Details";
+    var adultPersonType = ViewData["AdultPersonType"];
     var imgSrc = $"/Original/{Model.Id.ToString()}.jpg";
     var person = Model.Name;
 }
 <div>
     <h2>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.ActorsAge))</h2>
+    <h4>bearbeiten</h4>
     <hr />
     <div class="row">
         <div class="col-sm-3">
@@ -15,9 +17,6 @@
                     <div class="media">
                         <img src="@imgSrc" alt="@person" />
                     </div>
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
             </div>
         </div>
@@ -25,47 +24,67 @@
         <div class="col-sm-9">
             <div class="card">
                 <div class="card-body">
-                    <div class="col-sm-9">
+                    <div class="col-sm-12">
                         <div class="row">
-                            <div class="form-group col-sm-3">
+                            <div class="form-group col-sm-4">
                                 <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
                                 @Html.DisplayFor(model => model.Sex.Name)
                             </div>
-                            <div class="form-group col-sm-3">
+                            <div class="form-group col-sm-4">
                                 <label asp-for="ActorsAge" class="control-label">aktuelles Alter: </label>
                                 @Html.DisplayFor(model => model.ActorsAge)
                             </div>
-                            <div class="form-group col-sm-3">
+                            <div class="form-group col-sm-4">
                                 <label asp-for="Birthday" class="control-label">Geburtstag: </label>
                                 @Html.DisplayFor(model => model.Birthday)
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-9">
+                    <div class="col-sm-12">
                         <div class="row">
-                            <div class="form-group col-sm-3">
+                            <div class="form-group col-sm-4">
                                 <label asp-for="PersonType.Name" class="control-label">Type: </label>
                                 @Html.DisplayFor(model => model.PersonType.Name)
                             </div>
-                            <div class="form-group col-sm-3">
+                            <div class="form-group col-sm-4">
                                 <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
                                 @Html.DisplayFor(model => model.Nationality.Name)
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-9">
+                    <div class="col-sm-12">
                         <div class="row">
-                            <div class="form-group col-sm-3">
+                            <div class="form-group col-sm-4">
                                 <label asp-for="Obit" class="control-label">Todestag: </label>
                                 @Html.DisplayFor(model => model.Obit)
                             </div>
-                            <div class="form-group col-sm-3">
+                            <div class="form-group col-sm-4">
                                 <label asp-for="Height" class="control-label">Größe: </label>
                                 @Html.DisplayFor(model => model.Height)
                             </div>
-                            <div class="form-group col-sm-3">
+                            <div class="form-group col-sm-4">
                                 <label asp-for="Weight" class="control-label">Gewicht: </label>
                                 @Html.DisplayFor(model => model.Weight)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="display:none" id="adultStuff">
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label for="cupSize" class="form-label">Cupsize:</label>
+                                @Html.DisplayFor(model => model.CupSize)
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="fakeBoobs" class="form-label">Fakeboobs:</label>
+                                @Html.DisplayFor(model => model.FakeBoobs)
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="startOfBusiness" class="form-label">Start of Business:</label>
+                                @Html.DisplayFor(model => model.StartOfBusiness)
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="endOfBusiness" class="form-label">End of Business:</label>
+                                @Html.DisplayFor(model => model.EndOfBusiness)
                             </div>
                         </div>
                     </div>
@@ -73,6 +92,11 @@
             </div>
         </div>
     </div>
+    <p>
+        <a asp-action="Edit" asp-route-id="@Model.Id">
+            <i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC;  --fa-animation-duration: 2s;"></i>
+        </a>
+    </p>
     <hr />
     <ul class="nav nav-tabs">
         <li>
@@ -147,10 +171,12 @@
             </table>
         </div>
     </div>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <hr />
+    <p>
+        <a asp-action="Index" title="zurück zur Liste">
+            <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+        </a>
+    </p>
 </div>
 
 @section Scripts
@@ -177,16 +203,7 @@
                     dataSrc: ''
                 },
                 columns: [
-                    {
-                        data: 'Person'
-                        // render: function (data, type, full, meta) {
-                        //     if (data && type === 'display') {
-                        //         var url = appRootPath + '/Person/Details/' + data.Id;
-                        //         return '<a href="' + url + '">' + data.Name; /*  + '< /a>'; */
-                        //     }
-                        //     return '';
-                        // }
-                    },
+                    { data: 'Person' },
                     {
                         data: 'Film',
                         render: function (data, type, full, meta) {
@@ -202,8 +219,6 @@
                 ordering: true,
                 paging: false,
                 searching: false,
-                // lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                // iDisplayLength: 25,
                 fixedHeader: {
                     header: true,
                 },
@@ -239,6 +254,16 @@
                     table.order([groupColumn, 'asc']).draw();
                 }
             });
+
+            var adultPersonType = '@adultPersonType';
+            var modelPersonType = '@Model.PersonTypesId.ToString()';
+
+            if (modelPersonType === adultPersonType) {
+                $('#adultStuff').show();
+            }
+            else {
+                $('#adultStuff').hide();
+            };
         })
     </script>
 }
