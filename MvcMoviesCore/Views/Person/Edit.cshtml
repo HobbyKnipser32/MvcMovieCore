@@ -18,7 +18,8 @@
 <hr />
 <form class="card-form-horizontal" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Id" id="id" />
+    <input type="hidden" asp-for="Image" id="image" />
 
     <div class="container-fluid">
         <div class="row">
@@ -35,7 +36,9 @@
                         {
                             <div class="col-sm-12" id="dropzone">
                                 <div action="/Person/Upload" class="dropzone" id="uploader">
-                                    
+                                    <div class="fallback">
+                                        <input type="file" id="file" />
+                                    </div>
                                 </div>
                             </div>
                         }
@@ -49,7 +52,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-4">
                                     <label for="name" class="form-label">Name:</label>
-                                    <input asp-for="Name" id ="name" class="form-control" />
+                                    <input asp-for="Name" id="name" class="form-control" />
                                     <span asp-validation-for="Name" class="text-danger" id="name"></span>
                                 </div>
                                 <div class="form-group col-sm-4">
@@ -134,7 +137,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="form-group col-md-3">
-                    <button type="submit" title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
+                    <button onclick="save()" title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
                 </div>
             </div>
         </div>
@@ -172,20 +175,23 @@
         });
 
         function save() {
+            var fileName = $('.dz-filename')[0].innerText;
             var person = {
+                "Id": $('#id').val(),
                 "Name": $('#name').val(),
                 "NationalityId": $('#nationalityId').val(),
                 "SexId": $('#sexId').val(),
                 "Birthday": $('#birthday').val(),
                 "Obit": $('#obit').val(),
                 "PersonTypeId": $('#personTypeId').val(),
-                "Height": $('#').val(),
-            weight
-            classification
-            cupSize
-            fakeBoobs
-            startOfBusiness
-            endOfBusiness
+                "Height": $('#height').val(),
+                "Weight": $('#weight').val(),
+                "Classification": $('#classification').val(),
+                "CupSize": $('#cupSize').val(),
+                "FakeBoobs": $('#fakeBoobs').is(":checked"),
+                "StartOfBusiness": $('#startOfBusiness').val(),
+                "EndOfBusiness": $('#endOfBusiness').val(),
+                "Image": fileName,
             }
         };
     </script>
