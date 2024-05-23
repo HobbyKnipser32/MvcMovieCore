@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGeneration.Utils;
+using Microsoft.Extensions.Configuration;
+using Microsoft.VisualBasic;
 using MvcMoviesCore.Models;
 using MvcMoviesCore.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-//using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace MvcMoviesCore.ApiController
 {
@@ -17,15 +19,30 @@ namespace MvcMoviesCore.ApiController
     [ApiController]
     public class PersonApiController : ControllerBase
     {
+        #region private fields
 
         private readonly MvcMovieCoreContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
         private List<MoviesPerson> _moviePersons;
         private List<Scenes> _scenes;
+        private readonly string _originalFilePath = @"images\Original";
 
-        public PersonApiController(MvcMovieCoreContext context)
+        #endregion
+
+        #region constructor
+
+        public PersonApiController(MvcMovieCoreContext context, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
+            _configuration = configuration;
+            _originalFilePath = _configuration.GetValue<string>("AppSettings:OriginalFilePath");
         }
+
+        #endregion
+
+        #region public functions
 
         [HttpGet("{personId}")]
         public async Task<IActionResult> Get(Guid personId)
@@ -97,5 +114,62 @@ namespace MvcMoviesCore.ApiController
             }
             return Ok(jsonResult);
         }
+
+        [HttpPost("Update")]
+        public async Task<IActionResult> Update([FromForm] Person person)
+        {
+            try
+            {
+                if (RenameImage(person, out var image))
+                {
+                    person.Image = image;
+                }
+                _context.Update(person);
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                var message = ex.Message;
+                if (!string.IsNullOrEmpty(ex.InnerException.Message))
+                {
+                    message = ex.InnerException.Message;
+                }
+                return BadRequest(message);
+            }
+        }
+
+        #endregion
+
+        #region private functions
+
+        private bool RenameImage(Person person, out string newFileName)
+        {
+            newFileName = string.Empty;
+
+            if (person == null)
+                return false;
+
+            if (string.IsNullOrEmpty(person.Image)) 
+                return false; 
+
+            var currentFileName = person.Image;
+            var lastDot = currentFileName.LastIndexOf('.');
+            var extension = currentFileName[(lastDot + 1)..];
+            newFileName = $"{person.Id}.{extension}";
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, _originalFilePath);
+            var sourceFile = Path.Combine(path, currentFileName);
+            FileInfo fileInfo = new(sourceFile);
+            if (fileInfo.Exists)
+            {
+                var targetFile = Path.Combine(path, newFileName);
+                fileInfo.MoveTo(targetFile);
+            }
+
+            return true;
+        }
+
+        #endregion
     }
 }

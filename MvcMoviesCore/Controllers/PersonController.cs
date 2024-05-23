@@ -20,8 +20,9 @@ namespace MvcMoviesCore.Controllers
         private readonly MvcMovieCoreContext _context;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly bool _showAdult;
-        private const string _originalFileDictonary = @"Images\Original";
+        private readonly bool _showAdult = false;
+        private readonly string _originalFileDirectory = "Images/Original";
+        private readonly string _originalFilePath = @"images\Original";
 
         #endregion
 
@@ -33,6 +34,8 @@ namespace MvcMoviesCore.Controllers
             _configuration = configuration;
             _webHostEnvironment = hostEnvironment;
             _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
+            _originalFileDirectory = _configuration.GetValue<string>("AppSettings:OriginalFileDirectory");
+            _originalFilePath = _configuration.GetValue<string>("AppSettings:OriginalFilePath");
         }
 
         #endregion
@@ -47,7 +50,7 @@ namespace MvcMoviesCore.Controllers
         [HttpPost]
         public IActionResult Upload(IFormFile file)
         {
-            string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, _originalFileDictonary);
+            string filePath = Path.Combine(_webHostEnvironment.WebRootPath, _originalFilePath);
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
             var fileName = file.FileName;
@@ -73,7 +76,7 @@ namespace MvcMoviesCore.Controllers
 
             if (!_showAdult)
             {
-                var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
+                var personType = _context.PersonType.FirstOrDefault(f => f.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase));
                 if (personType != null)
                     persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id));
             }
@@ -112,8 +115,12 @@ namespace MvcMoviesCore.Controllers
             }
 
             person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication).ToList();
-            
+
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
+            if (!string.IsNullOrEmpty(person.Image))
+                ViewData["ImageSource"] = $"{_originalFileDirectory}/{person.Image}";
+            else
+                ViewData["ImageSource"] = string.Empty;
             return View(person);
         }
 
@@ -163,8 +170,11 @@ namespace MvcMoviesCore.Controllers
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", person.SexId);
             ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
-            ViewData["ImageSource"] = Path.Combine(_webHostEnvironment.WebRootPath, _originalFileDictonary, person.Id.ToString() + ".jpg");
-
+            if (!string.IsNullOrEmpty(person.Image))
+                ViewData["ImageSource"] = $"{_originalFileDirectory}/{person.Image}";
+            //ViewData["ImageSource"] = Path.Combine(_webHostEnvironment.ContentRootPath, _originalFilePath, "images", person.Image);
+            else
+                ViewData["ImageSource"] = string.Empty;
             return View(person);
         }
 
@@ -173,7 +183,7 @@ namespace MvcMoviesCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, 
+        public async Task<IActionResult> Edit(Guid id,
             [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness")] Person person)
         {
             if (id != person.Id)
@@ -205,6 +215,7 @@ namespace MvcMoviesCore.Controllers
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", person.SexId);
             ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
+            ViewData["ImageSource"] = $"/{_originalFileDirectory}/{person.Image}";
             return View(person);
         }
 

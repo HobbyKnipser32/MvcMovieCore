@@ -16,113 +16,137 @@
 
 <h4>bearbeiten</h4>
 <hr />
-<form class="card-form-horizontal" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" id="id" />
-    <input type="hidden" asp-for="Image" id="image" />
+@* <form class="card-form-horizontal" method="post"> *@
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input type="hidden" asp-for="Id" id="id" />
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="card">
-                    <div class="card-body">
-                        @if (System.IO.File.Exists(imgSrc))
-                        {
-                            <div class="media">
-                                <img src="@imgSrc" alt="@personName" />
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="col-sm-12" id="dropzone">
-                                <div action="/Person/Upload" class="dropzone" id="uploader">
-                                    <div class="fallback">
-                                        <input type="file" id="file" />
-                                    </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="card">
+                <div class="card-body" style="max-height: 278px">
+                    @if (!string.IsNullOrEmpty(imgSrc))
+                    {
+                        <div class="media">
+                            <img src="@imgSrc" alt="@personName" style="max-width: 100%; max-height: 253px; display: block;  margin-left: auto;  margin-right: auto;" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-12" id="dropzone">
+                            <div action="/Person/Upload" class="dropzone" id="uploader">
+                                <div class="fallback">
+                                    <input type="file" id="file" />
                                 </div>
                             </div>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
             </div>
-            <div class="col-sm-9">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="col-sm-12">
-                            <div class="row">
-                                <div class="form-group col-sm-4">
+        </div>
+        <div class="col-sm-9">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
                                     <label for="name" class="form-label">Name:</label>
                                     <input asp-for="Name" id="name" class="form-control" />
                                     <span asp-validation-for="Name" class="text-danger" id="name"></span>
                                 </div>
-                                <div class="form-group col-sm-4">
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="birthday" class="form-label">Geburtstag:</label>
+                                    <input type="date" asp-for="Birthday" class="form-control" id="birthday" />
+                                    <span asp-validation-for="Birthday" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="obit" class="form-label">Todestag:</label>
+                                    <input type="date" asp-for="Obit" class="form-control" id="obit" />
+                                    <span asp-validation-for="Obit" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
                                     <label for="nationalityId" class="form-label">Nationalität:</label>
                                     <select asp-for="NationalityId" class="form-select" asp-items="@nationalityId" id="nationalityId"></select>
                                     <span asp-validation-for="NationalityId" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-sm-4">
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
                                     <label for="sexId" class="form-label">Geschlecht:</label>
                                     <select asp-for="SexId" class="form-select" asp-items="@sexId" id="sexId"></select>
                                     <span asp-validation-for="SexId" class="text-danger"></span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="row">
-                                <div class="form-group col-sm-4">
-                                    <label for="birthday" class="form-label">Geburtstag:</label>
-                                    <input type="date" asp-for="Birthday" class="form-control" id="birthday" />
-                                    <span asp-validation-for="Birthday" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    <label for="obit" class="form-label">Todestag:</label>
-                                    <input type="date" asp-for="Obit" class="form-control" id="obit" />
-                                    <span asp-validation-for="Obit" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-md-4">
+                            <div class="col-sm-4">
+                                <div class="form-group">
                                     <label for="personTypeId" class="form-label">Rolle:</label>
                                     <select asp-for="PersonTypesId" class="form-select" asp-items="@personTypesId" id="personTypeId"></select>
                                     <span asp-validation-for="PersonTypesId" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12">
-                            <div class="row">
-                                <div class="form-group col-md-4">
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
                                     <label for="height" class="form-label">Größe:</label>
-                                    <input type="number" asp-for="Height" class="form-control" id="height" />
+                                    <input asp-for="Height" class="form-control" id="height" />
                                     <span asp-validation-for="Height" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-md-4">
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
                                     <label for="weight" class="form-label">Gewicht:</label>
                                     <input type="number" asp-for="Weight" class="form-control" id="weight" />
                                     <span asp-validation-for="Weight" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-sm-4">
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
                                     <label for="classification" class="form-label">Klassifizierung:</label>
                                     <input type="number" asp-for="Classification" class="form-control" min="1" max="12" id="classification" />
                                     <span asp-validation-for="Classification" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12" style="display:none" id="adultStuff">
-                            <div class="row">
-                                <div class="form-group col-md-3">
+                    </div>
+                    <div class="col-sm-12" style="display:none" id="adultStuff">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
                                     <label for="cupSize" class="form-label">Cupsize:</label>
-                                    <input asp-for="CupSize" class="form-control" id="height" itemid="cupSize" />
+                                    <input asp-for="CupSize" class="form-control" id="cupSize" />
                                     <span asp-validation-for="CupSize" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-md-3">
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
                                     <label for="fakeBoobs" class="form-label">Fakeboobs:</label>
                                     <input type="checkbox" asp-for="FakeBoobs" class="form-checkbox" id="fakeBoobs" />
                                     <span asp-validation-for="FakeBoobs" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-sm-3">
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
                                     <label for="startOfBusiness" class="form-label">Start of Business:</label>
                                     <input type="number" asp-for="StartOfBusiness" class="form-control" id="startOfBusiness" min="@minValue" max="@maxValue" />
                                     <span asp-validation-for="StartOfBusiness" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-sm-3">
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
                                     <label for="endOfBusiness" class="form-label">End of Business:</label>
                                     <input type="number" asp-for="EndOfBusiness" class="form-control" id="endOfBusiness" />
                                     <span asp-validation-for="EndOfBusiness" class="text-danger" min="@minValue" max="@maxValue"></span>
@@ -133,17 +157,18 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-md-12">
-            <div class="row">
-                <div class="form-group col-md-3">
-                    <button onclick="save()" title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
-                </div>
+    <div class="col-md-12">
+        <div class="row">
+            <div class="form-group col-md-3">
+                <button onclick="save()" title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
             </div>
         </div>
-
     </div>
-</form>
+
+</div>
+@* </form> *@
 
 <p>
     <a asp-action="Index" title="zurück zur Liste">
@@ -175,7 +200,10 @@
         });
 
         function save() {
-            var fileName = $('.dz-filename')[0].innerText;
+            var fileName = "";
+            if ($('.dz-filename').length != 0) {
+                fileName = $('.dz-filename')[0].innerText;
+            };
             var person = {
                 "Id": $('#id').val(),
                 "Name": $('#name').val(),
@@ -183,7 +211,7 @@
                 "SexId": $('#sexId').val(),
                 "Birthday": $('#birthday').val(),
                 "Obit": $('#obit').val(),
-                "PersonTypeId": $('#personTypeId').val(),
+                "PersonTypesId": $('#personTypeId').val(),
                 "Height": $('#height').val(),
                 "Weight": $('#weight').val(),
                 "Classification": $('#classification').val(),
@@ -193,6 +221,23 @@
                 "EndOfBusiness": $('#endOfBusiness').val(),
                 "Image": fileName,
             }
+            var url = appRootPath + '/api/PersonApi/Update';
+            $.post(url, person, function () {
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Daten erfolgreich gespeichert.',
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+            })
+                .fail(function (response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Daten konnten nicht gespeichert werden!',
+                        footer: response.responseText
+                    })
+                });
         };
     </script>
 }

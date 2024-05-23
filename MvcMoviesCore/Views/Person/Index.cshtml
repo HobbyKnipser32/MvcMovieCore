@@ -3,97 +3,80 @@
 @{
     ViewData["Title"] = "Personen";
 }
-
-<h2>Persons</h2>
-<form method="get" class="form-inline">
-    <input type="text" name="filter" class="form-control" />
-    <button type="submit" class="btn btn-info">
-        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
-    </button>
-</form>
-<p>
-    <a asp-action="Create">Create new person</a>
-</p>
-
-<table class="table" id="personIndex">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-            <th>
-                @Html.DisplayNameFor(model => model.Birthday)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Obit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nationality)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Height)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weight)
-            </th>
-            <th></th>
-            <th>
-                @Html.DisplayNameFor(model => model.PersonType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sex)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="container-fluid">
+    <h2>Persons</h2>
+    <p>
+        <a asp-action="Create" title="Person hinzufügen">
+            <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
+        </a>
+    </p>
+    <hr />
+    <table class="table" id="personIndex">
+        <thead>
             <tr>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ActorsAge)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Birthday)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Obit)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nationality.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Height)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Weight)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BMI)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PersonType.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sex.Name)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>          @*  0 *@
+                <th></th>                                                   @*  1 *@
+                <th>@Html.DisplayNameFor(model => model.Birthday)</th>      @*  2 *@
+                <th>@Html.DisplayNameFor(model => model.Obit)</th>          @*  3 *@
+                <th>@Html.DisplayNameFor(model => model.Nationality)</th>   @*  4 *@
+                <th>@Html.DisplayNameFor(model => model.Height)</th>        @*  5 *@
+                <th>@Html.DisplayNameFor(model => model.Weight)</th>        @*  6 *@
+                <th></th>                                                   @*  7 *@
+                <th>@Html.DisplayNameFor(model => model.PersonType)</th>    @*  8 *@
+                <th>@Html.DisplayNameFor(model => model.Sex)</th>           @*  9 *@
+                <th></th>                                                   @* 10 *@
+                <th></th>                                                   @* 11 *@
             </tr>
-        }
-    </tbody>
-</table>
-
-@*<nav aria-label="Movies navigation">
-    <vc:pager paging-list="@Model" />
-</nav>*@
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ActorsAge)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Birthday)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Obit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nationality.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Height)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Weight)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Classification)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PersonType.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sex.Name)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id">
+                            <i class="fa-regular fa-trash-can fa-shake" style="color: #ff0000; --fa-animation-duration: 2s;"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @section Scripts
 {
@@ -103,11 +86,16 @@
         $(document).ready(function () {
             $('#personIndex').DataTable({
                 ordering: true,
-                lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-                iDisplayLength: 20,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                iDisplayLength: 10,
                 fixedHeader: {
                     header: true,
-                }
+                },
+                columnDefs: [{
+                    orderable: false,
+                    targets: [10, 11]
+                }],
+                searchHighlight: true
             });
         })
     </script>
