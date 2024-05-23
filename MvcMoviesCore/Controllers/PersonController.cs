@@ -127,7 +127,7 @@ namespace MvcMoviesCore.Controllers
         public IActionResult Create()
         {
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name");
-            ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name");
+            ViewData["SexId"] = new SelectList(_context.Sex.OrderBy(o => o.Name), "Id", "Name");
             ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name");
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
             return View();
@@ -167,7 +167,7 @@ namespace MvcMoviesCore.Controllers
             }
             person.ActorsAge = person.GetActorsAge(person.Birthday, person.Obit);
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", person.PersonTypesId);
-            ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", person.SexId);
+            ViewData["SexId"] = new SelectList(_context.Sex.OrderBy(o => o.Name), "Id", "Name", person.SexId);
             ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
             if (!string.IsNullOrEmpty(person.Image))

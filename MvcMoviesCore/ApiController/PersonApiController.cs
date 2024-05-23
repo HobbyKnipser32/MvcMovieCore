@@ -140,6 +140,36 @@ namespace MvcMoviesCore.ApiController
             }
         }
 
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create([FromForm] Person person)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(person.Name))
+                    return BadRequest("Der Name ist erforderlich!");
+
+                person.Id = Guid.NewGuid();
+                if (RenameImage(person, out var image))
+                {
+                    person.Image = image;
+                }
+
+                _context.Add(person);
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                var message = ex.Message;
+                if (!string.IsNullOrEmpty(ex.InnerException.Message))
+                {
+                    message = ex.InnerException.Message;
+                }
+                return BadRequest(message);
+            }
+        }
+
         #endregion
 
         #region private functions
