@@ -17,6 +17,10 @@
     {
       "library": "popper.js@2.11.8",
       "destination": "wwwroot/popper.js/"
+    },
+    {
+      "library": "bootstrap-select@1.13.18",
+      "destination": "wwwroot/bootstrap-select/"
     }
   ]
 }

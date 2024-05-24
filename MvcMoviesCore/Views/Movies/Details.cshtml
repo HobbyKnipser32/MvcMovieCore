@@ -9,7 +9,7 @@
     <div>
         <input type="hidden" value="@Model.Id" id="movieID" />
         <hr />
-        @* <div class="row"> *@
+        <div class="row">
             <div class="col-md-12">
                 <div class="row">
                     <div class="form-group col-md-3">
@@ -92,7 +92,12 @@
                     </div>
                 </div>
             </div>
-        @* </div> *@
+        </div>
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.Id">
+                <i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC;  --fa-animation-duration: 2s;"></i>
+            </a>
+        </p>
         <hr />
         <ul class="nav nav-tabs">
             <li>
@@ -172,7 +177,9 @@
         </div>
         <hr />
         <p>
-            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Index">Back to List</a>
+            <a asp-action="Index" title="zurück zur Liste">
+                <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+            </a>
         </p>
     </div>
 </div>
