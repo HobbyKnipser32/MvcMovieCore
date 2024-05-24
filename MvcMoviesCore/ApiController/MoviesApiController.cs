@@ -12,15 +12,10 @@ namespace MvcMoviesCore.ApiController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MoviesApiController : ControllerBase
+    public class MoviesApiController(MvcMovieCoreContext context) : ControllerBase
     {
 
-        private readonly MvcMovieCoreContext _context;
-
-        public MoviesApiController(MvcMovieCoreContext context)
-        {
-            _context = context;
-        }
+        private readonly MvcMovieCoreContext _context = context;
 
         [HttpGet("{movieId}")]
         public async Task<IActionResult> Get(Guid movieId)
@@ -46,7 +41,7 @@ namespace MvcMoviesCore.ApiController
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 jsonResult = string.Empty;
             }
@@ -85,7 +80,7 @@ namespace MvcMoviesCore.ApiController
                 jsonResult = JsonConvert.SerializeObject(moviePersons, Formatting.Indented, jsonSerializerSettings);
                 return Ok(jsonResult);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Ok(string.Empty);
             }
@@ -96,7 +91,7 @@ namespace MvcMoviesCore.ApiController
         {
             var moviePerson = await _context.MoviesPerson.FirstOrDefaultAsync(f => f.Id.Equals(id));
             var scenes = await _context.Scenes.Where(w => w.MoviesPersonsId.Equals(moviePerson.Id)).ToListAsync();
-            if (scenes.Any())
+            if (scenes.Count != 0)
             {
                 _context.Scenes.RemoveRange(scenes);
                 _context.SaveChanges();

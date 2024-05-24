@@ -7,61 +7,63 @@
 <div class="container-fluid">
     <h2>Willkommen</h2>
     <hr />
-    <h2>New</h2>
-    <div>
-        <table class="table table-striped" id="homeIndex">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.YearOfPublication)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.LastView)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Genre)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RecordCarrier)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.StorageLocation)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    var i = 0;
-                }
-                @foreach (var item in Model)
-                {
-                    <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
-                        <td>
-                            <a asp-area="" asp-controller="Movies" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.YearOfPublication)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LastView)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Genre.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.RecordCarrier.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StorageLocation.Name)
-                        </td>
-                    </tr>
-                    i++;
-                }
-            </tbody>
-        </table>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card shadow p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+                    <h5 class="card-title">Neu</h5>
+                    <div>
+                        <table class="table table-striped" id="homeIndex">
+                            <thead>
+                                <tr>
+                                    <th>Titel</th>
+                                    <th>Genre</th>
+                                    <th>Datentäger</th>
+                                    <th>Lageror</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var i = 0;
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
+                                        <td>
+                                            <a asp-area="" asp-controller="Movies" asp-action="Details" asp-route-id="@item.Id">
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </a>
+                                        </td>
+                                        <td>@Html.DisplayFor(modelItem => item.Genre.Name)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.RecordCarrier.Name)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.StorageLocation.Name)</td>
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card shadow p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+                    <h5 class="card-title">Heutige Geburtstage</h5>
+                    <table class="table table-striped" id="birthdayTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Aktuelles Alter</th>
+                                <th>Nationalität</th>
+                                <th>Rolle</th>
+                                <th>Geschlecht</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @section Scripts
@@ -73,6 +75,35 @@
             $('#homeIndex').DataTable({
                 ordering: true,
                 ajax: false,
+                paging: false,
+                searching: false,
+                fixedHeader: {
+                    header: true,
+                    footer: false
+                },
+            });
+            $('#birthdayTable').DataTable({
+                ordering: true,
+                ajax: {
+                    url: appRootPath + '/api/PersonApi/TodaysBirtdays',
+                    dataSrc: ''
+                },
+                columns: [
+                    {
+                        data: 'Id',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var url = '@Url.Action("Details", "Person")' + '/' + data;
+                                return '<a href="' + url + '" title="ansehen">' + full["Name"];
+                            }
+                            return '';
+                        }
+                    },
+                    { data: 'ActorsAge' },
+                    { data: 'Nationality.Name' },
+                    { data: 'PersonType.Name' },
+                    { data: 'Sex.Name' },
+                ],
                 paging: false,
                 searching: false,
                 fixedHeader: {

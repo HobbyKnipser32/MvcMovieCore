@@ -27,6 +27,7 @@ namespace MvcMoviesCore.ApiController
         private List<MoviesPerson> _moviePersons;
         private List<Scenes> _scenes;
         private readonly string _originalFilePath = @"images\Original";
+        private readonly bool _showAdult;
 
         #endregion
 
@@ -38,6 +39,7 @@ namespace MvcMoviesCore.ApiController
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
             _originalFilePath = _configuration.GetValue<string>("AppSettings:OriginalFilePath");
+            _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
         }
 
         #endregion
@@ -47,25 +49,23 @@ namespace MvcMoviesCore.ApiController
         [HttpGet("{personId}")]
         public async Task<IActionResult> Get(Guid personId)
         {
-            List<PersonSceneViewModel> personScenes = new List<PersonSceneViewModel>();
+            List<PersonSceneViewModel> personScenes = [];
             var personMovies = await _context.MoviesPerson.Where(w => w.PersonId.Equals(personId)).ToListAsync();
             string jsonResult;
             var scenes = new List<int>();
 
-            if (personMovies.Any())
+            if (personMovies.Count != 0)
             {
                 foreach (var personMovie in personMovies)
                 {
-                    if (_scenes == null)
-                        _scenes = await _context.Scenes.ToListAsync();
+                    _scenes ??= await _context.Scenes.ToListAsync();
 
                     scenes = _scenes.Where(w => w.MoviesPersonsId.Equals(personMovie.Id)).Select(s => s.Scene).ToList();
-                    if (scenes.Any())
+                    if (scenes.Count != 0)
                     {
                         foreach (var scene in scenes)
                         {
-                            if (_moviePersons == null)
-                                _moviePersons = await _context.MoviesPerson.Include(i => i.Movies).Include(i => i.Person).ToListAsync();
+                            _moviePersons ??= await _context.MoviesPerson.Include(i => i.Movies).Include(i => i.Person).ToListAsync();
 
                             var moviePersons = _moviePersons.Where(w => w.MoviesId.Equals(personMovie.MoviesId) && !w.PersonId.Equals(personId));
                             foreach (var moviePerson in moviePersons)
@@ -103,7 +103,7 @@ namespace MvcMoviesCore.ApiController
                     var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
                     jsonResult = JsonConvert.SerializeObject(personScenes, Formatting.Indented, jsonSerializerSettings);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     jsonResult = string.Empty;
                 }
@@ -113,6 +113,42 @@ namespace MvcMoviesCore.ApiController
                 jsonResult = string.Empty;
             }
             return Ok(jsonResult);
+        }
+
+        [HttpGet("TodaysBirtdays")]
+        public async Task<IActionResult> TodaysBirtdays()
+        {
+            try
+            {
+                var today = DateTime.Now;
+                var persons = await _context.Person
+                                            .Where(w => w.Birthday.Value.Month == today.Month && w.Birthday.Value.Day == today.Day)
+                                            .Include(i => i.PersonType)
+                                            .Include(i => i.Sex)
+                                            .Include(i => i.Nationality)
+                                            .OrderBy(o => o.PersonType)
+                                            .ThenBy(t => t.Name).ToListAsync();
+
+                foreach (var person in persons)
+                {
+                    person.ActorsAge = person.Obit == null ? (today.Year - person.Birthday.Value.Year).ToString() : person.GetActorsAge(person.Birthday, person.Obit);
+                }
+
+                if (!_showAdult)
+                    persons = persons.Where(w => !w.PersonType.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                var jsonResult = JsonConvert.SerializeObject(persons, Formatting.Indented, jsonSerializerSettings);
+
+                return Ok(jsonResult);
+            }
+            catch(Exception ex)
+            {
+                string message = ex.Message;
+                if (ex.InnerException.Message != null)
+                    message = ex.InnerException.Message;
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("Update")]

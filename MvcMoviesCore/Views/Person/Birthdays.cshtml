@@ -28,7 +28,7 @@
         </div>
     </div>
 </form>
-<table class="table">
+<table class="table" id="birthdayTable">
     <thead>
         <tr>
             <th>
@@ -110,11 +110,15 @@
 
     <script>
         $(document).ready(function () {
-            $('#indexRandom').DataTable({
+            $('#birthdayTable').DataTable({
                 ordering: true,
+                ajax: false,
+                paging: false,
+                searching: false,
                 fixedHeader: {
                     header: true,
-                }
+                    footer: false
+                },
             });
         })
     </script>

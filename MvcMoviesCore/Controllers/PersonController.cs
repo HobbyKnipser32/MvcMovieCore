@@ -76,7 +76,7 @@ namespace MvcMoviesCore.Controllers
 
             if (!_showAdult)
             {
-                var personType = _context.PersonType.FirstOrDefault(f => f.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase));
+                var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
                 if (personType != null)
                     persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id));
             }
@@ -249,7 +249,7 @@ namespace MvcMoviesCore.Controllers
             if (person != null)
             {
                 var moviePersons = await _context.MoviesPerson.Where(w => w.PersonId.Equals(person.Id)).ToListAsync();
-                if (moviePersons.Any())
+                if (moviePersons.Count != 0)
                 {
                     foreach (var moviePerson in moviePersons)
                     {
