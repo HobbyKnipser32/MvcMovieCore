@@ -145,7 +145,7 @@ namespace MvcMoviesCore.ApiController
             catch(Exception ex)
             {
                 string message = ex.Message;
-                if (ex.InnerException.Message != null)
+                if (ex.InnerException != null)
                     message = ex.InnerException.Message;
                 return BadRequest(ex.Message);
             }
