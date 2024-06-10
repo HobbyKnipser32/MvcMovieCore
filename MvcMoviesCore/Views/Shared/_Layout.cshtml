@@ -36,7 +36,7 @@
     </environment>
 </head>
 <body>
-    <div class="offcanvas offcanvas-start w-15" tabindex="-1" id="offcanvas" data-bs-keyboard="false" data-bs-backdrop="false">
+    <div class="offcanvas offcanvas-start w-10" tabindex="-1" id="offcanvas" data-bs-keyboard="false" data-bs-backdrop="false">
         <div class="offcanvas-header">
             <h6 class="offcanvas-title d-none d-sm-block" id="offcanvas">Menu</h6>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -117,6 +117,29 @@
             </main>
         </div>
     </div>
+
+    @* <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <div class="col-auto px-0">
+                <div id="sidebar" class="collapse collapse-horizontal show border-end">
+                    <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
+                        <a href="#" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Item</span> </a>
+                        (more nav items) ...
+                    </div>
+                </div>
+            </div>
+            <main class="col ps-md-2 pt-2">
+                <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="border rounded-3 p-1 text-decoration-none">
+                    <<i class="fa-solid fa-bars fa-flip" style="color: #3a5788; --fa-animation-duration: 2s"></i>
+                </a>
+                <div class="row">
+                    <div class="col-12">
+                        @RenderBody()
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div> *@
 
     <script src="~/lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
 
