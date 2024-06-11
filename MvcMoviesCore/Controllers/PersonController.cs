@@ -42,6 +42,35 @@ namespace MvcMoviesCore.Controllers
 
         #region puclic functions
 
+        public async Task<IActionResult> UpdatedImages()
+        {
+            string filePath = Path.Combine(_webHostEnvironment.WebRootPath, _originalFilePath);
+            List<Person> persons = [];
+
+            if (Directory.Exists(filePath))
+            {
+                var files = Directory.GetFiles(filePath).ToList();
+                foreach(var file in files)
+                {
+                    var lastBackSlash = file.LastIndexOf('\\');
+                    var fileNameWithExtension = file[(lastBackSlash + 1)..];
+                    var lastDot = fileNameWithExtension.LastIndexOf('.');
+                    var fileName = fileNameWithExtension[..lastDot];
+                    var personId = new Guid(fileName);
+                    var person = _context.Person.FirstOrDefaultAsync(x => x.Id == personId).GetAwaiter().GetResult();
+                    if (person != null && string.IsNullOrEmpty(person.Image))
+                    {
+                        person.Image = fileNameWithExtension;
+                        _context.Update(person);
+                        await _context.SaveChangesAsync();
+                        persons.Add(person);
+                    }
+                }
+            }
+            ViewData["ImagesSource"] = _originalFilePath;
+            return View(persons);
+        }
+
         public IActionResult Upload()
         {
             return View();

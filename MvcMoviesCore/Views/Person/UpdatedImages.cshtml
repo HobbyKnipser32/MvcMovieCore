@@ -1,0 +1,52 @@
+﻿@model List<MvcMoviesCore.Models.Person>
+
+@{
+    ViewData["Title"] = "Aktualisierte Fotos";
+    var imagesSource = ViewData["ImagesSource"];
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>Personen</h2>
+        <h4>Aktualisierte Fotos</h4>
+        <hr />
+        @if (!Model.Any())
+        {
+            <p>Es wurden keine Fotos zum aktualisieren gefunden.</p>
+        }
+        else
+        {
+            <table class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;" id="updatedImages">
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var imgPath = "~/" + imagesSource + "/" + item.Image;
+                        <tr>
+                            <td>
+                                <div class="media">
+                                    <img src="@imgPath" alt="@item.Name" style="max-width: 100%; max-height: 50px; display: block;  margin-left: auto;  margin-right: auto;" />
+                                </div>
+                            </td>
+                            <td>
+                                <p>@item.Name</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function () {
+            $('#updatedImages').DataTable({
+                ordering: true
+            });
+        })
+    </script>
+}
