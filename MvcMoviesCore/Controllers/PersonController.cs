@@ -67,7 +67,7 @@ namespace MvcMoviesCore.Controllers
                     }
                 }
             }
-            ViewData["ImagesSource"] = _originalFilePath;
+            ViewData["ImagesSource"] = _originalFileDirectory;
             return View(persons);
         }
 
