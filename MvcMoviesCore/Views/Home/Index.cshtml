@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Home Page";
+    var imageSource = ViewData["ImageSource"];
 }
 
 <div class="container-fluid">
@@ -53,6 +54,7 @@
                     <table class="table table-striped" id="birthdayTable">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Name</th>
                                 <th>Aktuelles Alter</th>
                                 <th>Nationalität</th>
@@ -89,6 +91,16 @@
                     dataSrc: ''
                 },
                 columns: [
+                    {
+                        data: 'Image',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var src = '@imageSource' + '/' + data;
+                                return '<img src="' + src + '"  title = "' + full["Name"] + '" / style="max-width: 50px; max-height: 100%">';
+                            }
+                            return '';
+                        }
+                    },
                     {
                         data: 'Id',
                         render: function (data, type, full, meta) {

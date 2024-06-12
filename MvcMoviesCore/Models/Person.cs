@@ -15,7 +15,7 @@ namespace MvcMoviesCore.Models
 
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public Guid SexId { get; set; }
 
@@ -40,9 +40,9 @@ namespace MvcMoviesCore.Models
 
         public int? Classification { get; set; }
 
-        public string CupSize { get; set; }
+        public string? CupSize { get; set; }
 
-        public bool FakeBoobs { get; set; } = false;
+        public bool? FakeBoobs { get; set; } = false;
 
         public Guid PersonTypesId { get; set; }
 
@@ -50,8 +50,9 @@ namespace MvcMoviesCore.Models
 
         public int? EndOfBusiness { get; set; }
 
-        public string Image { get; set; }
+        public string? Image { get; set; }
 
+        [NotMapped]
         public string BMI
         {
             get

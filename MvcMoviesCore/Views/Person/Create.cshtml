@@ -8,6 +8,7 @@
     var adultPersonType = ViewData["AdultPersonType"].ToString();
     var minValue = DateTime.Now.Year - 120;
     var maxValue = DateTime.Now.Year;
+    // var fakeBoobs = Model.FakeBoobs.GetValueOrDefault();
 }
 
 <h2>Person</h2>
@@ -36,13 +37,13 @@
                 <div class="card-body">
                     <div class="col-sm-12">
                         <div class="row">
-                            <div class="col-sm-4">
+                            @* <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="name" class="form-label">Name:</label>
-                                    <input asp-for="Name" id="name" class="form-control" />
-                                    <span asp-validation-for="Name" class="text-danger" id="name"></span>
+                                    <input type="text" asp-for="Name" id="name" class="form-control" id="name" />
+                                    <span asp-validation-for="Name" class="text-danger" ></span>
                                 </div>
-                            </div>
+                            </div> *@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="birthday" class="form-label">Geburtstag:</label>
@@ -118,13 +119,13 @@
                                     <span asp-validation-for="CupSize" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            @* <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="fakeBoobs" class="form-label">Fakeboobs:</label>
-                                    <input type="checkbox" asp-for="FakeBoobs" class="form-checkbox" id="fakeBoobs" />
+                                    <input type="checkbox" asp-items="@fakeBoobs" class="form-check" id="fakeBoobs" />
                                     <span asp-validation-for="FakeBoobs" class="text-danger"></span>
                                 </div>
-                            </div>
+                            </div> *@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="startOfBusiness" class="form-label">Start of Business:</label>

@@ -17,12 +17,14 @@ namespace MvcMoviesCore.Controllers
         private readonly MvcMovieCoreContext _context;
         private readonly IConfiguration _configuration;
         private readonly bool _showAdult;
+        private readonly string _originalFileDirectory = "Images/Original";
 
         public HomeController(MvcMovieCoreContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
             _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
+            _originalFileDirectory = _configuration.GetValue<string>("AppSettings:OriginalFileDirectory");
         }
 
         public IActionResult Index()
@@ -50,6 +52,7 @@ namespace MvcMoviesCore.Controllers
                     .Take(20)
                     .AsQueryable();
 
+            ViewData["ImageSource"] = _originalFileDirectory;
             return View(movies);
         }
 
