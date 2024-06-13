@@ -1,10 +1,15 @@
 ﻿@model IEnumerable<MvcMoviesCore.Models.Person>
 
 @{
+    var headline = "Personen";
     ViewData["Title"] = "Personen";
+    if (ViewData["FilterFor"] != null && !string.IsNullOrEmpty(ViewData["FilterFor"].ToString()))
+    {
+        headline += ViewData["FilterFor"].ToString();
+    }
 }
 <div class="container-fluid">
-    <h2>Persons</h2>
+    <h2>@headline</h2>
     <p>
         <a asp-action="Create" title="Person hinzufügen">
             <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>

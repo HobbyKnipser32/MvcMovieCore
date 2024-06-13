@@ -31,18 +31,6 @@ namespace MvcMoviesCore.Controllers
         public IActionResult Index()
         {
             return View();
-            //var nationalities = _context.Nationalities.ToList();
-            //if (nationalities.Count != 0)
-            //{
-            //    var persons = _context.Person.GroupBy(g => g.NationalityId).ToList();
-            //    foreach (var person in persons)
-            //    {
-            //        var nationality = nationalities.FirstOrDefault(f => f.Id.Equals(person.Key));
-            //        if (nationality != null)
-            //            nationality.Count = person.Count();
-            //    }
-            //}
-            //return View(nationalities);
         }
 
         [HttpGet]

@@ -33,7 +33,17 @@
                     dataSrc: ''
                 },
                 columns: [
-                    { data: 'Name' },
+                    {
+                        data: 'Id',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var url = '@Url.Action("FilterNationality", "Person")' + '/' + data;
+                                return '<a href="' + url + '" title="Filter Nationalität">' + full['Name'];
+                                    // '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>';
+                            }
+                            return '';
+                        }
+                    },
                     { data: 'Description' },
                     { data: 'Count' },
                     {

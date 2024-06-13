@@ -131,6 +131,9 @@ namespace MvcMoviesCore.ApiController
                 foreach (var person in persons)
                 {
                     person.ActorsAge = person.Obit == null ? (today.Year - person.Birthday.Value.Year).ToString() : person.GetActorsAge(person.Birthday, person.Obit);
+                    if (person.Nationality.Person != null) { person.Nationality.Person = null; }
+                    if (person.PersonType.Person != null) { person.PersonType.Person = null; }
+                    if (person.Sex.Person != null) { person.Sex.Person = null; }
                 }
 
                 if (!_showAdult)
@@ -141,7 +144,7 @@ namespace MvcMoviesCore.ApiController
 
                 return Ok(jsonResult);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string message = ex.Message;
                 if (ex.InnerException != null)
@@ -216,8 +219,8 @@ namespace MvcMoviesCore.ApiController
             if (person == null)
                 return false;
 
-            if (string.IsNullOrEmpty(person.Image)) 
-                return false; 
+            if (string.IsNullOrEmpty(person.Image))
+                return false;
 
             var currentFileName = person.Image;
             var lastDot = currentFileName.LastIndexOf('.');

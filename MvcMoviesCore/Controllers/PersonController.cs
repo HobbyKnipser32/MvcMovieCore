@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace MvcMoviesCore.Controllers
 {
@@ -50,7 +51,7 @@ namespace MvcMoviesCore.Controllers
             if (Directory.Exists(filePath))
             {
                 var files = Directory.GetFiles(filePath).ToList();
-                foreach(var file in files)
+                foreach (var file in files)
                 {
                     var lastBackSlash = file.LastIndexOf('\\');
                     var fileNameWithExtension = file[(lastBackSlash + 1)..];
@@ -113,6 +114,33 @@ namespace MvcMoviesCore.Controllers
             persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
 
             return View(persons);
+        }
+
+        public IActionResult FilterNationality(Guid id)
+        {
+            if (id == Guid.Empty)
+                return Redirect("Nationality");
+
+            var persons = _context.Person
+                                  .Include(i => i.PersonType)
+                                  .Include(i => i.Sex)
+                                  .Include(i => i.Nationality)
+                                  .Where(w => w.NationalityId.Equals(id))
+                                  .OrderBy(o => o.Name)
+                                  .AsQueryable();
+
+            if (!_showAdult)
+            {
+                var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
+                if (personType != null)
+                    persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id));
+            }
+
+            persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
+
+            ViewData["FilterFor"] = GetNationalityName(id);
+
+            return View("Index", persons);
         }
 
         // GET: Person/Details/5
@@ -374,6 +402,16 @@ namespace MvcMoviesCore.Controllers
                 return personType.Id.ToString();
             return string.Empty;
         }
+
+        private string GetNationalityName(Guid id)
+        {
+            if (id == Guid.Empty) return string.Empty;
+            var nationality = _context.Nationalities.FirstOrDefault(f=>f.Id.Equals(id));
+            if (nationality != null)
+                return $" für {nationality.Description}";
+            return string.Empty;
+        }
+
 
         #endregion
     }

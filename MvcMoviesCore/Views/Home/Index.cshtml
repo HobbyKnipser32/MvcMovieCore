@@ -116,12 +116,20 @@
                     { data: 'PersonType.Name' },
                     { data: 'Sex.Name' },
                 ],
-                paging: false,
                 searching: false,
                 fixedHeader: {
                     header: true,
                     footer: false
                 },
+                lengthMenu: [[10, -1], [10, "All"]],
+                iDisplayLength: 10,
+                layout: {
+                    topStart: 'pageLength',
+                    topEnd: 'paging',
+                    bottomStart: 'info',
+                    bottomEnd: 'info'
+                },
+                // dom: 'lpftrip',
             });
         })
     </script>
