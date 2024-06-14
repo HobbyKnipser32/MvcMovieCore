@@ -406,7 +406,7 @@ namespace MvcMoviesCore.Controllers
         private string GetNationalityName(Guid id)
         {
             if (id == Guid.Empty) return string.Empty;
-            var nationality = _context.Nationalities.FirstOrDefault(f=>f.Id.Equals(id));
+            var nationality = _context.Nationalities.FirstOrDefault(f => f.Id.Equals(id));
             if (nationality != null)
                 return $" für {nationality.Description}";
             return string.Empty;
