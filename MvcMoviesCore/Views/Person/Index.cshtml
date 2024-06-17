@@ -7,6 +7,7 @@
     {
         headline += ViewData["FilterFor"].ToString();
     }
+    var originalFileDirectory = ViewData["OriginalFileDirectory"].ToString();
 }
 <div class="container-fluid">
     <h2>@headline</h2>
@@ -19,6 +20,7 @@
     <table class="table" id="personIndex">
         <thead>
             <tr>
+                <th style="max-width: 100px"></th>
                 <th>@Html.DisplayNameFor(model => model.Name)</th>          @*  0 *@
                 <th></th>                                                   @*  1 *@
                 <th>@Html.DisplayNameFor(model => model.Birthday)</th>      @*  2 *@
@@ -36,7 +38,11 @@
         <tbody>
             @foreach (var item in Model)
             {
+                var imgSrc = originalFileDirectory + "/" + @item.Image;
                 <tr>
+                    <td>
+                        <img src="@imgSrc" title="@item.Name" style="max-width: 100%; max-height: 50px" />
+                    </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
                     </td>
