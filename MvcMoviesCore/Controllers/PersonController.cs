@@ -139,6 +139,7 @@ namespace MvcMoviesCore.Controllers
 
             persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
 
+            ViewData["OriginalFileDirectory"] = _originalFileDirectory; 
             ViewData["FilterFor"] = GetNationalityName(id);
 
             return View("Index", persons);

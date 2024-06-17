@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Nationalitäten";
+    var originalFileDirectory = ViewData["OriginalFileDirectory"].ToString();
 }
 <h2>Nationalitäten</h2>
 <p>
@@ -12,6 +13,7 @@
 <table id="nationalitiesIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
     <thead>
         <tr>
+            <th style="max-width: 50px"></th>
             <th>Nationalität</th>
             <th>Beschreibung</th>
             <th>Anzahl</th>
@@ -37,9 +39,19 @@
                         data: 'Id',
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
+                                var imgSrc = "@originalFileDirectory" + "/flags/" + full["Name"] + ".png";
+                                return '<img src="' + imgSrc + '" style="max-width: 50px; max-heigth: 100%" />';
+                            }
+                            return '';
+                        }
+                    },
+                    {
+                        data: 'Id',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
                                 var url = '@Url.Action("FilterNationality", "Person")' + '/' + data;
                                 return '<a href="' + url + '" title="Filter Nationalität">' + full['Name'];
-                                    // '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>';
+                                // '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
                         }
@@ -64,7 +76,7 @@
                                 var id = "'" + data + "'";
                                 return '<button name="id" style="background-color: transparent; color: red; border: hidden"' +
                                     'onClick="deleteLink(' + id + ')" title="Nationalität löschen">' +
-                                    '<i class="fa-regular fa-trash-can fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>' ;
+                                    '<i class="fa-regular fa-trash-can fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
                         }

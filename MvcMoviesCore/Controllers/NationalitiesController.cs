@@ -14,14 +14,16 @@ namespace MvcMoviesCore.Controllers
         #region fields
 
         private readonly MvcMovieCoreContext _context;
+        private readonly string _originalFileDirectory = "/images/original";
 
         #endregion
 
         #region constructor
 
-        public NationalitiesController(MvcMovieCoreContext context)
+        public NationalitiesController(MvcMovieCoreContext context, IConfiguration configuration)
         {
             _context = context;
+            _originalFileDirectory = configuration.GetValue<string>("AppSettings:OriginalFileDirectory");
         }
 
         #endregion
@@ -30,6 +32,7 @@ namespace MvcMoviesCore.Controllers
 
         public IActionResult Index()
         {
+            ViewData["OriginalFileDirectory"] = _originalFileDirectory;
             return View();
         }
 
