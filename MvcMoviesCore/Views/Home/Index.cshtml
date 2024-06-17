@@ -96,7 +96,7 @@
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
                                 var src = '@imageSource' + '/' + data;
-                                return '<img src="' + src + '"  title = "' + full["Name"] + '" / style="max-width: 50px; max-height: 100%">';
+                                return '<img src="' + src + '"  title = "' + full["Name"] + '" / style="max-width: 100%; max-height: 50px">';
                             }
                             return '';
                         }
@@ -129,7 +129,7 @@
                     bottomStart: 'info',
                     bottomEnd: 'info'
                 },
-                // dom: 'lpftrip',
+                //dom: 'lpftrip',
             });
         })
     </script>

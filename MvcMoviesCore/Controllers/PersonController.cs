@@ -22,7 +22,7 @@ namespace MvcMoviesCore.Controllers
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly bool _showAdult = false;
-        private readonly string _originalFileDirectory = "Images/Original";
+        private readonly string _originalFileDirectory = "/Images/Original";
         private readonly string _originalFilePath = @"images\Original";
 
         #endregion
@@ -383,6 +383,7 @@ namespace MvcMoviesCore.Controllers
             if (!_showAdult)
                 persons = persons.Where(w => !w.PersonType.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase)).ToList();
 
+            ViewData["OriginalFileDirectory"] = _originalFileDirectory;
             return View(persons);
         }
 
