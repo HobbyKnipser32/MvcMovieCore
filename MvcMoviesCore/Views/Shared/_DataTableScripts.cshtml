@@ -1,9 +1,11 @@
-﻿@using System.Globalization
-<link rel="stylesheet" type="text/css" href="~/lib/datatables/css/buttons.dataTables.min.css" />
+﻿<link href="~/css/datatables.min.css" rel="stylesheet" />
+<script src="~/js/datatables.min.js"></script>
+@using System.Globalization
+@* <link rel="stylesheet" type="text/css" href="~/lib/datatables/css/buttons.dataTables.min.css" />
 <script src="~/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="~/lib/datatables/js/jszip.min.js"></script>
 <script type="text/javascript" src="~/lib/datatables/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="~/lib/datatables/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="~/lib/datatables/js/buttons.html5.min.js"></script> *@
 
 <script>
     /* Create an array with the values of all the input boxes in a column */
@@ -34,17 +36,17 @@
         });
     }
     /** Sets table's language + custom language resources for table elements */
-    function getLanguageSettings() {
-        var cultureInfo = '@CultureInfo.CurrentCulture.Name';
-        return {
-                url: '@Url.Content("~/lib/datatables/" + CultureInfo.CurrentCulture.Name + ".txt")',
-                select: {
-                    rows: {
-                        _: cultureInfo == 'de-DE' ? "%d Zeilen ausgewählt" : "%d rows selected",
-                        0: "",
-                        1: cultureInfo == 'de-DE' ? "1 Zeile ausgewählt" : "1 row selected"
-                    }
-                }
-            }
-    }
+    // function getLanguageSettings() {
+    //     var cultureInfo = '@CultureInfo.CurrentCulture.Name';
+    //     return {
+    //             url: '@Url.Content("~/lib/datatables/" + CultureInfo.CurrentCulture.Name + ".txt")',
+    //             select: {
+    //                 rows: {
+    //                     _: cultureInfo == 'de-DE' ? "%d Zeilen ausgewählt" : "%d rows selected",
+    //                     0: "",
+    //                     1: cultureInfo == 'de-DE' ? "1 Zeile ausgewählt" : "1 row selected"
+    //                 }
+    //             }
+    //         }
+    // }
 </script>

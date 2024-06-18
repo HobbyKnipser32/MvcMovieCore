@@ -128,7 +128,8 @@
                 {
                     <hr />
                     <h4>Szenen Aufschlüsselung</h4>
-                    <table class="table hover cell-border compact stripe" id="scenesTable">
+                    <table class="table hover cell-border stripe" id="scenesTable">
+                        <thead><th></th></thead>
                         <tbody>
                             @{
                                 var i = 0;
@@ -137,8 +138,8 @@
                             {
                                 var j = 0;
                                 var count = 0;
-                                <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
-                                    <td>
+                                <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray"); width: 400px" >
+                                    <td style ="width: 400px">
                                         Szene @Html.DisplayTextFor(model => scene.Key):&nbsp;
                                         @{
                                             var s = Model.Scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.Classification).ThenBy(o => o.Name).ToList();
@@ -164,7 +165,6 @@
                                                     ;&nbsp;
                                                 </text>
                                             }
-
                                         }
                                     </td>
                                 </tr>
@@ -201,13 +201,13 @@
                         header: true,
                         footer: false
                     },
-                    columnDefs: [
-                        {
-                            targets: [0],
-                            searchable: true,
-                            className: 'compact'
-                        }
-                    ],
+                    // columnDefs: [
+                    //     {
+                    //         targets: [0],
+                    //         searchable: true,
+                    //         className: 'compact'
+                    //     }
+                    // ],
                     searchHighlight: true
                 });
             }
@@ -266,13 +266,14 @@
                     header: true,
                     footer: false
                 },
-                columnDefs: [
-                    {
-                        targets: [0, 1, 2, 3, 4],
-                        searchable: true,
-                        className: 'compact'
-                    }
-                ],
+                columnDefs: [{ className: 'compact', targets: [0] }],
+                // columnDefs: [
+                //     {
+                //         targets: [0, 1, 2, 3, 4],
+                //         searchable: true,
+                //         className: 'compact'
+                //     }
+                // ],
                 searchHighlight: true
             });
         });
