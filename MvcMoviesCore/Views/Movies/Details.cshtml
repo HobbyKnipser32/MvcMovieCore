@@ -117,7 +117,14 @@
                             <th>Name</th>
                             <th>Geschlecht</th>
                             <th>Alter beim Dreh</th>
-                            <th>Praxis</th>
+                            @if (Model.Adult)
+                            {
+                                <th>Praxis</th>
+                            }
+                            else
+                            {
+                                <th>Rolle</th>
+                            }
                             <th></th>
                         </tr>
                     </thead>
