@@ -130,13 +130,17 @@
                     </thead>
                 </table>
             </div>
-            <div id="scenesTab" class="tab-pane" style="width:400px">
+            <div id="scenesTab" class="tab-pane" >
                 @if (Model.Scenes != null && Model.Scenes.Any())
                 {
                     <hr />
-                    <h4>Szenen Aufschlüsselung</h4>
+                    @* <h4>Szenen Aufschlüsselung</h4> *@
                     <table class="table hover cell-border stripe" id="scenesTable">
-                        <thead><th></th></thead>
+                        <thead>
+                            <tr>
+                                <th>Szenen</th>
+                            </tr>
+                        </thead>
                         <tbody>
                             @{
                                 var i = 0;
@@ -145,8 +149,8 @@
                             {
                                 var j = 0;
                                 var count = 0;
-                                <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray"); width: 400px" >
-                                    <td style ="width: 400px">
+                                <tr>
+                                    <td style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray"); width: 600px">
                                         Szene @Html.DisplayTextFor(model => scene.Key):&nbsp;
                                         @{
                                             var s = Model.Scenes.Where(w => w.Nr == scene.Key).OrderBy(o => o.Classification).ThenBy(o => o.Name).ToList();
@@ -197,27 +201,27 @@
     <script>
         $(document).ready(function () {
             const movieId = '@Model.Id';
-            if ($('#scenesTable')) {
-                $('#scenesTable').DataTable({
-                    ordering: true,
-                    paging: false,
-                    bFilter: false,
-                    lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-                    iDisplayLength: -1,
-                    fixedHeader: {
-                        header: true,
-                        footer: false
-                    },
-                    // columnDefs: [
-                    //     {
-                    //         targets: [0],
-                    //         searchable: true,
-                    //         className: 'compact'
-                    //     }
-                    // ],
-                    searchHighlight: true
-                });
-            }
+            // if ($('#scenesTable')) {
+            //     $('#scenesTable').DataTable({
+            //         ordering: true,
+            //         paging: false,
+            //         //bFilter: false,
+            //         lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            //         iDisplayLength: -1,
+            //         fixedHeader: {
+            //             header: true,
+            //             footer: false
+            //         },
+            //         // columnDefs: [
+            //         //     {
+            //         //         targets: [0],
+            //         //         searchable: true,
+            //         //         className: 'compact'
+            //         //     }
+            //         // ],
+            //         searchHighlight: true
+            //     });
+            // }
             $('#movieDetails').DataTable({
                 ajax: {
                     url: appRootPath + '/api/MoviesApi/' + movieId,
@@ -257,7 +261,7 @@
                             if (data && type === 'display') {
                                 var id = "'" + data + "'";
                                 return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + id + ')" title="Verknüpfung löschen">' +
-                                            '<i class="fa-solid fa-eraser fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
+                                    '<i class="fa-solid fa-eraser fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
                         },
