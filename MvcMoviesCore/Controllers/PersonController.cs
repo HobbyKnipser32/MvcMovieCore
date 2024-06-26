@@ -139,7 +139,7 @@ namespace MvcMoviesCore.Controllers
 
             persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
 
-            ViewData["OriginalFileDirectory"] = _originalFileDirectory; 
+            ViewData["OriginalFileDirectory"] = _originalFileDirectory;
             ViewData["FilterFor"] = GetNationalityName(id);
 
             return View("Index", persons);
@@ -340,6 +340,7 @@ namespace MvcMoviesCore.Controllers
                                         .Include(i => i.Sex)
                                         .Include(i => i.Nationality)
                                         .Include(i => i.MoviesPerson)
+                                        .ThenInclude(t => t.MovieRole)
                                         .OrderBy(o => o.PersonType)
                                         .ThenBy(t => t.Name).ToListAsync();
                 ViewData["BirthDay"] = $" im Jahr {year}";
@@ -352,6 +353,7 @@ namespace MvcMoviesCore.Controllers
                                         .Include(i => i.Sex)
                                         .Include(i => i.Nationality)
                                         .Include(i => i.MoviesPerson)
+                                        .ThenInclude(t => t.MovieRole)
                                         .OrderBy(o => o.PersonType)
                                         .ThenBy(t => t.Name).ToListAsync();
                 ViewData["BirthDay"] = $" {birthday.Day}.{birthday.Month:00}.";
@@ -366,6 +368,7 @@ namespace MvcMoviesCore.Controllers
                                         .Include(i => i.Sex)
                                         .Include(i => i.Nationality)
                                         .Include(i => i.MoviesPerson)
+                                        .ThenInclude(t => t.MovieRole)
                                         .OrderBy(o => o.PersonType)
                                         .ThenBy(t => t.Name).ToListAsync();
                 ViewData["BirthDay"] = $" {birthday.Day:00}.{birthday.Month:00}.{year}";

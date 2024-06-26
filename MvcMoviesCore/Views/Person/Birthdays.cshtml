@@ -32,29 +32,14 @@
 <table class="table" id="birthdayTable">
     <thead>
         <tr>
-            <th></th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                Aktuelles Alter
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nationality)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Height)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weight)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PersonType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sex)
-            </th>
-            <th></th>
+            <th></th>                                                   @* 0 *@
+            <th>@Html.DisplayNameFor(model => model.Name)</th>          @* 1 *@
+            <th>Aktuelles Alter</th>                                    @* 2 *@
+            <th>@Html.DisplayNameFor(model => model.Nationality)</th>   @* 3 *@
+            <th>@Html.DisplayNameFor(model => model.PersonType)</th>    @* 4 *@
+            <th>@Html.DisplayNameFor(model => model.Height)</th>        @* 5 *@
+            <th>@Html.DisplayNameFor(model => model.Weight)</th>        @* 6 *@
+            <th>@Html.DisplayNameFor(model => model.Sex)</th>           @* 7 *@
         </tr>
     </thead>
     <tbody>
@@ -62,48 +47,35 @@
         {
             var imgSrc = originalFileDirectory + "/" + @item.Image;
             <tr>
-                <td>
-                    <img src="@imgSrc" title="@item.Name" style="max-width: 100%; max-height: 50px" />
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ActorsAge)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nationality.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Height)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Weight)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PersonType.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sex.Name)
-                </td>
-                @* <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                </td> *@
+                <td><img src="@imgSrc" title="@item.Name" style="max-width: 100%; max-height: 50px" /></td>             @* 0 *@
+                <td><a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a></td>   @* 1 *@
+                <td>@Html.DisplayFor(modelItem => item.ActorsAge)</td>                                                  @* 2 *@
+                <td>@Html.DisplayFor(modelItem => item.Nationality.Name)</td>                                           @* 3 *@
+                <td>@Html.DisplayFor(modelItem => item.PersonType.Name)</td>                                            @* 4 *@
+                <td>@Html.DisplayFor(modelItem => item.Height)</td>                                                     @* 5 *@
+                <td>@Html.DisplayFor(modelItem => item.Weight)</td>                                                     @* 6 *@
+                <td>@Html.DisplayFor(modelItem => item.Sex.Name)</td>                                                   @* 7 *@
             </tr>
             @foreach (var movies in item.MoviesPerson)
             {
                 <tr>
-                    <td>.</td>
-                    <td>
-                        <a asp-area="" asp-controller="Movies" asp-action="Details" asp-route-id="@movies.MoviesId">@Html.DisplayFor(movie => movies.Movies.Name)</a>
+                    <td></td>                                                                                                                                               @* 0 *@
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>                                                                                                       @* 1 *@
+                    <td><a asp-area="" asp-controller="Movies" asp-action="Details" asp-route-id="@movies.MoviesId">@Html.DisplayFor(movie => movies.Movies.Name)</a></td>  @* 2 *@
+                    <td>@Html.DisplayFor(movie => movies.Movies.ActorsAge)</td>                                                                                             @* 3 *@
+                    <td>@Html.DisplayFor(modelItem => item.PersonType.Name)</td>                                                                                            @* 4 *@
+                    <td>                                                                                                                                                    @* 5 *@
+                        @if (string.IsNullOrEmpty(movies.Practices))
+                        {
+                            @Html.DisplayFor(movie => movies.MovieRole.Name)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(movie => movies.Practices)
+                        }
                     </td>
-                    <td>
-                        @Html.DisplayFor(movie => movies.Movies.ActorsAge)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(movie => movies.Practices)
-                    </td>
-
+                    <td></td>                                                                                                                                               @* 6 *@
+                    <td></td>                                                                                                                                               @* 7 *@
                 </tr>
             }
         }
@@ -112,7 +84,7 @@
 
 @section Scripts
 {
-   @*  <partial name="_DataTableScripts" />
+    <partial name="_DataTableScripts" />
 
     <script>
         $(document).ready(function () {
@@ -125,7 +97,14 @@
                     header: true,
                     footer: false
                 },
+                order: [
+                    [4, 'asc'],
+                    [1, 'asc']
+                ],
+                columnDefs: [
+                    { 'orderable': false, 'targets': 0 }
+                ],
             });
         })
-    </script> *@
+    </script>
 }
