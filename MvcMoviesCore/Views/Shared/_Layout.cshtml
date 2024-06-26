@@ -88,9 +88,9 @@
                             </div>
                         </li>
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-sm-2" type="search" placeholder="Search">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    <form asp-controller="Home" asp-action="Search" class="d-flex">
+                        <input id="searchTxt" name="searchText" class="form-control me-sm-2" type="search" placeholder="Search">
+                        <button id="searchButton" class="btn btn-secondary my-2 my-sm-0" type="submit" disabled>Search</button>
                     </form>
                 </div>
             </div>
@@ -160,7 +160,21 @@
     <partial name="_Select2InitScript" />
 
     <script>
+        $(document).ready(function () {
+            $('#searchTxt').on('input', function () {
+                enableSearchButton();
+            })
+        });
         var appRootPath = '@Context.Request.PathBase';
+
+        function enableSearchButton() {
+            if ($('#searchTxt').val()) {
+                $('#searchButton').attr('disabled', false);
+            }
+            else {
+                $('#searchButton').attr('disabled', true);
+            }
+        }
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

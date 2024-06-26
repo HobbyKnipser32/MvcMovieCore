@@ -1,0 +1,27 @@
+﻿@model List<MvcMoviesCore.ViewModels.SearchResult>
+
+<div class="container-fluid">
+    <h2>Suchergebnisse</h2>
+    <hr />
+    <table class="table" id="personIndex">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th></th>
+                <th>Typ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            { 
+                <tr>
+                    <td>
+                        <a asp-controller="@item.TypeOf" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                    </td>
+                    <td>image (fehlt noch)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TypeOf)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

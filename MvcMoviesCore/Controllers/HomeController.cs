@@ -1,23 +1,29 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
+using MvcMoviesCore.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-//using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace MvcMoviesCore.Controllers
 {
     public class HomeController : Controller
     {
+        #region privat fields
+
         private readonly MvcMovieCoreContext _context;
         private readonly IConfiguration _configuration;
         private readonly bool _showAdult;
         private readonly string _originalFileDirectory = "Images/Original";
+
+        #endregion
+
+        #region constructor
 
         public HomeController(MvcMovieCoreContext context, IConfiguration configuration)
         {
@@ -26,6 +32,10 @@ namespace MvcMoviesCore.Controllers
             _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
             _originalFileDirectory = _configuration.GetValue<string>("AppSettings:OriginalFileDirectory");
         }
+
+        #endregion
+
+        #region public functions
 
         public IActionResult Index()
         {
@@ -97,5 +107,44 @@ namespace MvcMoviesCore.Controllers
 
             return LocalRedirect(returnUrl);
         }
+
+        public IActionResult Search(string searchText)
+        {
+            var model = new List<SearchResult>();
+            model.AddRange(SearchMovies(searchText));
+            model.AddRange(SearchPersons(searchText));
+            return View(model.OrderBy(o => o.Name).ToList());
+        }
+
+        #endregion
+
+        #region private functions
+
+        private List<SearchResult> SearchMovies(string searchText)
+        {
+            var model = new List<SearchResult>();
+            var movies = _context.Movies.Where(w => w.Name.Contains(searchText)).ToList();
+            foreach (var movie in movies)
+            {
+                var result = new SearchResult() { Id = movie.Id, Name = movie.Name, TypeOf = "Movies" };
+                model.Add(result);
+            }
+            return model;
+        }
+
+        private List<SearchResult> SearchPersons(string searchText)
+        {
+            var model = new List<SearchResult>();
+            var persons = _context.Person.Where(w => w.Name.Contains(searchText)).ToList();
+            foreach (var person in persons)
+            {
+                var result = new SearchResult() { Name = person.Name, Id = person.Id, TypeOf = "Person" };
+                model.Add(result);
+            }
+            return model;
+        }
+
+
+        #endregion
     }
 }

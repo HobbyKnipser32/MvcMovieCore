@@ -86,9 +86,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Sex.Name)
                 </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> @*|*@
-                </td>
+                @* <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td> *@
             </tr>
             @foreach (var movies in item.MoviesPerson)
             {
@@ -112,7 +112,7 @@
 
 @section Scripts
 {
-    <partial name="_DataTableScripts" />
+   @*  <partial name="_DataTableScripts" />
 
     <script>
         $(document).ready(function () {
@@ -127,5 +127,5 @@
                 },
             });
         })
-    </script>
+    </script> *@
 }
