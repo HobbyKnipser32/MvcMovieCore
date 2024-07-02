@@ -153,6 +153,45 @@ namespace MvcMoviesCore.ApiController
             }
         }
 
+        [HttpGet("TodaysObits")]
+        public async Task<IActionResult> TodaysObits()
+        {
+            try
+            {
+                var today = DateTime.Now;
+                var persons = await _context.Person
+                                            .Where(w => w.Obit.Value.Month == today.Month && w.Obit.Value.Day == today.Day)
+                                            .Include(i => i.PersonType)
+                                            .Include(i => i.Sex)
+                                            .Include(i => i.Nationality)
+                                            .OrderBy(o => o.PersonType)
+                                            .ThenBy(t => t.Name).ToListAsync();
+
+                foreach (var person in persons)
+                {
+                    person.ActorsAge = person.Obit == null ? (today.Year - person.Birthday.Value.Year).ToString() : person.GetActorsAge(person.Birthday, person.Obit);
+                    if (person.Nationality.Person != null) { person.Nationality.Person = null; }
+                    if (person.PersonType.Person != null) { person.PersonType.Person = null; }
+                    if (person.Sex.Person != null) { person.Sex.Person = null; }
+                }
+
+                if (!_showAdult)
+                    persons = persons.Where(w => !w.PersonType.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                var jsonResult = JsonConvert.SerializeObject(persons, Formatting.Indented, jsonSerializerSettings);
+
+                return Ok(jsonResult);
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                if (ex.InnerException != null)
+                    message = ex.InnerException.Message;
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("Update")]
         public async Task<IActionResult> Update([FromForm] Person person)
         {

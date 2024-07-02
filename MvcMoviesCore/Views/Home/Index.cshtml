@@ -65,6 +65,23 @@
                     </table>
                 </div>
             </div>
+            <div class="card shadow p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+                    <h5 class="card-title" style="color:#00bcd4">Heutige Todestage</h5>
+                    <table class="table table-striped" id="obitTable">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Aktuelles Alter</th>
+                                <th>Nationalität</th>
+                                <th>Rolle</th>
+                                <th>Geschlecht</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -121,8 +138,55 @@
                     header: true,
                     footer: false
                 },
-                lengthMenu: [[10, -1], [10, "All"]],
-                iDisplayLength: 10,
+                lengthMenu: [[5, 10, -1], [5, 10, "All"]],
+                iDisplayLength: 5,
+                // layout: {
+                //     topStart: 'pageLength',
+                //     topEnd: 'paging',
+                //     bottomStart: 'info',
+                //     bottomEnd: 'info'
+                // },
+                dom: 'lpftrip',
+            });
+            $('#obitTable').DataTable({
+                ordering: true,
+                ajax: {
+                    url: appRootPath + '/api/PersonApi/TodaysObits',
+                    dataSrc: ''
+                },
+                columns: [
+                    {
+                        data: 'Image',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var src = '@imageSource' + '/' + data;
+                                return '<img src="' + src + '"  title = "' + full["Name"] + '" / style="max-width: 100%; max-height: 50px">';
+                            }
+                            return '';
+                        }
+                    },
+                    {
+                        data: 'Id',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var url = '@Url.Action("Details", "Person")' + '/' + data;
+                                return '<a href="' + url + '" title="ansehen">' + full["Name"];
+                            }
+                            return '';
+                        }
+                    },
+                    { data: 'ActorsAge' },
+                    { data: 'Nationality.Name' },
+                    { data: 'PersonType.Name' },
+                    { data: 'Sex.Name' },
+                ],
+                searching: false,
+                fixedHeader: {
+                    header: true,
+                    footer: false
+                },
+                lengthMenu: [[5, 10, -1], [5, 10, "All"]],
+                iDisplayLength: 5,
                 layout: {
                     topStart: 'pageLength',
                     topEnd: 'paging',

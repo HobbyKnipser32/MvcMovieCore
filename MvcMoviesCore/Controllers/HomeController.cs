@@ -113,6 +113,7 @@ namespace MvcMoviesCore.Controllers
             var model = new List<SearchResult>();
             model.AddRange(SearchMovies(searchText));
             model.AddRange(SearchPersons(searchText));
+            model.AddRange(SearchGenre(searchText));
             return View(model.OrderBy(o => o.Name).ToList());
         }
 
@@ -123,7 +124,11 @@ namespace MvcMoviesCore.Controllers
         private List<SearchResult> SearchMovies(string searchText)
         {
             var model = new List<SearchResult>();
-            var movies = _context.Movies.Where(w => w.Name.Contains(searchText)).ToList();
+            List<Movies> movies = new();
+            if (_showAdult)
+                movies = _context.Movies.Where(w => w.Name.Contains(searchText)).ToList();
+            else
+                movies = _context.Movies.Where(w => w.Name.Contains(searchText) && w.Adult == _showAdult).ToList();
             foreach (var movie in movies)
             {
                 var result = new SearchResult() { Id = movie.Id, Name = movie.Name, TypeOf = "Movies" };
@@ -135,12 +140,52 @@ namespace MvcMoviesCore.Controllers
         private List<SearchResult> SearchPersons(string searchText)
         {
             var model = new List<SearchResult>();
-            var persons = _context.Person.Where(w => w.Name.Contains(searchText)).ToList();
+            List<Person> persons = new();
+            if (_showAdult)
+            {
+                persons = _context.Person.Where(w => w.Name.Contains(searchText)).ToList();
+            }
+            else
+            {
+                var adultPersonType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
+                if (adultPersonType != null)
+                {
+                    persons = _context.Person.Where(w => w.Name.Contains(searchText) && !w.PersonTypesId.Equals(adultPersonType.Id)).ToList();
+                }
+            }
             foreach (var person in persons)
             {
                 var result = new SearchResult() { Name = person.Name, Id = person.Id, TypeOf = "Person" };
                 model.Add(result);
             }
+            return model;
+        }
+
+        private List<SearchResult> SearchGenre(string searchText)
+        {
+            var model = new List<SearchResult>();
+            List<Genre> genres = [];
+            if (_showAdult)
+            {
+                genres = _context.Genre.Where(w => w.Name.Contains(searchText)).ToList();
+            }
+            else
+            {
+                genres = _context.Genre.Where(w => w.Name.Contains(searchText) && !w.IsAdult).ToList();
+            }
+            foreach (var genre in genres)
+            {
+                var result = new SearchResult() { Name = genre.Name, Id = genre.Id, TypeOf = "Genres" };
+                model.Add(result);
+                var movies = _context.Movies.Where(w => w.GenreId.Equals(genre.Id));
+                foreach (var movie in movies)
+                {
+                    result = new SearchResult() { Name = movie.Name, Id = movie.Id, TypeOf = "Movies" };
+                    model.Add(result);
+
+                }
+            }
+
             return model;
         }
 
