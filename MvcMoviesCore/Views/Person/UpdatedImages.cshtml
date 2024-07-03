@@ -17,6 +17,12 @@
         else
         {
             <table class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;" id="updatedImages">
+                <thead style="display: none">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
@@ -45,7 +51,7 @@
     <script>
         $(document).ready(function () {
             $('#updatedImages').DataTable({
-                ordering: true
+                ordering: true,
             });
         })
     </script>

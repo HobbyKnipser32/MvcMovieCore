@@ -51,7 +51,7 @@
             <div class="card shadow p-3 mb-5 bg-white rounded">
                 <div class="card-body">
                     <h5 class="card-title" style="color:#00bcd4">Heutige Geburtstage</h5>
-                    <table class="table table-striped" id="birthdayTable">
+                    <table class="table table-striped compact nowrap" id="birthdayTable">
                         <thead>
                             <tr>
                                 <th></th>
@@ -68,7 +68,7 @@
             <div class="card shadow p-3 mb-5 bg-white rounded">
                 <div class="card-body">
                     <h5 class="card-title" style="color:#00bcd4">Heutige Todestage</h5>
-                    <table class="table table-striped" id="obitTable">
+                    <table class="table table-striped compact" id="obitTable">
                         <thead>
                             <tr>
                                 <th></th>
@@ -140,13 +140,14 @@
                 },
                 lengthMenu: [[5, 10, -1], [5, 10, "All"]],
                 iDisplayLength: 5,
-                // layout: {
-                //     topStart: 'pageLength',
-                //     topEnd: 'paging',
-                //     bottomStart: 'info',
-                //     bottomEnd: 'info'
-                // },
-                dom: 'lpftrip',
+                layout: {
+                    topStart: 'pageLength',
+                    topEnd: 'paging',
+                    bottomStart: 'info',
+                    bottomEnd: 'info'
+                },
+                responsive: true,
+                // dom: 'lpftrip',
             });
             $('#obitTable').DataTable({
                 ordering: true,
@@ -193,6 +194,7 @@
                     bottomStart: 'info',
                     bottomEnd: 'info'
                 },
+                responsive: true,
                 //dom: 'lpftrip',
             });
         })
