@@ -5,6 +5,7 @@
     var adultPersonType = ViewData["AdultPersonType"];
     var imgSrc = ViewData["ImageSource"];
     var person = Model.Name;
+    var natImgSrc = ViewData["OriginalFileDirectory"].ToString() + "/flags/" + Model.Nationality.Name + ".png";
 }
 <div class="container-fluid">
     <h2>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.ActorsAge))</h2>
@@ -56,19 +57,21 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
+                                    <img src="@natImgSrc" style="max-width: 100%; max-height: 16px" title="@Model.Nationality.Description"/>
                                     @Html.DisplayFor(model => model.Nationality.Name)
                                 </div>
                             </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label asp-for="Classification" class="control-label">Klassifizierung: </label>
+                                    @Html.DisplayFor(model => model.Classification)
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label asp-for="Obit" class="control-label">Todestag: </label>
-                                    @Html.DisplayFor(model => model.Obit)
-                                </div>
-                            </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label asp-for="Height" class="control-label">Größe: </label>
@@ -79,6 +82,12 @@
                                 <div class="form-group">
                                     <label asp-for="Weight" class="control-label">Gewicht: </label>
                                     @Html.DisplayFor(model => model.Weight)
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label asp-for="Obit" class="control-label">Todestag: </label>
+                                    @Html.DisplayFor(model => model.Obit)
                                 </div>
                             </div>
                         </div>

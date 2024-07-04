@@ -180,6 +180,7 @@ namespace MvcMoviesCore.Controllers
                 ViewData["ImageSource"] = $"{_originalFileDirectory}/{person.Image}";
             else
                 ViewData["ImageSource"] = string.Empty;
+            ViewData["OriginalFileDirectory"] = _originalFileDirectory;
             return View(person);
         }
 
