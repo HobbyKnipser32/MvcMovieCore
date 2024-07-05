@@ -65,12 +65,12 @@ namespace MvcMoviesCore.ApiController
                 .ToListAsync();
             foreach (var movieRole in movieRoles)
             {
-                var viewModel = new MoviePersonsViewModel()
+                var viewModel = new MoviePersonsViewModel() { Actor = movieRole.Person.Name };
+                if (movieRole.MovieRole != null)
                 {
-                    Actor = movieRole.Person.Name,
-                    Role = movieRole.MovieRole?.Name,
-                    MovieRoleId = (Guid)(movieRole.MovieRole?.Id)
-                };
+                    viewModel.Role = movieRole.MovieRole.Name;
+                    viewModel.MovieRoleId = movieRole.MovieRole.Id;
+                }
                 moviePersons.Add(viewModel);
             }
             try

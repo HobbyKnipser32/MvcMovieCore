@@ -57,7 +57,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
-                                    <img src="@natImgSrc" style="max-width: 100%; max-height: 16px" title="@Model.Nationality.Description"/>
+                                    <img src="@natImgSrc" style="max-width: 100%; max-height: 16px" title="@Model.Nationality.Description" />
                                     @Html.DisplayFor(model => model.Nationality.Name)
                                 </div>
                             </div>
@@ -176,7 +176,12 @@
                                 <td>
                                     @if (string.IsNullOrEmpty(item.Practices))
                                     {
-                                        @Html.DisplayFor(modelItem => item.MovieRole.Name)
+                                        @if (item.MovieRole != null)
+                                        {
+                                            <a asp-controller="MovieRole" asp-action="Details" asp-route-id="@item.MovieRole.Id">
+                                                @Html.DisplayFor(modelItem => item.MovieRole.Name)
+                                            </a>
+                                        }
                                     }
                                     else
                                     {
@@ -212,7 +217,7 @@
     </div>
 </div>
 @section Scripts
-    {
+{
     <partial name="_DataTableScripts" />
 
     <script>
