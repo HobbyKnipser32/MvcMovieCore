@@ -114,6 +114,7 @@ namespace MvcMoviesCore.Controllers
             model.AddRange(SearchMovies(searchText));
             model.AddRange(SearchPersons(searchText));
             model.AddRange(SearchGenre(searchText));
+            model.AddRange(SearchRole(searchText));
             return View(model.OrderBy(o => o.Name).ToList());
         }
 
@@ -189,6 +190,19 @@ namespace MvcMoviesCore.Controllers
             return model;
         }
 
+        private List<SearchResult> SearchRole(string searchText)
+        {
+            List<SearchResult> model = new();
+            List<MovieRole> roles = _context.MovieRole.Where(w => w.Name.Contains(searchText)).ToList();
+
+            foreach (var role in roles)
+            {
+                var result = new SearchResult() { Id = role.Id, Name = role.Name, TypeOf = "MovieRole" };
+                model.Add(result);
+            }
+
+            return model;
+        }
 
         #endregion
     }

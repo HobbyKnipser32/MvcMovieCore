@@ -1,0 +1,53 @@
+﻿@model List<MvcMoviesCore.Models.MoviesPerson>
+
+@{
+    ViewData["Title"] = "Rolle(n)";
+}
+<div class="container-fluid">
+    <table class="table hover cell-border compact stripe" id="movieRolls">
+        <thead>
+            <tr>
+                <th>Role</th>
+                <th>Darsteller</th>
+                <th>Film</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var movieRole in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayTextFor(item => movieRole.MovieRole.Name)</td>
+                    <td>
+                        <a asp-action="Details" asp-controller="Person" asp-route-id="@movieRole.Person.Id">
+                            @Html.DisplayTextFor(item => movieRole.Person.Name)
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-controller="Movies" asp-route-id="@movieRole.Movies.Id">
+                            @Html.DisplayTextFor(item => movieRole.Movies.Name)
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $('#movieRolls').DataTable({
+            ordering: true,
+            ajax: false,
+            paging: false,
+            searching: false,
+            fixedHeader: {
+                header: true,
+                footer: false
+            },
+        });
+    </script>
+}
