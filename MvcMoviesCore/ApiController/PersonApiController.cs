@@ -274,7 +274,7 @@ namespace MvcMoviesCore.ApiController
             if (fileInfo.Exists)
             {
                 var targetFile = Path.Combine(path, newFileName);
-                fileInfo.MoveTo(targetFile);
+                fileInfo.MoveTo(targetFile, true);
             }
 
             return true;
