@@ -130,7 +130,10 @@ namespace MvcMoviesCore.ApiController
 
                 foreach (var person in persons)
                 {
-                    person.ActorsAge = person.Obit == null ? (today.Year - person.Birthday.Value.Year).ToString() : person.GetActorsAge(person.Birthday, person.Obit);
+                    var actorsAge = (today.Year - person.Birthday.Value.Year).ToString();
+                    if (person.Obit != null)
+                        actorsAge += $" ({person.GetActorsAge(person.Birthday, person.Obit)})";
+                    person.ActorsAge = actorsAge;
                     if (person.Nationality.Person != null) { person.Nationality.Person = null; }
                     if (person.PersonType.Person != null) { person.PersonType.Person = null; }
                     if (person.Sex.Person != null) { person.Sex.Person = null; }
