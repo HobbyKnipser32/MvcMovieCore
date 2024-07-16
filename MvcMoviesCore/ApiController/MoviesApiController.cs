@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
 using MvcMoviesCore.ViewModels;
 using Newtonsoft.Json;
@@ -12,10 +13,11 @@ namespace MvcMoviesCore.ApiController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MoviesApiController(MvcMovieCoreContext context) : ControllerBase
+    public class MoviesApiController(MvcMovieCoreContext context, IConfiguration configuration) : ControllerBase
     {
 
         private readonly MvcMovieCoreContext _context = context;
+        private readonly IConfiguration _configuration = configuration;
 
         [HttpGet("{movieId}")]
         public async Task<IActionResult> Get(Guid movieId)
@@ -100,6 +102,39 @@ namespace MvcMoviesCore.ApiController
             _context.SaveChanges();
 
             return Ok();
+        }
+
+        [HttpGet("GetMovies")]
+        public async Task<IActionResult> GetMovies()
+        {
+            string jsonResult;
+            var showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
+            var movies = await _context.Movies
+                                .Include(m => m.Genre)
+                                .Include(m => m.RecordCarrier)
+                                .Include(m => m.StorageLocation)
+                                .OrderBy(o => o.Name).ToListAsync();
+            //.AsQueryable();
+
+            foreach (var movie in movies) {
+                movie.Genre.Movies.Clear();
+                movie.RecordCarrier.Movies.Clear();
+                movie.StorageLocation.Movies.Clear();
+            }
+
+            if (!showAdult)
+                movies = movies.Where(w => w.Adult == false).ToList();
+
+            try
+            {
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                jsonResult = JsonConvert.SerializeObject(movies, Formatting.Indented, jsonSerializerSettings);
+                return Ok(jsonResult);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
     }
 }

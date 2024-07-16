@@ -60,7 +60,7 @@ namespace MvcMoviesCore.Controllers
             var practices = GetPractices();
             var filterContent = GetFilterContent();
 
-            ViewData["ShowwAdult"] = _showAdult;
+            ViewData["ShowAdult"] = _showAdult;
             return View(movies);
         }
 

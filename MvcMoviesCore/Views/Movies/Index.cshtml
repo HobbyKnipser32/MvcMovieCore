@@ -57,7 +57,14 @@
                     @Html.DisplayFor(modelItem => item.YearOfPublication)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.InStock)
+                    @if (item.InStock != null && item.InStock.Value)
+                    {
+                        <i class="fa-solid fa-check" style="color: #74C0FC;"></i>
+                    }
+                    else
+                    {
+                        <i class="fa-solid fa-xmark" style="color: #ff0000;"></i>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.RunTime)
@@ -98,6 +105,42 @@
     <script>
         $(document).ready(function () {
             $('#movieIndex').DataTable({
+                // ajax: {
+                //     url: appRootPath + '/api/MoviesApi/GetMovies',
+                //     dataSrc: ''
+                // },
+                // columns:[
+                //     {
+                //         data: 'Name',
+                //         render: function (data, type, full, meta) {
+                //             if (data && type === 'display') {
+                //                 var url = '@Url.Action("Details", "Movies")' + '/' + full.Id;
+                //                 return '<a href="' + url + '">' + full.Name; /*  + '< /a>'; */
+                //             }
+                //             return '';
+                //         }
+                //     },
+                //     { data: 'YearOfPublication' },
+                //     { 
+                //         data: 'InStock',
+                //         render: function (data, type, full, meta) {
+                //             if (data && type === 'display' && full.InStock) {
+                //                 return '<i class="fa-duotone fa-check" style="--fa-primary-color: #74C0FC;"></i>';
+                //             }
+                //             return '<i class="fa-duotone fa-xmark" style="--fa-primary-color: #ff0000; --fa-secondary-color: #ff0000;"></i>';
+                //         }
+                            
+                //     },
+                //     { data: 'RunTime' },
+                //     { data: 'OnWatch' },
+                //     { data: 'LastView' },
+                //     { data: 'Genre.Name' },
+                //     { data: 'RecordCarrier.Name' },
+                //     { data: 'StorageLocation.Name' },
+                //     { data: 'FileSizeInKB' },
+                //     { data: 'Id' },
+                //     { data: 'Id' },
+                // ],
                 ordering: true,
                 createdRow: function (row, data, dataIndex) {
                     if (data['adult'] === false) {
