@@ -41,27 +41,28 @@ namespace MvcMoviesCore.Controllers
         // GET: Movies
         public IActionResult Index(string filter, bool? adult)
         {
-            if (adult != null)
-                _showAdult = adult.Value;
+            //if (adult != null)
+            //    _showAdult = adult.Value;
 
-            var movies = _context.Movies
-                                 .Include(m => m.Genre)
-                                 .Include(m => m.RecordCarrier)
-                                 .Include(m => m.StorageLocation)
-                                 .OrderBy(o => o.Name)
-                                 .AsQueryable();
+            //var movies = _context.Movies
+            //                     .Include(m => m.Genre)
+            //                     .Include(m => m.RecordCarrier)
+            //                     .Include(m => m.StorageLocation)
+            //                     .OrderBy(o => o.Name)
+            //                     .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(filter))
-                movies = movies.Where(p => p.Name.Contains(filter));
+            //if (!string.IsNullOrWhiteSpace(filter))
+            //    movies = movies.Where(p => p.Name.Contains(filter));
 
-            if (!_showAdult)
-                movies = movies.Where(w => w.Adult == false);
+            //if (!_showAdult)
+            //    movies = movies.Where(w => w.Adult == false);
 
-            var practices = GetPractices();
-            var filterContent = GetFilterContent();
+            //var practices = GetPractices();
+            //var filterContent = GetFilterContent();
 
             ViewData["ShowAdult"] = _showAdult;
-            return View(movies);
+            return View();
+            //return View(movies);
         }
 
         // GET: Movies/Details/5
