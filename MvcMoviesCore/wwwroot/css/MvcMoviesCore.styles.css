@@ -1,8 +1,12 @@
-﻿.me-auto
-{
+﻿.me-auto {
     margin-left: 1px !important;
 }
 
 .ms-auto {
     margin-right: 1px !important;
+}
+
+div.dt-container div.dt-info {
+    color: #AAAAAA !important;
+    width: 100% !important;
 }

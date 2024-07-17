@@ -47,53 +47,53 @@
         </tr>
     </thead>
     <tbody>
-       @*  @foreach (var item in Model)
+        @*  @foreach (var item in Model)
         {
-            <tr>
-                <td width="300px">
-                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.YearOfPublication)
-                </td>
-                <td>
-                    @if (item.InStock != null && item.InStock.Value)
-                    {
-                        <i class="fa-solid fa-check" style="color: #74C0FC;"></i>
-                    }
-                    else
-                    {
-                        <i class="fa-solid fa-xmark" style="color: #ff0000;"></i>
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RunTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OnWatch)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastView)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Genre.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RecordCarrier.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StorageLocation.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FileSizeInKB)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC;  --fa-animation-duration: 2s;"></i></a>
-                </td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fa-shake" style="color: #ff0000; --fa-animation-duration: 2s;"></i></a>
-                </td>
-            </tr>
+        <tr>
+        <td width="300px">
+        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+        </td>
+        <td>
+        @Html.DisplayFor(modelItem => item.YearOfPublication)
+        </td>
+        <td>
+        @if (item.InStock != null && item.InStock.Value)
+        {
+        <i class="fa-solid fa-check" style="color: #74C0FC;"></i>
+        }
+        else
+        {
+        <i class="fa-solid fa-xmark" style="color: #ff0000;"></i>
+        }
+        </td>
+        <td>
+        @Html.DisplayFor(modelItem => item.RunTime)
+        </td>
+        <td>
+        @Html.DisplayFor(modelItem => item.OnWatch)
+        </td>
+        <td>
+        @Html.DisplayFor(modelItem => item.LastView)
+        </td>
+        <td>
+        @Html.DisplayFor(modelItem => item.Genre.Name)
+        </td>
+        <td>
+        @Html.DisplayFor(modelItem => item.RecordCarrier.Name)
+        </td>
+        <td>
+        @Html.DisplayFor(modelItem => item.StorageLocation.Name)
+        </td>
+        <td>
+        @Html.DisplayFor(modelItem => item.FileSizeInKB)
+        </td>
+        <td>
+        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC;  --fa-animation-duration: 2s;"></i></a>
+        </td>
+        <td>
+        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fa-shake" style="color: #ff0000; --fa-animation-duration: 2s;"></i></a>
+        </td>
+        </tr>
         } *@
     </tbody>
 </table>
@@ -109,7 +109,7 @@
                     url: appRootPath + '/api/MoviesApi/GetMovies',
                     dataSrc: ''
                 },
-                columns:[
+                columns: [
                     {
                         data: 'Name',
                         render: function (data, type, full, meta) {
@@ -130,7 +130,7 @@
                             return '';
                         }
                     },
-                    { 
+                    {
                         data: 'InStock',
                         render: function (data, type, full, meta) {
                             if (data && type === 'display' && full.InStock) {
@@ -155,9 +155,9 @@
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
                                 let lastView = new Date(data);
-                                return lastView.getUTCDay().toString().padStart(2, "0") + "." + 
-                                       (lastView.getUTCMonth() + 1).toString().padStart(2, "0") + "." + 
-                                       lastView.getUTCFullYear().toString().padStart(2, "0");
+                                return lastView.getUTCDay().toString().padStart(2, "0") + "." +
+                                    (lastView.getUTCMonth() + 1).toString().padStart(2, "0") + "." +
+                                    lastView.getUTCFullYear().toString().padStart(2, "0");
                             }
                             return '';
                         }
@@ -165,12 +165,15 @@
                     { data: 'Genre.Name' },
                     { data: 'RecordCarrier.Name' },
                     { data: 'StorageLocation.Name' },
-                    { data: 'FileSizeInKB' },
+                    {
+                        data: 'FileSizeInKB',
+                        render: ['number', '.', ',', 0]
+                    },
                     {
                         data: 'Id',
+                        orderable: false,
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
-                                // var id = "'" + data + "'";
                                 var url = '@Url.Action("Details", "Movies")' + '/' + data;
                                 return '<a href = "' + url + '" titel="Details zeigen">' +
                                     '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC;  --fa-animation-duration: 2s;"></i>';
@@ -180,6 +183,7 @@
                     },
                     {
                         data: 'Id',
+                        orderable: false,
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
                                 var id = "'" + data + "'";

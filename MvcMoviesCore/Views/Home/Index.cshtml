@@ -143,11 +143,10 @@
                 layout: {
                     topStart: 'pageLength',
                     topEnd: 'paging',
-                    bottomStart: 'info',
-                    bottomEnd: 'info'
+                    bottomEnd: 'info',
+                    bottomStart: null
                 },
                 responsive: true,
-                // dom: 'lpftrip',
             });
             $('#obitTable').DataTable({
                 ordering: true,
@@ -188,12 +187,12 @@
                 },
                 lengthMenu: [[5, 10, -1], [5, 10, "All"]],
                 iDisplayLength: 5,
-                layout: {
-                    topStart: 'pageLength',
-                    topEnd: 'paging',
-                    bottomStart: 'info',
-                    bottomEnd: 'info'
-                },
+                // layout: {
+                //     topStart: 'pageLength',
+                //     topEnd: 'paging',
+                //     bottomEnd: 'info',
+                //     bottomStart: null
+                // },
                 responsive: true,
                 //dom: 'lpftrip',
             });
