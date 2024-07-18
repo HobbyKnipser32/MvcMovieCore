@@ -109,7 +109,7 @@ namespace MvcMoviesCore.ApiController
             }
             else
             {
-                jsonResult = string.Empty;
+                jsonResult = JsonConvert.SerializeObject(new List<MoviesPerson>()); //string.Empty;
             }
             return Ok(jsonResult);
         }
