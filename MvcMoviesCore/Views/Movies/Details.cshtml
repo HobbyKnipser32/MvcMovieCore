@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    var imageSource = ViewData["ImageSource"];
 }
 <div class="container-fluid">
     <h2>@Html.DisplayFor(model => model.Name)</h2>
@@ -114,6 +115,7 @@
                 <table class="table hover cell-border compact stripe" id="movieDetails">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Name</th>
                             <th>Geschlecht</th>
                             <th>Alter beim Dreh</th>
@@ -228,6 +230,16 @@
                     dataSrc: ''
                 },
                 columns: [
+                    {
+                        data: 'Person.Image',
+                        render: function (data, type, full, meta) {
+                            if (data && type === 'display') {
+                                var src = '@imageSource' + '/' + data;
+                                return '<img src="' + src + '"  title = "' + full["Name"] + '" / style="max-width: 100%; max-height: 50px">';
+                            }
+                            return '';
+                        }
+                    },
                     {
                         data: 'Person',
                         render: function (data, type, full, meta) {

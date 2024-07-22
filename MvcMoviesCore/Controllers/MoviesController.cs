@@ -21,6 +21,7 @@ namespace MvcMoviesCore.Controllers
 
         private readonly MvcMovieCoreContext _context;
         private readonly IConfiguration _configuration;
+        private readonly string _originalFileDirectory = "/Images/Original";
         private bool _showAdult;
 
         #endregion
@@ -32,6 +33,7 @@ namespace MvcMoviesCore.Controllers
             _context = context;
             _configuration = configuration;
             _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
+            _originalFileDirectory = _configuration.GetValue<string>("AppSettings:OriginalFileDirectory");
         }
 
         #endregion
@@ -99,6 +101,7 @@ namespace MvcMoviesCore.Controllers
 
             movie.Scenes = await GetScenesAsync(id);
 
+            ViewData["ImageSource"] = _originalFileDirectory;
             return View(movie);
         }
 
