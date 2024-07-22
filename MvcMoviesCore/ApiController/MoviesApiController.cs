@@ -118,8 +118,8 @@ namespace MvcMoviesCore.ApiController
 
             foreach (var movie in movies) {
                 movie.Genre.Movies.Clear();
-                movie.RecordCarrier.Movies.Clear();
-                movie.StorageLocation.Movies.Clear();
+                movie.RecordCarrier?.Movies.Clear();
+                movie.StorageLocation?.Movies.Clear();
             }
 
             if (!showAdult)
