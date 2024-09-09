@@ -90,3 +90,27 @@ body {
 .select2-selection--multiple {
     margin: 0px 6px;
 }
+
+.image-container {
+    position: relative;
+    /*display: inline-block;*/
+}
+
+.image-small {
+    /*display: block;*/
+    max-width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right:auto;
+}
+
+.image-large {
+    display: none;
+    position: fixed;
+    max-width: auto;
+    max-height: auto;
+    z-index: 100;
+    background-color: rgba(222, 222, 222);
+    padding: 5px;
+    border: 1px solid #888;
+}

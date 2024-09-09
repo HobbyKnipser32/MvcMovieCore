@@ -1,0 +1,69 @@
+﻿<script>
+    function getImageType(imageName) {
+        return imageName.split('.').pop().toLowerCase();
+    }
+
+    function onMouseEnter(container) {
+        if (container.children.length >= 2) {
+            const padding = 5;
+            const border = 1;
+            const offsetLeft = 50;
+            const offsetTop = 75;
+            const offsetBelow = 20;
+            const offsetAbove = offsetBelow;
+            const maxImageHeight = 800;
+
+            let nodeSmall = container.children[0];
+            let rectSmall = nodeSmall.getBoundingClientRect();
+            let nodeLarge = container.children[1];
+            let rectLarge = nodeLarge.getBoundingClientRect();
+            let viewWidth = document.documentElement.clientWidth;
+            let viewHeight = document.documentElement.clientHeight;
+            let left = rectSmall.left + rectSmall.width + offsetLeft;
+            let top = rectSmall.top - offsetTop;
+            let nodeLargeWidth = nodeLarge.width + padding + border;
+            let nodeLargeHeight = nodeLarge.height + padding + border;
+
+            if (nodeLarge.height > maxImageHeight) {
+                nodeLargeHeight = maxImageHeight + padding + border;
+                nodeLargeWidth = Number(maxImageHeight * nodeLarge.width / nodeLarge.height) + padding + border;
+                nodeLarge.height = nodeLargeHeight;
+                nodeLarge.width = nodeLargeWidth;
+            }
+
+            // not enough space on the left
+            let placeLeft = viewWidth - rectSmall.x - rectSmall.width - offsetLeft;
+            if (placeLeft < nodeLargeWidth) {
+                left = rectSmall.x - offsetLeft - nodeLargeWidth;
+            }
+
+            // not enough space below
+            let placeBellow = viewHeight - rectSmall.y - rectSmall.width + offsetTop;
+            if (placeBellow < nodeLargeHeight) {
+                top = viewHeight - offsetBelow - nodeLargeHeight;
+            }
+
+            // not enough space above
+            if (top < offsetAbove) {
+                top = offsetAbove;
+            }
+
+            //is too high
+            if (rectLarge < nodeLarge.x) {
+                nodeLarge.height = rectLarge - padding - border;
+
+            }
+
+            nodeLarge.style.left = left + "px";
+            nodeLarge.style.top = top + "px";
+            nodeLarge.style.display = "block";
+        }
+    }
+
+    function onMouseLeave(container) {
+        if (container.children.length >= 2) {
+            let node = container.children[1];
+            node.style.display = "none";
+        }
+    }
+</script>

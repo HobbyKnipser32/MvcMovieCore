@@ -20,19 +20,19 @@
     <table class="table" id="personIndex">
         <thead>
             <tr>
-                <th style="max-width: 100px"></th>
-                <th>@Html.DisplayNameFor(model => model.Name)</th>          @*  0 *@
-                <th></th>                                                   @*  1 *@
-                <th>@Html.DisplayNameFor(model => model.Birthday)</th>      @*  2 *@
-                <th>@Html.DisplayNameFor(model => model.Obit)</th>          @*  3 *@
-                <th>@Html.DisplayNameFor(model => model.Nationality)</th>   @*  4 *@
-                <th>@Html.DisplayNameFor(model => model.Height)</th>        @*  5 *@
-                <th>@Html.DisplayNameFor(model => model.Weight)</th>        @*  6 *@
-                <th></th>                                                   @*  7 *@
-                <th>@Html.DisplayNameFor(model => model.PersonType)</th>    @*  8 *@
-                <th>@Html.DisplayNameFor(model => model.Sex)</th>           @*  9 *@
-                <th></th>                                                   @* 10 *@
+                <th style="width: 50px">&nbsp;</th>                         @*  0 *@
+                <th>@Html.DisplayNameFor(model => model.Name)</th>          @*  1 *@
+                <th>&nbsp;</th>                                             @*  2 *@
+                <th>@Html.DisplayNameFor(model => model.Birthday)</th>      @*  3 *@
+                <th>@Html.DisplayNameFor(model => model.Obit)</th>          @*  4 *@
+                <th>@Html.DisplayNameFor(model => model.Nationality)</th>   @*  5 *@
+                <th>@Html.DisplayNameFor(model => model.Height)</th>        @*  6 *@
+                <th>@Html.DisplayNameFor(model => model.Weight)</th>        @*  7 *@
+                <th></th>                                                   @*  8 *@
+                <th>@Html.DisplayNameFor(model => model.PersonType)</th>    @*  9 *@
+                <th>@Html.DisplayNameFor(model => model.Sex)</th>           @* 10 *@
                 <th></th>                                                   @* 11 *@
+                <th></th>                                                   @* 12 *@
             </tr>
         </thead>
         <tbody>
@@ -41,7 +41,10 @@
                 var imgSrc = originalFileDirectory + "/" + @item.Image;
                 <tr>
                     <td>
-                        <img src="@imgSrc" title="@item.Name" style="max-width: 100%; max-height: 50px" />
+                        <div class="image-container">
+                            <img src="@imgSrc" title="@item.Name" class="image-small" style="max-height: 50px" />
+                            <img src="@imgSrc" title="@item.Name" class="image-large" />
+                        </div>
                     </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
@@ -92,11 +95,13 @@
 @section Scripts
 {
     <partial name="_DataTableScripts" />
+    <partial name="_ShowImageModalScripts" />
 
     <script>
         $(document).ready(function () {
             $('#personIndex').DataTable({
                 ordering: true,
+                order: [[1, 'asc']],
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 iDisplayLength: 10,
                 fixedHeader: {
@@ -106,8 +111,33 @@
                     orderable: false,
                     targets: [10, 11]
                 }],
-                searchHighlight: true
+                searchHighlight: true,
+                // columns: 
+                // [
+                //     { type: 'html' },       
+                //     { type: 'html'},        
+                //     { type: 'html-num'},    
+                //     { type: 'date'},        
+                //     { type: 'date'},        
+                //     { type: 'html' },       
+                //     { type: 'html-num'},    
+                //     { type: 'html-num'},    
+                //     { type: 'html-num'},    
+                //     { type: 'html'},        
+                //     { type: 'html'},        
+                //     null,                   
+                //     null                    
+                // ]                           
             });
+
+            $('#personIndex tbody').on('mouseenter', '.image-container', function () {
+                onMouseEnter(this);
+            });
+
+            $('#personIndex tbody').on('mouseleave', '.image-container', function () {
+                onMouseLeave(this);
+            });
+        
         })
     </script>
 }

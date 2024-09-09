@@ -21,6 +21,10 @@
     {
       "library": "bootstrap-select@1.13.18",
       "destination": "wwwroot/bootstrap-select/"
+    },
+    {
+      "library": "Dropify@0.2.2",
+      "destination": "wwwroot/Dropify/"
     }
   ]
 }

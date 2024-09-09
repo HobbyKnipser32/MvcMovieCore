@@ -54,7 +54,7 @@
                     <table class="table table-striped compact nowrap" id="birthdayTable">
                         <thead>
                             <tr>
-                                <th></th>
+                                <th style="width:40px">&nbsp;</th>
                                 <th>Name</th>
                                 <th>Aktuelles Alter</th>
                                 <th>Nationalität</th>
@@ -71,7 +71,7 @@
                     <table class="table table-striped compact" id="obitTable">
                         <thead>
                             <tr>
-                                <th></th>
+                                <th style="width:40px">&nbsp;</th>
                                 <th>Name</th>
                                 <th>Aktuelles Alter</th>
                                 <th>Nationalität</th>
@@ -88,6 +88,7 @@
 @section Scripts
 {
     <partial name="_DataTableScripts" />
+    <partial name="_ShowImageModalScripts" />
 
     <script>
         $(document).ready(function () {
@@ -113,10 +114,14 @@
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
                                 var src = '@imageSource' + '/' + data;
-                                return '<img src="' + src + '"  title = "' + full["Name"] + '" / style="max-width: 100%; max-height: 50px">';
+                                return '<div class="image-container">'
+                                    + '<img src="' + src + '" class="image-small" style="max-height: 50px">'
+                                    + '<img src="' + src + '" class="image-large">'
+                                    + '</div>';
                             }
                             return '';
-                        }
+                        },
+                        type: 'html'
                     },
                     {
                         data: 'Id',
@@ -126,13 +131,32 @@
                                 return '<a href="' + url + '" title="ansehen">' + full["Name"];
                             }
                             return '';
-                        }
+                        },
+                        type: 'html'
                     },
-                    { data: 'ActorsAge' },
-                    { data: 'Nationality.Name' },
-                    { data: 'PersonType.Name' },
-                    { data: 'Sex.Name' },
+                    { 
+                        data: 'ActorsAge',
+                        type: 'num'
+                    },
+                    { 
+                        data: 'Nationality.Name',
+                        type: 'html'
+                    },
+                    { 
+                        data: 'PersonType.Name',
+                        type: 'html'
+                    },
+                    {   
+                        data: 'Sex.Name',
+                        type: 'html'
+                    },
                 ],
+                // columnDefs: 
+                // [
+                //         {type: 'html'}, t
+                //     {type: 'num', targets: 2}
+                // ],
+                order: [[4, 'asc'],[2, 'desc'],[1, 'asc']],
                 searching: false,
                 fixedHeader: {
                     header: true,
@@ -148,6 +172,15 @@
                 },
                 responsive: true,
             });
+
+            $('#birthdayTable tbody').on('mouseenter', '.image-container', function () {
+                onMouseEnter(this);
+            });
+
+            $('#birthdayTable tbody').on('mouseleave', '.image-container', function () {
+                onMouseLeave(this);
+            });
+
             $('#obitTable').DataTable({
                 ordering: true,
                 ajax: {
@@ -160,7 +193,10 @@
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
                                 var src = '@imageSource' + '/' + data;
-                                return '<img src="' + src + '"  title = "' + full["Name"] + '" / style="max-width: 100%; max-height: 50px">';
+                                return '<div class="image-container">'
+                                    + '<img src="' + src + '" class="image-small" style="max-height: 35px">'
+                                    + '<img src="' + src + '" class="image-large">'
+                                    + '</div>';
                             }
                             return '';
                         }
@@ -187,6 +223,7 @@
                 },
                 lengthMenu: [[5, 10, -1], [5, 10, "All"]],
                 iDisplayLength: 5,
+                order: [[1, 'asc']],
                 // layout: {
                 //     topStart: 'pageLength',
                 //     topEnd: 'paging',
@@ -195,6 +232,14 @@
                 // },
                 responsive: true,
                 //dom: 'lpftrip',
+            });
+
+            $('#obitTable tbody').on('mouseenter', '.image-container', function () {
+                onMouseEnter(this);
+            });
+
+            $('#obitTable tbody').on('mouseleave', '.image-container', function () {
+                onMouseLeave(this);
             });
         })
     </script>

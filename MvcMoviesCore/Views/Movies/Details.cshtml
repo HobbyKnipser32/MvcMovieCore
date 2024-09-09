@@ -199,6 +199,8 @@
 @section Scripts
 {
     <partial name="_DataTableScripts" />
+    <partial name="_ShowImageModalScripts" />
+
 
     <script>
         $(document).ready(function () {
@@ -235,7 +237,10 @@
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
                                 var src = '@imageSource' + '/' + data;
-                                return '<img src="' + src + '"  title = "' + full["Name"] + '" / style="max-width: 100%; max-height: 50px">';
+                                return '<div class="image-container">'
+                                    + '<img src="' + src + '" class="image-small" style="max-height: 50px">'
+                                    + '<img src="' + src + '" class="image-large">'
+                                    +'</div>';
                             }
                             return '';
                         }
@@ -280,6 +285,7 @@
                     }
                 ],
                 ordering: true,
+                order: [[1]],
                 info: false,
                 paging: false,
                 bFilter: false,
@@ -290,14 +296,15 @@
                     footer: false
                 },
                 columnDefs: [{ className: 'compact', targets: [0] }],
-                // columnDefs: [
-                //     {
-                //         targets: [0, 1, 2, 3, 4],
-                //         searchable: true,
-                //         className: 'compact'
-                //     }
-                // ],
                 searchHighlight: true
+            });
+
+            $('#movieDetails tbody').on('mouseenter', '.image-container', function () {
+                onMouseEnter(this);
+            });
+
+            $('#movieDetails tbody').on('mouseleave', '.image-container', function () {
+                onMouseLeave(this);
             });
         });
 

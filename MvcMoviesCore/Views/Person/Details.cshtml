@@ -14,8 +14,9 @@
         <div class="col-sm-2">
             <div class="card">
                 <div class="card-body" style="max-height: 225px">
-                    <div class="media">
-                        <img src="@imgSrc" alt="@person" style="max-width: 100%; max-height: 200px; display: block;  margin-left: auto;  margin-right: auto;" onclick="this.requestFullscreen()" />
+                    <div class="image-container" onmousenter="onMouseEnter(this)" onmouseleave="onMouseLeave(this)">
+                        <img src="@imgSrc" alt="@person" class="image-small" style="max-height: 200px" /> @* // onclick="this.requestFullscreen()" /> *@
+                        <img src="@imgSrc" alt="@person" class="image-large" />
                     </div>
                 </div>
             </div>
@@ -219,6 +220,7 @@
 @section Scripts
 {
     <partial name="_DataTableScripts" />
+    <partial name="_ShowImageModalScripts" />
 
     <script>
         $(document).ready(function () {
@@ -304,6 +306,13 @@
             else {
                 $('#adultStuff').hide();
             };
+
+            $('.image-container').on('mouseenter', function () {
+                onMouseEnter(this);
+            });
+            $('.image-container').on('mouseleave', function () {
+                onMouseLeave(this);
+            });
         })
     </script>
 }
