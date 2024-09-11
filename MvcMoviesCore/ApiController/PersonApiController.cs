@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace MvcMoviesCore.ApiController
 {
@@ -45,8 +46,36 @@ namespace MvcMoviesCore.ApiController
 
         #region public functions
 
-        [HttpGet("{personId}")]
-        public async Task<IActionResult> Get(Guid personId)
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var persons = await _context.Person
+                                  .Include(i => i.PersonType)
+                                  .Include(i => i.Sex)
+                                  .Include(i => i.Nationality)
+                                  .OrderBy(o => o.Name)
+                                  .ToListAsync();
+
+            if (!_showAdult)
+            {
+                var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
+                if (personType != null)
+                    persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id)).ToList();
+            }
+
+            persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
+            persons.ForEach(f => f.MoviesPerson = null);
+            persons.ForEach(f => f.Nationality.Person = null);
+            persons.ForEach(f => f.PersonType.Person = null);
+            persons.ForEach(f => f.Sex.Person = null);
+
+            var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            var jsonResult = JsonConvert.SerializeObject(persons, Formatting.Indented, jsonSerializerSettings);
+            return Ok(jsonResult);
+        }
+
+        [HttpGet("GetScenes/{personId}")]
+        public async Task<IActionResult> GetScenes(Guid personId)
         {
             List<PersonSceneViewModel> personScenes = [];
             var personMovies = await _context.MoviesPerson.Where(w => w.PersonId.Equals(personId)).ToListAsync();

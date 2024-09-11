@@ -93,28 +93,29 @@ namespace MvcMoviesCore.Controllers
         }
 
         // GET: Person
-        public IActionResult Index(string filter = null)
+        public IActionResult Index()
         {
-            var persons = _context.Person
-                                  .Include(i => i.PersonType)
-                                  .Include(i => i.Sex)
-                                  .Include(i => i.Nationality)
-                                  .OrderBy(o => o.Name)
-                                  .AsQueryable();
-            if (!string.IsNullOrWhiteSpace(filter))
-                persons = persons.Where(w => w.Name.Contains(filter));
+            //var persons = _context.Person
+            //                      .Include(i => i.PersonType)
+            //                      .Include(i => i.Sex)
+            //                      .Include(i => i.Nationality)
+            //                      .OrderBy(o => o.Name)
+            //                      .AsQueryable();
+            //if (!string.IsNullOrWhiteSpace(filter))
+            //    persons = persons.Where(w => w.Name.Contains(filter));
 
-            if (!_showAdult)
-            {
-                var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
-                if (personType != null)
-                    persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id));
-            }
+            //if (!_showAdult)
+            //{
+            //    var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
+            //    if (personType != null)
+            //        persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id));
+            //}
 
-            persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
+            //persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
 
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
-            return View(persons);
+            //return View(persons);
+            return View();
         }
 
         public IActionResult FilterNationality(Guid id)
