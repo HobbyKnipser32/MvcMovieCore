@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
+using MvcMoviesCore.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -95,26 +96,8 @@ namespace MvcMoviesCore.Controllers
         // GET: Person
         public IActionResult Index()
         {
-            //var persons = _context.Person
-            //                      .Include(i => i.PersonType)
-            //                      .Include(i => i.Sex)
-            //                      .Include(i => i.Nationality)
-            //                      .OrderBy(o => o.Name)
-            //                      .AsQueryable();
-            //if (!string.IsNullOrWhiteSpace(filter))
-            //    persons = persons.Where(w => w.Name.Contains(filter));
-
-            //if (!_showAdult)
-            //{
-            //    var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
-            //    if (personType != null)
-            //        persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id));
-            //}
-
-            //persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
 
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
-            //return View(persons);
             return View();
         }
 
@@ -233,10 +216,11 @@ namespace MvcMoviesCore.Controllers
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
             if (!string.IsNullOrEmpty(person.Image))
                 ViewData["ImageSource"] = $"{_originalFileDirectory}/{person.Image}";
-            //ViewData["ImageSource"] = Path.Combine(_webHostEnvironment.ContentRootPath, _originalFilePath, "images", person.Image);
             else
                 ViewData["ImageSource"] = string.Empty;
-            return View(person);
+
+            var personEdit = new PersonViewModel(person);
+            return View(personEdit);
         }
 
         // POST: Person/Edit/5

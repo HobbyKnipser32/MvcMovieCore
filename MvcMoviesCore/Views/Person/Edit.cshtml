@@ -1,4 +1,4 @@
-﻿@model global::MvcMoviesCore.Models.Person
+﻿@model global::MvcMoviesCore.ViewModels.PersonViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -26,25 +26,8 @@
             <div class="card">
                 <div class="card-body" style="max-height: 278px">
                     <div class="image-container">
-                        <input asp-for="Image" type="file" accept="image/*" class="dropify" />
-                        @* <img src="@imgSrc" alt="@personName" class="dropify small-image" style="max-height: 253px" /> *@
+                        <input asp-for="SelectedFile" type="file" accept="image/*" class="dropify" data-default-file="@imgSrc" />
                     </div>
-                    @* @if (!string.IsNullOrEmpty(imgSrc))
-                    {
-                        <div class="media">
-                            <img src="@imgSrc" alt="@personName" style="max-width: 100%; max-height: 253px; display: block;  margin-left: auto;  margin-right: auto;" />
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="col-sm-12" id="dropzone">
-                            <div action="/Person/Upload" class="dropzone" id="uploader">
-                                <div class="fallback">
-                                    <input type="file" id="file" />
-                                </div>
-                            </div>
-                        </div>
-                    } *@
                 </div>
             </div>
         </div>
@@ -179,8 +162,9 @@
         <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
     </a>
 </p>
-@* <script src="~/dropify/js/dropify.min.js"></script> *@
+
 <script src="~/js/dropifyimageupload.js"></script>
+
 @section Scripts {
     <script>
         $(document).ready(function () {

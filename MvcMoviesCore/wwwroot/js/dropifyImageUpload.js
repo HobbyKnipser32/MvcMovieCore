@@ -1,7 +1,7 @@
 ﻿class dropifyImage {
 
     static Draw(imageAttributes, customMessages) {
-        var drEvent = $("#SelectedFile").dropify({
+        var drEvent = $('.dropify').dropify({
             maxFileSize: '10M',
             allowedFileExtensions: 'xbm tif jfif ico tiff gif svg jpeg svgz jpg webp png bmp pjp apng pjpeg avif',
             messages: customMessages
@@ -11,8 +11,8 @@
         });
 
         if (imageAttributes.imageContent) {
-            var b64Data = 'data:image/*;base64,' + imageAttributes.imageContent;
-            dropifyImage.SetPreview('SelectedFile', b64Data, imageAttributes.imageName);
+            //var b64Data = 'data:image/*;base64,' + imageAttributes.imageContent;
+            dropifyImage.SetPreview('SelectedFile', imageAttributes.imageContent, imageAttributes.imageName);
         }
     }
 

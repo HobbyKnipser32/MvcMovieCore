@@ -24,7 +24,7 @@
     },
     {
       "library": "Dropify@0.2.2",
-      "destination": "wwwroot/Dropify/"
+      "destination": "wwwroot/lib/Dropify/"
     }
   ]
 }
