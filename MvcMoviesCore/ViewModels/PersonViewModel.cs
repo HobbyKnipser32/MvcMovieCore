@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MvcMoviesCore.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System;
-using Microsoft.CodeAnalysis.Options;
 
 namespace MvcMoviesCore.ViewModels
 {
     public class PersonViewModel : Person
     {
+        public PersonViewModel() { }
+
         public PersonViewModel(Person person)
         {
             Id = person.Id;

@@ -47,7 +47,12 @@
         {
             var imgSrc = originalFileDirectory + "/" + @item.Image;
             <tr>
-                <td><img src="@imgSrc" title="@item.Name" style="max-width: 100%; max-height: 50px" /></td>             @* 0 *@
+                <td>                                                                                                    @* 0 *@
+                    <div class="image-container">
+                        <img src="@imgSrc" class="image-small" title="@item.Name" style="max-height: 50px" />
+                        <img src="@imgSrc" class="image-large" title="@item.Name" />
+                    </div>
+                </td>             
                 <td><a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a></td>   @* 1 *@
                 <td>@Html.DisplayFor(modelItem => item.ActorsAge)</td>                                                  @* 2 *@
                 <td>@Html.DisplayFor(modelItem => item.Nationality.Name)</td>                                           @* 3 *@
@@ -85,6 +90,7 @@
 @section Scripts
 {
     <partial name="_DataTableScripts" />
+    <partial name="_ShowImageModalScripts" />
 
     <script>
         $(document).ready(function () {
@@ -104,6 +110,14 @@
                 columnDefs: [
                     { 'orderable': false, 'targets': 0 }
                 ],
+            });
+
+            $('#birthdayTable tbody').on('mouseenter', '.image-container', function () {
+                onMouseEnter(this);
+            });
+
+            $('#birthdayTable tbody').on('mouseleave', '.image-container', function () {
+                onMouseLeave(this);
             });
         })
     </script>

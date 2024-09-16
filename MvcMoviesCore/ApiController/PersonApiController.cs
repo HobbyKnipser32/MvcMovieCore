@@ -225,7 +225,7 @@ namespace MvcMoviesCore.ApiController
         }
 
         [HttpPost("Update")]
-        public async Task<IActionResult> Update([FromForm] Person person)
+        public async Task<IActionResult> Update([FromForm] PersonViewModel person)
         {
             try
             {

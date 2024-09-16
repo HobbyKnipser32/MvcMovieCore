@@ -180,20 +180,26 @@ namespace MvcMoviesCore.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness")] Person person)
+            [Bind("Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness,SelectedFile")] PersonViewModel personViewModel)
         {
+            Person person = new();
+
             if (ModelState.IsValid)
             {
-                person.Id = Guid.NewGuid();
+                person = await MapAsync(personViewModel);
+                if (personViewModel.SelectedFile != null)
+                {
+                    person.Image = SaveFile(personViewModel.SelectedFile, person.Id.ToString());
+                }
                 _context.Add(person);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", person.PersonTypesId);
-            ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", person.SexId);
-            ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypesId);
+            ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", personViewModel.SexId);
+            ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", personViewModel.NationalityId);
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
-            return View(person);
+            return View(personViewModel);
         }
 
         // GET: Person/Edit/5
@@ -229,9 +235,9 @@ namespace MvcMoviesCore.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id,
-            [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness")] Person person)
+            [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness,SelectedFile")] PersonViewModel personViewModel)
         {
-            if (id != person.Id)
+            if (id != personViewModel.Id)
             {
                 return NotFound();
             }
@@ -240,12 +246,22 @@ namespace MvcMoviesCore.Controllers
             {
                 try
                 {
+                    var person = await MapAsync(personViewModel);
+                    if (personViewModel.SelectedFile != null)
+                    {
+                        person.Image = SaveFile(personViewModel.SelectedFile, person.Id.ToString());
+                    }
+                    else
+                    {
+                        person.Image = null;
+                    }
+
                     _context.Update(person);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonExists(person.Id))
+                    if (!PersonExists(personViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -256,12 +272,12 @@ namespace MvcMoviesCore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", person.PersonTypesId);
-            ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", person.SexId);
-            ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
+            ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypesId);
+            ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", personViewModel.SexId);
+            ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", personViewModel.NationalityId);
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
-            ViewData["ImageSource"] = $"/{_originalFileDirectory}/{person.Image}";
-            return View(person);
+            ViewData["ImageSource"] = $"/{_originalFileDirectory}/{personViewModel.Image}";
+            return View(personViewModel);
         }
 
         // GET: Person/Delete/5
@@ -404,6 +420,65 @@ namespace MvcMoviesCore.Controllers
             return string.Empty;
         }
 
+        private async Task<Person> MapAsync(PersonViewModel personViewModel)
+        {
+            var existsPerson = await _context.Person.FirstOrDefaultAsync(f => f.Id.Equals(personViewModel.Id));
+            if (existsPerson != null)
+            {
+                existsPerson.Birthday = personViewModel.Birthday;
+                existsPerson.Classification = personViewModel.Classification;
+                existsPerson.CupSize = personViewModel.CupSize;
+                existsPerson.EndOfBusiness = personViewModel.EndOfBusiness;
+                existsPerson.FakeBoobs = personViewModel.FakeBoobs;
+                existsPerson.Height = personViewModel.Height;
+                existsPerson.Name = personViewModel.Name;
+                existsPerson.NationalityId = personViewModel.NationalityId;
+                existsPerson.Obit = personViewModel.Obit;
+                existsPerson.PersonTypesId = personViewModel.PersonTypesId;
+                existsPerson.SexId = personViewModel.SexId;
+                existsPerson.StartOfBusiness = personViewModel.StartOfBusiness;
+                existsPerson.Weight = personViewModel.Weight;
+            }
+            else
+            {
+                existsPerson=new Person()
+                {
+                    Birthday = personViewModel.Birthday,
+                    Classification = personViewModel.Classification,
+                    CupSize = personViewModel.CupSize,
+                    EndOfBusiness = personViewModel.EndOfBusiness,
+                    FakeBoobs = personViewModel.FakeBoobs,
+                    Height = personViewModel.Height,
+                    Id = Guid.NewGuid(),
+                    Name = personViewModel.Name,
+                    NationalityId = personViewModel.NationalityId,
+                    Obit = personViewModel.Obit,
+                    PersonTypesId = personViewModel.PersonTypesId,
+                    SexId = personViewModel.SexId,
+                    StartOfBusiness = personViewModel.StartOfBusiness,
+                    Weight = personViewModel.Weight,
+                };
+            }
+            return existsPerson;
+        }
+
+        private string SaveFile(IFormFile file, string newFileName)
+        {
+            if (file == null) return string.Empty;
+
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, _originalFilePath);
+            if (!Directory.Exists(filePath))
+                Directory.CreateDirectory(filePath);
+
+            var originalFileExtension = Path.GetExtension(file.FileName);
+            newFileName += originalFileExtension;
+            filePath = Path.Combine(filePath, newFileName);
+
+            using var stream = System.IO.File.Create(filePath);
+            file.CopyTo(stream);
+
+            return newFileName;
+        }
 
         #endregion
     }

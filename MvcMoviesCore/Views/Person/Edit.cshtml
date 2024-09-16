@@ -16,7 +16,7 @@
 
 <h4>bearbeiten</h4>
 <hr />
-@* <form class="card-form-horizontal" method="post"> *@
+<form class="card-form-horizontal" method="post" enctype="multipart/form-data">
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <input type="hidden" asp-for="Id" id="id" />
 
@@ -149,13 +149,14 @@
     <div class="col-md-12">
         <div class="row">
             <div class="form-group col-md-3">
-                <button onclick="save()" title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
-            </div>
+                <button title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
+                    @* <button onclick="save()" title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " /> *@
+                </div>
         </div>
     </div>
 
 </div>
-@* </form> *@
+</form>
 
 <p>
     <a asp-action="Index" title="zurück zur Liste">
@@ -220,6 +221,7 @@
                 "StartOfBusiness": $('#startOfBusiness').val(),
                 "EndOfBusiness": $('#endOfBusiness').val(),
                 "Image": fileName,
+                "SelectedFile": $('#SelectedFile').val(),
             }
             var url = appRootPath + '/api/PersonApi/Update';
             $.post(url, person, function () {
