@@ -45,15 +45,28 @@
     <tbody>
         @foreach (var item in Model)
         {
-            var imgSrc = originalFileDirectory + "/" + @item.Image;
             <tr>
-                <td>                                                                                                    @* 0 *@
+                <td>
+                    @* 0 *@
                     <div class="image-container">
-                        <img src="@imgSrc" class="image-small" title="@item.Name" style="max-height: 50px" />
-                        <img src="@imgSrc" class="image-large" title="@item.Name" />
+                        @if (string.IsNullOrEmpty(item.Image))
+                        {
+                            <img src="/images/noimageexists.png" class="image-small" style="max-height: 50px" />
+                        }
+                        else
+                        {
+                            var imgSrc = originalFileDirectory + "/" + @item.Image;
+                            <img src="@imgSrc" class="image-small" title="@item.Name" style="max-height: 50px" />
+                            <img src="@imgSrc" class="image-large" />
+                        }
                     </div>
-                </td>             
-                <td><a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a></td>   @* 1 *@
+                </td>
+                <td>
+                    @* 1 *@
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </a>
+                </td>
                 <td>@Html.DisplayFor(modelItem => item.ActorsAge)</td>                                                  @* 2 *@
                 <td>@Html.DisplayFor(modelItem => item.Nationality.Name)</td>                                           @* 3 *@
                 <td>@Html.DisplayFor(modelItem => item.PersonType.Name)</td>                                            @* 4 *@
@@ -64,12 +77,18 @@
             @foreach (var movies in item.MoviesPerson)
             {
                 <tr>
-                    <td></td>                                                                                                                                               @* 0 *@
-                    <td>@Html.DisplayFor(modelItem => item.Name)</td>                                                                                                       @* 1 *@
-                    <td><a asp-area="" asp-controller="Movies" asp-action="Details" asp-route-id="@movies.MoviesId">@Html.DisplayFor(movie => movies.Movies.Name)</a></td>  @* 2 *@
-                    <td>@Html.DisplayFor(movie => movies.Movies.ActorsAge)</td>                                                                                             @* 3 *@
-                    <td>@Html.DisplayFor(modelItem => item.PersonType.Name)</td>                                                                                            @* 4 *@
-                    <td>                                                                                                                                                    @* 5 *@
+                    <td>&nbsp;</td>                                                                                     @* 0 *@
+                    <td>&nbsp;</td>                                                   @* 1 @Html.DisplayFor(modelItem => item.Name) *@
+                    <td>
+                        @* 2 *@
+                        <a asp-area="" asp-controller="Movies" asp-action="Details" asp-route-id="@movies.MoviesId">
+                            @Html.DisplayFor(movie => movies.Movies.Name)
+                        </a>
+                    </td>
+                    <td>@Html.DisplayFor(movie => movies.Movies.ActorsAge)</td>                                         @* 3 *@
+                    <td>@Html.DisplayFor(modelItem => item.PersonType.Name)</td>                                        @* 4 *@
+                    <td>
+                        @* 5 *@
                         @if (string.IsNullOrEmpty(movies.Practices))
                         {
                             @Html.DisplayFor(movie => movies.MovieRole.Name)
@@ -79,8 +98,8 @@
                             @Html.DisplayFor(movie => movies.Practices)
                         }
                     </td>
-                    <td></td>                                                                                                                                               @* 6 *@
-                    <td></td>                                                                                                                                               @* 7 *@
+                    <td></td>                                                                                           @* 6 *@
+                    <td></td>                                                                                           @* 7 *@
                 </tr>
             }
         }
@@ -103,13 +122,15 @@
                     header: true,
                     footer: false
                 },
-                order: [
-                    [4, 'asc'],
-                    [1, 'asc']
-                ],
-                columnDefs: [
-                    { 'orderable': false, 'targets': 0 }
-                ],
+                // order: [
+                //     [4, 'asc'],
+                //     [1, 'asc']
+                // ],
+                orderable: false,
+                ordering: false,
+                // columnDefs: [
+                //     { 'orderable': false, 'targets': 0 }
+                // ],
             });
 
             $('#birthdayTable tbody').on('mouseenter', '.image-container', function () {
