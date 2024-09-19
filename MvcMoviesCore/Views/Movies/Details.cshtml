@@ -112,10 +112,10 @@
             <div id="actorsTab" class="tab-pane active">
                 <hr />
                 <h4>Darsteller</h4>
-                <table class="table hover cell-border compact stripe" id="movieDetails">
+                <table class="material-datatables table hover cell-border compact stripe" id="movieDetails">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th class="disabled-sorting"></th>
                             <th>Name</th>
                             <th>Geschlecht</th>
                             <th>Alter beim Dreh</th>
@@ -205,27 +205,6 @@
     <script>
         $(document).ready(function () {
             const movieId = '@Model.Id';
-            // if ($('#scenesTable')) {
-            //     $('#scenesTable').DataTable({
-            //         ordering: true,
-            //         paging: false,
-            //         //bFilter: false,
-            //         lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-            //         iDisplayLength: -1,
-            //         fixedHeader: {
-            //             header: true,
-            //             footer: false
-            //         },
-            //         // columnDefs: [
-            //         //     {
-            //         //         targets: [0],
-            //         //         searchable: true,
-            //         //         className: 'compact'
-            //         //     }
-            //         // ],
-            //         searchHighlight: true
-            //     });
-            // }
             $('#movieDetails').DataTable({
                 ajax: {
                     url: appRootPath + '/api/MoviesApi/' + movieId,
@@ -234,16 +213,25 @@
                 columns: [
                     {
                         data: 'Person.Image',
-                        render: function (data, type, full, meta) {
-                            if (data && type === 'display') {
+                        render: function (data, type) {
+                            if (type === 'display') {
+                            if (data ) {
                                 var src = '@imageSource' + '/' + data;
                                 return '<div class="image-container">'
                                     + '<img src="' + src + '" class="image-small" style="max-height: 50px">'
                                     + '<img src="' + src + '" class="image-large">'
                                     +'</div>';
+                                }
+                                else {
+                                return '<div class="image-container">'
+                                    + '<img src="/images/noimageexists.png" class="image-small" style="max-height: 50px" />'
+                                    + '</div>';
+
+                                }
                             }
                             return '';
-                        }
+                        },
+                        orderable: false
                     },
                     {
                         data: 'Person',
@@ -277,7 +265,8 @@
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
                                 var id = "'" + data + "'";
-                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + id + ')" title="Verknüpfung löschen">' +
+                                var actor = "'" + full.Person.Name + "'";
+                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + id + ', ' + actor + ')" title="Verknüpfung löschen">' +
                                     '<i class="fa-solid fa-eraser fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
@@ -308,9 +297,9 @@
             });
         });
 
-        function deleteLink(id) {
+        function deleteLink(id, actor) {
             Swal.fire({
-                text: 'Verknüpfung löschen?',
+                text: 'Verknüpfung mit ' + actor + ' löschen?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

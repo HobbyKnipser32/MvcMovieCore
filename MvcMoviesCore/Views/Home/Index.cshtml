@@ -121,7 +121,8 @@
                             }
                             return '';
                         },
-                        type: 'html'
+                        type: 'html',
+                        orderable: false
                     },
                     {
                         data: 'Id',
@@ -151,11 +152,6 @@
                         type: 'html'
                     },
                 ],
-                // columnDefs: 
-                // [
-                //         {type: 'html'}, t
-                //     {type: 'num', targets: 2}
-                // ],
                 order: [[4, 'asc'],[2, 'desc'],[1, 'asc']],
                 searching: false,
                 fixedHeader: {
@@ -199,7 +195,8 @@
                                     + '</div>';
                             }
                             return '';
-                        }
+                        },
+                        orderable: false
                     },
                     {
                         data: 'Id',
