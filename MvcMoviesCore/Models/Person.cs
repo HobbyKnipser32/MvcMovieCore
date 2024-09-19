@@ -1,5 +1,6 @@
 namespace MvcMoviesCore.Models
 {
+    using MovieExcelImporter._02.Entities;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -68,6 +69,8 @@ namespace MvcMoviesCore.Models
 #endif
             }
         }
+
+        public virtual ICollection<PersonImage> Images { get; set; }
 
         public virtual ICollection<MoviesPerson> MoviesPerson { get; set; }
 

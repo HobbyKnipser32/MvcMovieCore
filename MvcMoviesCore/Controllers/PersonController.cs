@@ -141,6 +141,7 @@ namespace MvcMoviesCore.Controllers
                 .Include(i => i.PersonType)
                 .Include(i => i.Sex)
                 .Include(i => i.Nationality)
+                .Include(i => i.Images)
                 .Include(i => i.MoviesPerson)
                 .ThenInclude(t => t.MovieRole)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -292,6 +293,7 @@ namespace MvcMoviesCore.Controllers
                 .Include(i => i.PersonType)
                 .Include(i => i.Sex)
                 .Include(i => i.Nationality)
+                .Include(i => i.Images)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
@@ -441,7 +443,7 @@ namespace MvcMoviesCore.Controllers
             }
             else
             {
-                existsPerson=new Person()
+                existsPerson = new Person()
                 {
                     Birthday = personViewModel.Birthday,
                     Classification = personViewModel.Classification,

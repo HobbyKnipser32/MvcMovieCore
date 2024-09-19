@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MovieExcelImporter._02.Entities;
 
 // ReSharper disable once CheckNamespace
 namespace MvcMoviesCore.Models
@@ -34,5 +35,7 @@ namespace MvcMoviesCore.Models
         public DbSet<Scenes> Scenes { get; set; }
 
         public DbSet<MovieRole> MovieRole { get; set; }
+
+        public DbSet<PersonImage> PersonImage { get; set; }
     }
 }

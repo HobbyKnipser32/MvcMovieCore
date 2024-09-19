@@ -299,7 +299,8 @@
 
         function deleteLink(id, actor) {
             Swal.fire({
-                text: 'Verknüpfung mit ' + actor + ' löschen?',
+                // text: 'Verknüpfung mit ' + actor + ' löschen?',
+                html: 'Verknüpfung mit <b>' + actor + '</b> löschen?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
