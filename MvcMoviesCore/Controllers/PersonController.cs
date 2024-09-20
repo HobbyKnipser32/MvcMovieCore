@@ -141,7 +141,7 @@ namespace MvcMoviesCore.Controllers
                 .Include(i => i.PersonType)
                 .Include(i => i.Sex)
                 .Include(i => i.Nationality)
-                .Include(i => i.Images)
+                .Include(i => i.PersonImages)
                 .Include(i => i.MoviesPerson)
                 .ThenInclude(t => t.MovieRole)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -293,7 +293,7 @@ namespace MvcMoviesCore.Controllers
                 .Include(i => i.PersonType)
                 .Include(i => i.Sex)
                 .Include(i => i.Nationality)
-                .Include(i => i.Images)
+                .Include(i => i.PersonImages)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {

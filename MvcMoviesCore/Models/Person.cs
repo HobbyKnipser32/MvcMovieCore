@@ -70,7 +70,7 @@ namespace MvcMoviesCore.Models
             }
         }
 
-        public virtual ICollection<PersonImage> Images { get; set; }
+        public virtual ICollection<PersonImage> PersonImages { get; set; }
 
         public virtual ICollection<MoviesPerson> MoviesPerson { get; set; }
 
