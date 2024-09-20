@@ -161,11 +161,14 @@ namespace MvcMoviesCore.Controllers
             person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication).ToList();
 
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
-            if (!string.IsNullOrEmpty(person.Image))
-                ViewData["ImageSource"] = $"{_originalFileDirectory}/{person.Image}";
-            else
-                ViewData["ImageSource"] = string.Empty;
+            ViewData["ImageSource"] = string.Empty;
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
+            if (person.PersonImages != null && person.PersonImages.Any())
+            {
+                var personImage = person.PersonImages.FirstOrDefault(f => f.IsMain == true);
+                if (personImage != null)
+                    ViewData["ImageSource"] = $"{_originalFileDirectory}/{personImage.Name}";
+            }
             return View(person);
         }
 
