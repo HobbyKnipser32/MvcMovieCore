@@ -28,5 +28,7 @@ namespace MvcMoviesCore.ViewModels
         }
 
         public IFormFile SelectedFile { get; set; }
+
+        public string PreviousPage { get; set; }
     }
 }

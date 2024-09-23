@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MovieExcelImporter._02.Entities;
 using MvcMoviesCore.Models;
 using MvcMoviesCore.ViewModels;
 using System;
@@ -58,7 +60,15 @@ namespace MvcMoviesCore.Controllers
                     var fileNameWithExtension = file[(lastBackSlash + 1)..];
                     var lastDot = fileNameWithExtension.LastIndexOf('.');
                     var fileName = fileNameWithExtension[..lastDot];
-                    var personId = new Guid(fileName);
+                    Guid personId;
+                    try
+                    {
+                        personId = new Guid(fileName);
+                    }
+                    catch(Exception)
+                    {
+                        continue;
+                    }
                     var person = _context.Person.FirstOrDefaultAsync(x => x.Id == personId).GetAwaiter().GetResult();
                     if (person != null && string.IsNullOrEmpty(person.Image))
                     {
@@ -163,7 +173,9 @@ namespace MvcMoviesCore.Controllers
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
             ViewData["ImageSource"] = string.Empty;
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
-            if (person.PersonImages != null && person.PersonImages.Any())
+            if (!string.IsNullOrEmpty(person.Image))
+                ViewData["ImageSource"] = $"{_originalFileDirectory}/{person.Image}";
+            else if (person.PersonImages != null && person.PersonImages.Any())
             {
                 var personImage = person.PersonImages.FirstOrDefault(f => f.IsMain == true);
                 if (personImage != null)
@@ -229,7 +241,10 @@ namespace MvcMoviesCore.Controllers
             else
                 ViewData["ImageSource"] = string.Empty;
 
-            var personEdit = new PersonViewModel(person);
+            var personEdit = new PersonViewModel(person)
+            {
+                PreviousPage = Request.Headers.Referer
+            };
             return View(personEdit);
         }
 
@@ -239,7 +254,7 @@ namespace MvcMoviesCore.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id,
-            [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness,SelectedFile")] PersonViewModel personViewModel)
+            [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness,SelectedFile,PreviousPage")] PersonViewModel personViewModel)
         {
             if (id != personViewModel.Id)
             {
@@ -274,6 +289,8 @@ namespace MvcMoviesCore.Controllers
                         throw;
                     }
                 }
+                if (!string.IsNullOrEmpty(personViewModel.PreviousPage))
+                    return Redirect(personViewModel.PreviousPage);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypesId);

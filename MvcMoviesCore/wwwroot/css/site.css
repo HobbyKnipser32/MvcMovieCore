@@ -98,7 +98,7 @@ body {
 
 .image-small {
     /*display: block;*/
-    max-width: 100%;
+    max-width: auto;
     display: block;
     margin-left: auto;
     margin-right:auto;
