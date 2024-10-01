@@ -46,6 +46,40 @@ namespace MvcMoviesCore.ApiController
 
         #region public functions
 
+        [HttpGet("GetPersonsWithoutImage")]
+        public async Task<IActionResult> GetPersonsWithoutImage()
+        {
+            var persons = await _context.Person
+                                  .Include(i => i.PersonType)
+                                  .Include(i => i.Sex)
+                                  .Include(i => i.Nationality)
+                                  .Include(i => i.MoviesPerson)
+                                  .Where(w => string.IsNullOrEmpty(w.Image))
+                                  .OrderByDescending(o => o.MoviesPerson.Count)
+                                  .ThenBy(o => o.Name)
+                                  .ToListAsync();
+
+            if (!_showAdult)
+            {
+                var personType = await _context.PersonType.FirstOrDefaultAsync(f => f.Name.ToLower().Contains("adult"));
+                if (personType != null)
+                    persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id)).ToList();
+            }
+
+            persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
+            foreach (var person in persons)
+            {
+                person.MoviesPerson.ToList().ForEach(f => f.Person = null);
+            }
+            persons.ForEach(f => f.Nationality.Person = null);
+            persons.ForEach(f => f.PersonType.Person = null);
+            persons.ForEach(f => f.Sex.Person = null);
+
+            var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            var jsonResult = JsonConvert.SerializeObject(persons, Formatting.Indented, jsonSerializerSettings);
+            return Ok(jsonResult);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -53,6 +87,7 @@ namespace MvcMoviesCore.ApiController
                                   .Include(i => i.PersonType)
                                   .Include(i => i.Sex)
                                   .Include(i => i.Nationality)
+                                  .Include(i => i.MoviesPerson)
                                   .OrderBy(o => o.Name)
                                   .ToListAsync();
 
@@ -64,7 +99,11 @@ namespace MvcMoviesCore.ApiController
             }
 
             persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
-            persons.ForEach(f => f.MoviesPerson = null);
+            foreach (var person in persons)
+            {
+                person.MoviesPerson.ToList().ForEach(f => f.Person = null);
+            }
+            //persons.ForEach(f => f.MoviesPerson = null);
             persons.ForEach(f => f.Nationality.Person = null);
             persons.ForEach(f => f.PersonType.Person = null);
             persons.ForEach(f => f.Sex.Person = null);

@@ -46,6 +46,11 @@ namespace MvcMoviesCore.Controllers
 
         #region puclic functions
 
+        public IActionResult PersonsWithoutImage()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> UpdatedImages()
         {
             string filePath = Path.Combine(_webHostEnvironment.WebRootPath, _originalFilePath);
