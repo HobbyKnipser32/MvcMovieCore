@@ -7,6 +7,7 @@
     var nationalityId = ViewData["NationalityId"] as IEnumerable<SelectListItem>;
     var adultPersonType = ViewData["AdultPersonType"].ToString();
     var imgSrc = ViewData["ImageSource"].ToString();
+    var imagePath = ViewData["ImagePath"].ToString();
     var personName = Model.Name;
     var minValue = Model.Birthday.GetValueOrDefault().Year + 18;
     var maxValue = DateTime.Now.Year;
@@ -156,6 +157,34 @@
             </div>
         </div>
 
+        <div class="col-md-12">
+            <table id="imagesTable">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Hauptfoto</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        @foreach (var image in Model.Images)
+                        {
+                            var src = $"{imagePath}/{image.Name}";
+                            <td>
+                                <div class="image-container">
+                                    <img src="@src" class="image-small" style="max-height: 200px" />
+                                    <img src="@src" class="image-large" />
+                                </div>
+                            </td>
+                            <td>
+                                <input type="radio" name="images" checked="@image.IsMain" />
+                            </td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </form>
 
@@ -165,9 +194,12 @@
     </a>
 </p>
 
-<script src="~/js/dropifyimageupload.js"></script>
+
 
 @section Scripts {
+    <script src="~/js/dropifyimageupload.js"></script>
+    <partial name="_ShowImageModalScripts" />
+
     <script>
         $(document).ready(function () {
             var imageAttributes = {
@@ -198,6 +230,14 @@
                 else {
                     $('#adultStuff').hide();
                 };
+            });
+
+            $('#imagesTable tbody').on('mouseenter', '.image-container', function () {
+                onMouseEnter(this);
+            });
+
+            $('#imagesTable tbody').on('mouseleave', '.image-container', function () {
+                onMouseLeave(this);
             });
         });
 

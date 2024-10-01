@@ -1,6 +1,5 @@
 namespace MvcMoviesCore.Models
 {
-    using MovieExcelImporter._02.Entities;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

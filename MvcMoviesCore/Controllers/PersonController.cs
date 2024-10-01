@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using MovieExcelImporter._02.Entities;
 using MvcMoviesCore.Models;
 using MvcMoviesCore.ViewModels;
 using System;
@@ -13,7 +11,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace MvcMoviesCore.Controllers
 {
@@ -65,7 +62,7 @@ namespace MvcMoviesCore.Controllers
                     {
                         personId = new Guid(fileName);
                     }
-                    catch(Exception)
+                    catch (Exception)
                     {
                         continue;
                     }
@@ -226,7 +223,7 @@ namespace MvcMoviesCore.Controllers
                 return NotFound();
             }
 
-            var person = await _context.Person.FindAsync(id);
+            var person = await _context.Person.Include(i => i.PersonImages).FirstOrDefaultAsync(f => f.Id.Equals(id));
             if (person == null)
             {
                 return NotFound();
@@ -236,6 +233,7 @@ namespace MvcMoviesCore.Controllers
             ViewData["SexId"] = new SelectList(_context.Sex.OrderBy(o => o.Name), "Id", "Name", person.SexId);
             ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
+            ViewData["ImagePath"] = _originalFileDirectory;
             if (!string.IsNullOrEmpty(person.Image))
                 ViewData["ImageSource"] = $"{_originalFileDirectory}/{person.Image}";
             else

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MvcMoviesCore.Models;
+using System.Collections.Generic;
 
 namespace MvcMoviesCore.ViewModels
 {
@@ -25,10 +26,13 @@ namespace MvcMoviesCore.ViewModels
             EndOfBusiness = person.EndOfBusiness;
             Image = person.Image;
             ActorsAge = person.ActorsAge;
+            Images = person.PersonImages;
         }
 
         public IFormFile SelectedFile { get; set; }
 
         public string PreviousPage { get; set; }
+
+        public ICollection<PersonImage> Images { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MovieExcelImporter._02.Entities;
 
 // ReSharper disable once CheckNamespace
 namespace MvcMoviesCore.Models

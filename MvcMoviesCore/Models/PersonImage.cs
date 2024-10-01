@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MovieExcelImporter._02.Entities
+namespace MvcMoviesCore.Models
 {
     [Table("PersonImage")]
     public class PersonImage
