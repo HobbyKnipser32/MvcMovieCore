@@ -279,6 +279,19 @@ namespace MvcMoviesCore.ApiController
             }
         }
 
+        [HttpGet("GetImages/{personId}")]
+        public async Task<IActionResult> GetImages(Guid personId)
+        {
+            if (personId == Guid.Empty)
+                return BadRequest();
+
+            var images = await _context.PersonImage.Where(w => w.PersonId.Equals(personId)).ToListAsync();
+
+            var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            var jsonResult = JsonConvert.SerializeObject(images, Formatting.Indented, jsonSerializerSettings);
+            return Ok(jsonResult);
+        }
+
         #endregion
 
         #region private functions
