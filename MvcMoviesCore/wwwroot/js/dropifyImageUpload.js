@@ -1,6 +1,6 @@
 ﻿class dropifyImage {
 
-    static Draw(imageAttributes, customMessages) {
+    static DrawImage(imageAttributes, customMessages) {
         var drEvent = $('.dropify').dropify({
             maxFileSize: '10M',
             allowedFileExtensions: 'xbm tif jfif ico tiff gif svg jpeg svgz jpg webp png bmp pjp apng pjpeg avif',
