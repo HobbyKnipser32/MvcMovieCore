@@ -285,7 +285,7 @@ namespace MvcMoviesCore.ApiController
             if (personId == Guid.Empty)
                 return BadRequest();
 
-            var images = await _context.PersonImage.Where(w => w.PersonId.Equals(personId)).ToListAsync();
+            var images = await _context.PersonImage.Where(w => w.PersonId.Equals(personId) && w.IsDeleted == false).ToListAsync();
 
             var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var jsonResult = JsonConvert.SerializeObject(images, Formatting.Indented, jsonSerializerSettings);

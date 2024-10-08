@@ -179,73 +179,69 @@
 <script src="~/js/dropifyimageupload.js"></script>
 
 @section Scripts {
-    <partial name="_ShowImageModalScripts" />
-    <partial name="_DataTableScripts" />
-    
 
+    <partial name="_ShowImageModalScripts" />
+    @* <partial name="_DataTableScripts" /> *@
+    
     <script>
         $(document).ready(function () {
-            // var imageAttributes = {
-            //     imageContent: '@imgSrc',
-            //     imageName: '@Model.Image'
-            // };
-            // var imageAttributes = {};
-            // var customMessages = {
-            //     'default': '<span style="font-size:20px;">Drag & Drop hier</span>',
-            //     'remove': 'Löschen',
-            //     'replace': 'Drag & Drop oder hier Klicken zum ersetzen',
-            // };
-            // dropifyImage.Draw(imageAttributes, customMessages);
 
-            let personId = '@Model.Id';
-            $('#imagesTable').DataTable({
-                ajax: {
-                    url: appRootPath + '/api/PersonApi/GetImages/' + personId,
-                    dataSrc: ''
-                },
-                columns: [
-                    {
-                        data: 'Name',
-                        render: function (data, type) {
-                            if (type === 'display') {
-                                if (data) {
-                                    var src = '@imagePath' + '/' + data;
-                                    return '<div class="image-container">'
-                                        + '<img src="' + src + '" class="image-small" style="height: 200px">'
-                                        + '<img src="' + src + '" class="image-large">'
-                                        + '</div>';
-                                }
-                            }
-                            return '';
-                        },
-                        orderable: false
-                    },
-                    {
-                        data: 'IsMain',
-                        render: function (data, type) {
-                            if (type === 'display') {
-                                return '<input type="radio" name="images" checked="' + data + '" />';
-                            }
-                            return '';
-                        }
-                    },
-                    {
-                        data: 'Id',
-                        render: function (data, type) {
-                            if (type === 'display') {
-                                // return '<button onClick="deleteLink(' + id + ')" title="Bild löschen">' +
-                                //     '<i class="fa-solid fa-eraser fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
-                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + data + ')" title="Bild löschen">' +
-                                    '<i class="fa-solid fa-trash-can fa-fade fa-lg" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
-                            }
-                            return '';
-                        }
+            // let personId = '@Model.Id';
+            // $('#imagesTable').DataTable({
+            //     ajax: {
+            //         url: appRootPath + '/api/PersonApi/GetImages/' + personId,
+            //         dataSrc: ''
+            //     },
+            //     columns: [
+            //         {
+            //             data: 'Name',
+            //             render: function (data, type) {
+            //                 if (type === 'display') {
+            //                     if (data) {
+            //                         var src = '@imagePath' + '/' + data;
+            //                         return '<div class="image-container">'
+            //                             + '<img src="' + src + '" class="image-small" style="height: 200px">'
+            //                             + '<img src="' + src + '" class="image-large">'
+            //                             + '</div>';
+            //                     }
+            //                 }
+            //                 return '';
+            //             },
+            //             orderable: false
+            //         },
+            //         {
+            //             data: 'IsMain',
+            //             render: function (data, type) {
+            //                 if (type === 'display') {
+            //                     return '<input type="radio" name="images" checked="' + data + '" />';
+            //                 }
+            //                 return '';
+            //             }
+            //         },
+            //         {
+            //             data: 'Id',
+            //             render: function (data, type) {
+            //                 if (type === 'display') {
+            //                     return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + data + ')" title="Bild löschen">' +
+            //                         '<i class="fa-solid fa-trash-can fa-fade fa-lg" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
+            //                 }
+            //                 return '';
+            //             }
+            //         }
+            //     ],
+            //     ordering: false,
+            // });
 
-                    }
-                ],
-                ordering: false,
-            });
-
+            var imageAttributes = {
+                imageContent: '@imgSrc',
+                imageName: '@Model.Image'
+            };
+            var customMessages = {
+                'default': '<span style="font-size:20px;">Drag & Drop hier</span>',
+                'remove': 'Löschen',
+                'replace': 'Drag & Drop oder hier Klicken zum ersetzen',
+            };
+            dropifyImage.Draw(imageAttributes, customMessages);
 
 
             var adultPersonType = '@adultPersonType';
