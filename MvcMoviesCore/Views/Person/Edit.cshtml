@@ -27,10 +27,17 @@
             <div class="col-sm-2">
                 <div class="card">
                     <div class="card-body" style="max-height: 278px">
-                        <div class="image-container">
+                        <div class="w3-content w3-section">
+                            @foreach(var image in Model.Images)
+                            {
+                                var src = $"{imagePath}/{image.PersonId}/{image.Name}";
+                                <img class="mySlides" src="@src" style="width:100%" />
+                            }
+                        </div>
+@*                         <div class="image-container">
                             <input asp-for="SelectedFile" type="file" accept="image/*" class="dropify" data-default-file="@imgSrc" />
                         </div>
-                    </div>
+ *@                    </div>
                 </div>
             </div>
             <div class="col-sm-9">
@@ -148,8 +155,9 @@
             <table id="imagesTable">
                 <thead>
                     <tr>
-                        <th class="col-md-2">&nbsp;</th>
-                        <th class="col-md-1">Hauptfoto</th>
+                        <th class="col-md-2">&nbsp;
+                            </th>
+                        <th class="col-md-1" style="text-align: center">Hauptfoto</th>
                         <th class="col-md-1">&nbsp;</th>
                     </tr>
                 </thead>
@@ -160,21 +168,34 @@
                         <tr>
                             <td>
                                 <div class="image-container" onmouseenter="onMouseEnter(this)" onmouseleave="onMouseLeave(this)">
-                                    <img src="@src" class="image-small" style="height: 200px">
+                                    <img src="@src" class="image-small" style="height:200px">
                                     <img src="@src" class="image-large">
                                 </div>
                             </td>
                             <td>
-                                <input type="radio" name="images" checked="@item.IsMain" />
+                                <input type="radio" name="images" checked="@item.IsMain" style="display:block; margin-left:auto; margin-right:auto" />
                             </td>
                             <td>
-                                <button name="id" style="background-color: transparent; color: red; border: hidden"
+                                <button id="deleteImage" style="background-color: transparent; color: red; border: hidden"
                                         onClick="deleteLink(@item.Id)" title="Bild löschen">
                                     <i class="fa-solid fa-trash-can fa-fade fa-lg" style="color: #ff0000; --fa-animation-duration: 2s;"></i>
                                 </button>
                             </td>
                         </tr>
                     }
+                    <tr>
+                        <td>
+                            <input asp-for="SelectedFile" type="file" accept="image/*" class="dropify" />
+                        </td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <button id="addImage" style="background-color: transparent; color: red; border: hidden"
+                                    onClick="addImage(this)" title="Bild hinzufügen">
+                                <i class="fa-regular fa-square-plus fa-beat fa-lg" style="color: #74C0FC;--fa-animation-duration: 2s;"></i>
+                            </button>
+
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -201,7 +222,7 @@
 
     <partial name="_ShowImageModalScripts" />
     @* <partial name="_DataTableScripts" /> *@
-    
+
     <script>
         $(document).ready(function () {
             var imageAttributes = {

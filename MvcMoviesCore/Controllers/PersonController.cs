@@ -170,13 +170,14 @@ namespace MvcMoviesCore.Controllers
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
             ViewData["ImageSource"] = string.Empty;
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
-            if (!string.IsNullOrEmpty(person.Image))
-                ViewData["ImageSource"] = $"{_originalFileDirectory}/{person.Image}";
-            else if (person.PersonImages != null && person.PersonImages.Any())
+            ViewData["ImageSource"] = "";
+            //if (!string.IsNullOrEmpty(person.Image))
+            //    ViewData["ImageSource"] = $"{_originalFileDirectory}/{person.Image}";
+            if (person.PersonImages != null && person.PersonImages.Count != 0)
             {
                 var personImage = person.PersonImages.FirstOrDefault(f => f.IsMain == true);
                 if (personImage != null)
-                    ViewData["ImageSource"] = $"{_originalFileDirectory}/{personImage.Name}";
+                    ViewData["ImageSource"] = $"{_originalFileDirectory}/{personImage.PersonId}/{personImage.Name}";
             }
             return View(person);
         }
