@@ -149,7 +149,7 @@
                 <thead>
                     <tr>
                         <th class="col-md-2">&nbsp;</th>
-                        <th class="col-md-1">Hauptfoto</th>
+                        <th class="col-md-1" sytle="text-align: center">Hauptfoto</th>
                         <th class="col-md-1">&nbsp;</th>
                     </tr>
                 </thead>
@@ -165,7 +165,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="radio" name="images" checked="@item.IsMain" />
+                                <input type="radio" name="images" checked="@item.IsMain" style="display: block; margin-left: auto; margin-right: auto;" />
                             </td>
                             <td>
                                 <button name="id" style="background-color: transparent; color: red; border: hidden"
@@ -190,7 +190,7 @@
 </form>
 <hr />
 <p>
-    <a asp-action="Index" title="zurück zur Liste">
+    <a href="@Model.PreviousPage" title="zurück">
         <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
     </a>
 </p>
@@ -200,7 +200,6 @@
 @section Scripts {
 
     <partial name="_ShowImageModalScripts" />
-    @* <partial name="_DataTableScripts" /> *@
     
     <script>
         $(document).ready(function () {
@@ -215,67 +214,6 @@
                 'replace': 'Drag & Drop oder hier Klicken zum ersetzen',
             };
             dropifyImage.DrawImage(imageAttributes, customMessages);
-
-            let personId = '@Model.Id';
-            $('#imagesTable').DataTable({
-                ajax: {
-                    url: appRootPath + '/api/PersonApi/GetImages/' + personId,
-                    dataSrc: ''
-                },
-                columns: [
-                    {
-                        data: 'Name',
-                        render: function (data, type) {
-                            if (type === 'display') {
-                                if (data) {
-                                    var src = '@imagePath' + '/' + data;
-                                    return '<div class="image-container">'
-                                        + '<img src="' + src + '" class="image-small" style="height: 200px">'
-                                        + '<img src="' + src + '" class="image-large">'
-                                        + '</div>';
-                                }
-                            }
-                            return '';
-                        },
-                        orderable: false
-                    },
-                    {
-                        data: 'IsMain',
-                        render: function (data, type) {
-                            if (type === 'display') {
-                                return '<input type="radio" name="images" checked="' + data + '" />';
-                            }
-                            return '';
-                        }
-                    },
-                    {
-                        data: 'Id',
-                        render: function (data, type) {
-                            if (type === 'display') {
-                                // return '<button onClick="deleteLink(' + id + ')" title="Bild löschen">' +
-                                //     '<i class="fa-solid fa-eraser fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
-                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteLink(' + data + ')" title="Bild löschen">' +
-                                    '<i class="fa-solid fa-trash-can fa-fade fa-lg" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
-                            }
-                            return '';
-                        }
-
-                    }
-                ],
-                ordering: false,
-            });
-
-            var imageAttributes = {
-                imageContent: '@imgSrc',
-                imageName: '@Model.Image'
-            };
-            var customMessages = {
-                'default': '<span style="font-size:20px;">Drag & Drop hier</span>',
-                'remove': 'Löschen',
-                'replace': 'Drag & Drop oder hier Klicken zum ersetzen',
-            };
-            dropifyImage.Draw(imageAttributes, customMessages);
-
 
             var adultPersonType = '@adultPersonType';
             var modelPersonType = '@Model.PersonTypesId.ToString()';
@@ -295,14 +233,6 @@
                     $('#adultStuff').hide();
                 };
             });
-
-            // $('#imagesTable tbody').on('mouseenter', '.image-container', function () {
-            //     onMouseEnter(this);
-            // });
-
-            // $('#imagesTable tbody').on('mouseleave', '.image-container', function () {
-            //     onMouseLeave(this);
-            // });
         });
 
         function save() {
