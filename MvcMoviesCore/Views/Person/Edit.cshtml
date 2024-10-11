@@ -28,16 +28,17 @@
                 <div class="card">
                     <div class="card-body" style="max-height: 278px">
                         <div class="w3-content w3-section">
-                            @foreach(var image in Model.Images)
+                            @foreach (var image in Model.Images)
                             {
                                 var src = $"{imagePath}/{image.PersonId}/{image.Name}";
                                 <img class="mySlides" src="@src" style="width:100%" />
                             }
                         </div>
-@*                         <div class="image-container">
-                            <input asp-for="SelectedFile" type="file" accept="image/*" class="dropify" data-default-file="@imgSrc" />
+                        @*                         <div class="image-container">
+                        <input asp-for="SelectedFile" type="file" accept="image/*" class="dropify" data-default-file="@imgSrc" />
                         </div>
- *@                    </div>
+                        *@
+                    </div>
                 </div>
             </div>
             <div class="col-sm-9">
@@ -155,8 +156,9 @@
             <table id="imagesTable">
                 <thead>
                     <tr>
-                        <th class="col-md-2">&nbsp;
-                            </th>
+                        <th class="col-md-2">
+                            &nbsp;
+                        </th>
                         <th class="col-md-1" style="text-align: center">Hauptfoto</th>
                         <th class="col-md-1">&nbsp;</th>
                     </tr>
@@ -164,7 +166,7 @@
                 <tbody>
                     @foreach (var item in Model.Images)
                     {
-                        var src = imagePath + "/" + item.Name;
+                        var src = $"{imagePath}/{item.PersonId}/{item.Name}";
                         <tr>
                             <td>
                                 <div class="image-container" onmouseenter="onMouseEnter(this)" onmouseleave="onMouseLeave(this)">
@@ -185,12 +187,12 @@
                     }
                     <tr>
                         <td>
-                            <input asp-for="SelectedFile" type="file" accept="image/*" class="dropify" />
+                            <input id="newImage" asp-for="SelectedFile" type="file" accept="image/*" class="dropify" />
                         </td>
                         <td>&nbsp;</td>
                         <td>
                             <button id="addImage" style="background-color: transparent; color: red; border: hidden"
-                                    onClick="addImage(this)" title="Bild hinzufügen">
+                                    onClick="addNewImage()" title="Bild hinzufügen">
                                 <i class="fa-regular fa-square-plus fa-beat fa-lg" style="color: #74C0FC;--fa-animation-duration: 2s;"></i>
                             </button>
 
@@ -367,5 +369,32 @@
                     })
                 });
         };
+
+        function addNewImage() {
+            var image = $('#newImage');
+            if (!image)
+                return;
+            var file_data = image.files[0];
+            var personId = $('#id').val();
+            var url = appRootPath + '/api/PersonApi/SaveImage?personId=' + personId + '&filePath=' + file_data;
+            $.post(url, function () { 
+                location.reload();
+            })
+        }
+
+        var myIndex = 0;
+        carousel();
+
+        function carousel() {
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            myIndex++;
+            if (myIndex > x.length) { myIndex = 1 }
+            x[myIndex - 1].style.display = "block";
+            setTimeout(carousel, 2000); // Change image every 2 seconds
+        }
     </script>
 }
