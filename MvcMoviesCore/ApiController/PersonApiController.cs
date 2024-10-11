@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace MvcMoviesCore.ApiController
 {
@@ -290,6 +289,37 @@ namespace MvcMoviesCore.ApiController
             var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var jsonResult = JsonConvert.SerializeObject(images, Formatting.Indented, jsonSerializerSettings);
             return Ok(jsonResult);
+        }
+
+        [HttpPost("SaveImage")]
+        public async Task<IActionResult> SaveImage(Guid personId, IFormFile filePath)
+        {
+            if (personId.Equals(Guid.Empty) || filePath==null)
+                return BadRequest();
+
+            var imageNumber = await _context.PersonImage.Where(w => w.PersonId.Equals(personId)).MaxAsync(m => m.Number);
+            imageNumber++;
+            var fileExtension = Path.GetExtension(filePath.FileName);
+            var newFileName = $"{imageNumber}{fileExtension}";
+            var newFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, _originalFilePath, personId.ToString(), newFileName);
+            //System.IO.File.Move(filePath, newFileName, true);
+            bool isMain = false;
+            if (imageNumber == 1)
+                isMain = true;
+            var personImage = new PersonImage()
+            {
+                CreatetAt = DateTime.Now,
+                Id = Guid.NewGuid(),
+                IsDeleted = false,
+                IsMain = isMain,
+                Name = newFileName,
+                Number = imageNumber,
+                PersonId = personId
+            };
+            await _context.AddAsync(personImage);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         #endregion

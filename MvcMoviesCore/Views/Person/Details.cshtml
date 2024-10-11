@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Person-Details";
     var adultPersonType = ViewData["AdultPersonType"];
-    var imgSrc = ViewData["ImageSource"];
+    var imgSrc = ViewData["ImageSource"].ToString();
     var person = Model.Name;
     var natImgSrc = ViewData["OriginalFileDirectory"].ToString() + "/flags/" + Model.Nationality.Name + ".png";
 }
@@ -14,10 +14,19 @@
         <div class="col-sm-2">
             <div class="card">
                 <div class="card-body" style="max-height: 225px">
-                    <div class="image-container" onmousenter="onMouseEnter(this)" onmouseleave="onMouseLeave(this)">
-                        <img src="@imgSrc" alt="@person" class="image-small" style="max-height: 200px" /> @* // onclick="this.requestFullscreen()" /> *@
-                        <img src="@imgSrc" alt="@person" class="image-large" />
-                    </div>
+                    @if (string.IsNullOrEmpty(imgSrc))
+                    {
+                        <div class="image-container" style="width:170px">
+                            <img src="~/images/noimageexists.png" style="width:170px" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="image-container" onmousenter="onMouseEnter(this)" onmouseleave="onMouseLeave(this)">
+                            <img src="@imgSrc" alt="@person" class="image-small" style="max-height: 200px" /> @* // onclick="this.requestFullscreen()" /> *@
+                            <img src="@imgSrc" alt="@person" class="image-large" />
+                        </div>
+                    }
                 </div>
             </div>
         </div>
