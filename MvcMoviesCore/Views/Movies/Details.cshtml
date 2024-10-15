@@ -140,7 +140,7 @@
                     </thead>
                 </table>
             </div>
-            <div id="scenesTab" class="tab-pane" >
+            <div id="scenesTab" class="tab-pane">
                 @if (Model.Scenes != null && Model.Scenes.Any())
                 {
                     <hr />
@@ -220,40 +220,48 @@
                 },
                 columns: [
                     {
-                        data: 'Person.Image',
-                        render: function (data, type) {
+                        data: 'Person.PersonImages',
+                        render: function (data, type, full) {
                             if (type === 'display') {
-                            if (data ) {
-                                var src = '@imageSource' + '/' + data;
-                                return '<div class="image-container">'
-                                    + '<img src="' + src + '" class="image-small" style="height: 40px">'
-                                    + '<img src="' + src + '" class="image-large">'
-                                    +'</div>';
+                                if (data && data.length > 0) {
+                                    var src = '@imageSource/' + data[0].PersonId + '/' + data[0].Name
+                                    return '<div class="image-container">'
+                                        + '<img src="' + src + '" class="image-small" style="height: 40px">'
+                                        + '<img src="' + src + '" class="image-large">'
+                                        + '</div>';
                                 }
                                 else {
-                                return '<div class="image-container">'
-                                    + '<img src="/images/noimageexists.png" class="image-small" style="height: 40px" />'
-                                    + '</div>';
+                                    return '<div class="image-container">'
+                                        + '<img src="/images/noimageexists.png" class="image-small" style="height: 40px" />'
+                                        + '</div>';
 
                                 }
                             }
                             return '';
                         },
-                        orderable: false
+                        orderable: false,
+                        ordering: false
                     },
                     {
                         data: 'Person',
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
                                 var url = '@Url.Action("Details", "Person")' + '/' + data.Id;
-                                return '<a href="' + url + '">' + data.Name; /*  + '< /a>'; */
+                                return '<a href="' + url + '">' + data.Name;
                             }
                             return '';
-                        }
+                        },
+                        type: 'html'
                     },
 
-                    { data: 'Person.Sex.Name' },
-                    { data: 'Person.ActorsAge' },
+                    { 
+                        data: 'Person.Sex.Name',
+                        type: 'html'
+                    },
+                    { 
+                        data: 'Person.ActorsAge',
+                        type: 'html-num'
+                    },
                     {
                         data: 'Practices',
                         render: function (data, type, full, meta) {
@@ -266,7 +274,8 @@
                                 }
                             }
                             return "";
-                        }
+                        },
+                        type: 'html'
                     },
                     {
                         data: 'Id',
@@ -282,7 +291,7 @@
                     }
                 ],
                 ordering: true,
-                order: [[1]],
+                order: [[1, 'asc']],
                 info: false,
                 paging: false,
                 bFilter: false,
@@ -292,7 +301,7 @@
                     header: true,
                     footer: false
                 },
-                columnDefs: [{ className: 'compact', targets: [0] }],
+                // columnDefs: [{ className: 'compact', targets: [0] }],
                 searchHighlight: true
             });
 

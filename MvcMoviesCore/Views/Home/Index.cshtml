@@ -110,10 +110,10 @@
                 },
                 columns: [
                     {
-                        data: 'Image',
+                        data: 'PersonImages',
                         render: function (data, type, full, meta) {
-                            if (data && type === 'display') {
-                                var src = '@imageSource' + '/' + data;
+                            if (data && data.length > 0  && type === 'display') {
+                                var src = '@imageSource/' + data[0].PersonId + '/' + data[0].Name;
                                 return '<div class="image-container">'
                                     + '<img src="' + src + '" class="image-small" style="max-height: 50px">'
                                     + '<img src="' + src + '" class="image-large">'

@@ -6,11 +6,13 @@ using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
 using MvcMoviesCore.ViewModels;
 using Newtonsoft.Json;
+using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MvcMoviesCore.ApiController
 {
@@ -115,18 +117,51 @@ namespace MvcMoviesCore.ApiController
                                     personScenes.Add(new PersonSceneViewModel()
                                     {
                                         Film = new Movies() { Id = moviePerson.Movies.Id, Name = moviePerson.Movies.Name },
-                                        Szene = sceneCoActor.Scene,
+                                        Szene = sceneCoActor.Scene.ToString(),
                                         Person = person,
-                                        //Person = new Person() { Id = moviePerson.Person.Id, Name = moviePerson.Person.Name }
                                     });
                                 }
                             }
                         }
+
+                        personScenes = personScenes.OrderBy(o => o.Person).ThenBy(t => t.Film.Name).ThenBy(t => t.Szene).ToList();
+                    }
+                    else
+                    {
+                        var actors = await _context
+                            .MoviesPerson
+                            .Include(i => i.Person)
+                            .Include(i => i.Movies)
+                            .Include(i => i.MovieRole)
+                            .Where(w => w.MoviesId.Equals(personMovie.MoviesId) && !w.PersonId.Equals(personId))
+                            .ToListAsync();
+                        foreach (var actor in actors)
+                        {
+                            string person;
+                            var referer = Request.GetTypedHeaders().Referer;
+                            var hostUrl = $"{referer.Scheme}://{referer.Host}:{referer.Port}";
+                            string url = $"{hostUrl}/Person/Details/{actor.PersonId}";
+                            if (actor.Person.Classification < 8)
+                            {
+                                person = $"<b><a href=\"{url}\">{actor.Person.Name}</a></b>";
+                            }
+                            else
+                            {
+                                person = $"<a href=\"{url}\">{actor.Person.Name}</a>";
+                            }
+                            personScenes.Add(new PersonSceneViewModel()
+                            {
+                                Film = new Movies() { Id = personMovie.Movies.Id, Name = $"{personMovie.Movies.Name} ({actor.MovieRole.Name})" },
+                                Person = person,
+                                Szene = "-"
+                            });
+                        }
+
+                        personScenes = personScenes.OrderBy(o => o.Person).ThenBy(t => t.Film.Name).ToList();
                     }
                 }
                 try
                 {
-                    personScenes = personScenes.OrderBy(o => o.Person).ThenBy(t => t.Film.Name).ThenBy(t => t.Szene).ToList();
                     var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
                     jsonResult = JsonConvert.SerializeObject(personScenes, Formatting.Indented, jsonSerializerSettings);
                 }
@@ -137,7 +172,7 @@ namespace MvcMoviesCore.ApiController
             }
             else
             {
-                jsonResult = JsonConvert.SerializeObject(new List<MoviesPerson>()); //string.Empty;
+                jsonResult = JsonConvert.SerializeObject(new List<PersonSceneViewModel>());
             }
             return Ok(jsonResult);
         }
@@ -153,6 +188,7 @@ namespace MvcMoviesCore.ApiController
                                             .Include(i => i.PersonType)
                                             .Include(i => i.Sex)
                                             .Include(i => i.Nationality)
+                                            .Include(i => i.PersonImages.Where(f => f.IsMain == true))
                                             .OrderBy(o => o.PersonType)
                                             .ThenBy(t => t.Name).ToListAsync();
 
@@ -292,34 +328,56 @@ namespace MvcMoviesCore.ApiController
         }
 
         [HttpPost("SaveImage")]
-        public async Task<IActionResult> SaveImage(Guid personId, IFormFile filePath)
+        public async Task<IActionResult> SaveImage(Guid personId)
         {
-            if (personId.Equals(Guid.Empty) || filePath==null)
+            if (personId.Equals(Guid.Empty))
                 return BadRequest();
 
-            var imageNumber = await _context.PersonImage.Where(w => w.PersonId.Equals(personId)).MaxAsync(m => m.Number);
-            imageNumber++;
-            var fileExtension = Path.GetExtension(filePath.FileName);
-            var newFileName = $"{imageNumber}{fileExtension}";
-            var newFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, _originalFilePath, personId.ToString(), newFileName);
-            //System.IO.File.Move(filePath, newFileName, true);
-            bool isMain = false;
-            if (imageNumber == 1)
-                isMain = true;
-            var personImage = new PersonImage()
+            int imageNumber = 0;
+            try
             {
-                CreatetAt = DateTime.Now,
-                Id = Guid.NewGuid(),
-                IsDeleted = false,
-                IsMain = isMain,
-                Name = newFileName,
-                Number = imageNumber,
-                PersonId = personId
-            };
-            await _context.AddAsync(personImage);
-            await _context.SaveChangesAsync();
+                imageNumber = await _context.PersonImage.Where(w => w.PersonId.Equals(personId)).MaxAsync(m => m.Number);
+            }
+            catch(Exception ex)
+            {
+                imageNumber = 0;
+            }
+            imageNumber++;
+            var file = Request.Form.Files[0];
+            var fileExtension = Path.GetExtension(file.FileName);
+            var newFileName = $"{imageNumber}{fileExtension}";
+            var newPath = Path.Combine(_webHostEnvironment.WebRootPath, _originalFilePath, personId.ToString());
+            if (!Directory.Exists(newPath))
+                Directory.CreateDirectory(newPath);
+            var newFilePath = Path.Combine(newPath, newFileName);
+            try
+            {
 
-            return Ok();
+                Stream fileStream = file.OpenReadStream();
+                fileStream.CopyToFile(newFilePath);
+                bool isMain = false;
+                if (imageNumber == 1)
+                    isMain = true;
+                var personImage = new PersonImage()
+                {
+                    ChangedAt = DateTime.Now,
+                    CreatetAt = DateTime.Now,
+                    Id = Guid.NewGuid(),
+                    IsDeleted = false,
+                    IsMain = isMain,
+                    Name = newFileName,
+                    Number = imageNumber,
+                    PersonId = personId
+                };
+                await _context.AddAsync(personImage);
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            { 
+                return BadRequest(ex.Message);
+            }
         }
 
         #endregion

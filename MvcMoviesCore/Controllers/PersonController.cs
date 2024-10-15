@@ -148,7 +148,7 @@ namespace MvcMoviesCore.Controllers
                 .Include(i => i.PersonType)
                 .Include(i => i.Sex)
                 .Include(i => i.Nationality)
-                .Include(i => i.PersonImages)
+                .Include(i => i.PersonImages.OrderBy(o => o.Number))
                 .Include(i => i.MoviesPerson)
                 .ThenInclude(t => t.MovieRole)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -168,7 +168,6 @@ namespace MvcMoviesCore.Controllers
             person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication).ToList();
 
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
-            ViewData["ImageSource"] = string.Empty;
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
             ViewData["ImageSource"] = "";
             //if (!string.IsNullOrEmpty(person.Image))
@@ -224,7 +223,7 @@ namespace MvcMoviesCore.Controllers
                 return NotFound();
             }
 
-            var person = await _context.Person.Include(i => i.PersonImages).FirstOrDefaultAsync(f => f.Id.Equals(id));
+            var person = await _context.Person.Include(i => i.PersonImages.OrderBy(o => o.Number)).FirstOrDefaultAsync(f => f.Id.Equals(id));
             if (person == null)
             {
                 return NotFound();

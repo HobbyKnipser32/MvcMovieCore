@@ -17,7 +17,7 @@
 
 <h4>bearbeiten</h4>
 <hr />
-<form class="card-form-horizontal" method="post" enctype="multipart/form-data">
+<form class="card-form-horizontal" method="post" enctype="multipart/form-data" id="editPersonForm">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" id="id" />
     <input type="hidden" asp-for="PreviousPage" />
@@ -26,19 +26,15 @@
         <div class="row">
             <div class="col-sm-2">
                 <div class="card">
-                    <div class="card-body" style="max-height: 278px">
+                    @* <div class="card-body" style="max-height: 278px"> *@
                         <div class="w3-content w3-section">
                             @foreach (var image in Model.Images)
                             {
                                 var src = $"{imagePath}/{image.PersonId}/{image.Name}";
-                                <img class="mySlides" src="@src" style="width:100%" />
+                                <img class="mySlides w3-animate-fading" src="@src" style="max-height:250px; margin-left:auto; margin-right:auto" />
                             }
                         </div>
-                        @*                         <div class="image-container">
-                        <input asp-for="SelectedFile" type="file" accept="image/*" class="dropify" data-default-file="@imgSrc" />
-                        </div>
-                        *@
-                    </div>
+                    @* </div> *@
                 </div>
             </div>
             <div class="col-sm-9">
@@ -215,7 +211,7 @@
         <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
     </a>
 </p>
-
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script src="~/js/dropifyimageupload.js"></script>
 
 @section Scripts {
@@ -299,15 +295,32 @@
         };
 
         function addNewImage() {
-            var image = $('#newImage');
-            if (!image)
-                return;
-            var file_data = image.files[0];
-            var personId = $('#id').val();
-            var url = appRootPath + '/api/PersonApi/SaveImage?personId=' + personId + '&filePath=' + file_data;
-            $.post(url, function () { 
-                location.reload();
-            })
+            let file = $('input[name="SelectedFile"]')[0].files[0];
+            let formData = new FormData();
+            if (file) {
+                formData.append(file.name, file);
+            }
+            else { return; }
+
+            let personId = $('#id').val();
+            let url = appRootPath + '/api/PersonApi/SaveImage?personId=' + personId;
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', url);
+            xhr.send(formData);
+            xhr.onreadystatechange = function () {
+                if (xhr.readystate == 4 && xhr.status == 200) {
+                    location.reload;
+                    alert(xhr.responseText);
+                }
+            }
+
+            // var image = $('#newImage');
+            // if (!image)
+            //     return;
+            // var file_data = image.files[0];
+            // $.post(url, function () { 
+            //     location.reload();
+            // })
         }
 
         var myIndex = 0;
@@ -322,7 +335,7 @@
             myIndex++;
             if (myIndex > x.length) { myIndex = 1 }
             x[myIndex - 1].style.display = "block";
-            setTimeout(carousel, 2000); // Change image every 2 seconds
+            setTimeout(carousel, 9000); // Change image every 9 seconds
         }
     </script>
 }

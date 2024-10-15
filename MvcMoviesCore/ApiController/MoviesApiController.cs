@@ -26,7 +26,11 @@ namespace MvcMoviesCore.ApiController
             var moviePersons = await _context.MoviesPerson.Include(i => i.MovieRole).Where(w => w.MoviesId.Equals(movieId)).ToListAsync();
             foreach (var moviePerson in moviePersons)
             {
-                moviePerson.Person = await _context.Person.Include(i => i.Sex).FirstOrDefaultAsync(f => f.Id == moviePerson.PersonId);
+                moviePerson.Person = await _context
+                    .Person
+                    .Include(i => i.Sex)
+                    .Include(i => i.PersonImages.Where(w => w.IsMain == true))
+                    .FirstOrDefaultAsync(f => f.Id == moviePerson.PersonId);
                 if (moviePerson.Person.Obit != null && moviePerson.Person.Obit.Value.Year < movie.YearOfPublication.Value.Year)
                     moviePerson.Person.ActorsAge = moviePerson.Person.GetActorsAge(moviePerson.Person.Birthday, moviePerson.Person.Obit);
                 else
@@ -116,7 +120,8 @@ namespace MvcMoviesCore.ApiController
                                 .OrderBy(o => o.Name).ToListAsync();
             //.AsQueryable();
 
-            foreach (var movie in movies) {
+            foreach (var movie in movies)
+            {
                 movie.Genre.Movies.Clear();
                 movie.RecordCarrier?.Movies.Clear();
                 movie.StorageLocation?.Movies.Clear();

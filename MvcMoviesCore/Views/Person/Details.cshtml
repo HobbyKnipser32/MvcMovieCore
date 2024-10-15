@@ -6,6 +6,7 @@
     var imgSrc = ViewData["ImageSource"].ToString();
     var person = Model.Name;
     var natImgSrc = ViewData["OriginalFileDirectory"].ToString() + "/flags/" + Model.Nationality.Name + ".png";
+    var originalFileDirectory = ViewData["OriginalFileDirectory"].ToString();
 }
 <div class="container-fluid">
     <h2>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.ActorsAge))</h2>
@@ -13,21 +14,29 @@
     <div class="row">
         <div class="col-sm-2">
             <div class="card">
-                <div class="card-body" style="max-height: 225px">
+                @* <div class="card-body" style="max-height: 225px"> *@
                     @if (string.IsNullOrEmpty(imgSrc))
                     {
-                        <div class="image-container" style="width:170px">
-                            <img src="~/images/noimageexists.png" style="width:170px" />
+                        <div class="image-container" style="width:225px; margin-left:auto; margin-right:auto">
+                            <img src="~/images/noimageexists.png" style="width:225px" />
                         </div>
                     }
                     else
                     {
-                        <div class="image-container" onmousenter="onMouseEnter(this)" onmouseleave="onMouseLeave(this)">
-                            <img src="@imgSrc" alt="@person" class="image-small" style="max-height: 200px" /> @* // onclick="this.requestFullscreen()" /> *@
-                            <img src="@imgSrc" alt="@person" class="image-large" />
+                        <div class="w3-content w3-section">
+                            @foreach (var image in Model.PersonImages)
+                            {
+                                var src = $"{originalFileDirectory}/{image.PersonId}/{image.Name}";
+                                <img class="mySlides w3-animate-fading" src="@src" style="max-height:250px; margin-left:auto; margin-right:auto" />
+                                @* <img src="@src" class="image-large" /> *@
+                            }
                         </div>
+                         @* <div class="image-container" onmousenter="onMouseEnter(this)" onmouseleave="onMouseLeave(this)"> *@
+                            @* <img src="@imgSrc" alt="@person" class="image-small" style="max-height: 200px" /> *@
+                            @* <img src="@imgSrc" alt="@person" class="image-large" /> *@
+                        @* </div> *@
                     }
-                </div>
+                @* </div> *@
             </div>
         </div>
 
@@ -226,6 +235,9 @@
         </p>
     </div>
 </div>
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
 @section Scripts
 {
     <partial name="_DataTableScripts" />
@@ -245,7 +257,7 @@
             });
             const personId = '@Model.Id';
             var groupColumn = 0;
-            var scenesTable = $('#personScenes').DataTable({
+            $('#personScenes').DataTable({
                 columnDefs: [{ visible: false, targets: groupColumn }],
                 order: [[groupColumn, 'asc']],
                 ajax: {
@@ -323,5 +335,20 @@
                 onMouseLeave(this);
             });
         })
+
+        var myIndex = 0;
+        carousel();
+
+        function carousel() {
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            myIndex++;
+            if (myIndex > x.length) { myIndex = 1 }
+            x[myIndex - 1].style.display = "block";
+            setTimeout(carousel, 9000); // Change image every 9 seconds
+        }
     </script>
 }
