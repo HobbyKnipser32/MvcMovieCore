@@ -24,18 +24,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model)
+                    @foreach (var person in Model)
                     {
-                        var imgPath = imagesSource + "/" + item.Image;
                         <tr>
                             <td>
-                                <div class="image-container" onmouseenter="onMouseEnter(this)" onmouseleave="onMouseLeave(this)">
-                                    <img src="@imgPath" alt="@item.Name" class="image-small" style="height: 50px" />
-                                    <img src="@imgPath" alt="@item.Name" class="image-large" />
+                                <div class="w3-content w3-section">
+                                    @foreach (var image in person.PersonImages)
+                                    {
+                                        var src = $"{imagesSource}/{image.PersonId}/{image.Name}";
+                                        <img class="mySlides w3-animate-fading" src="@src" style="max-height:250px; margin-left:auto; margin-right:auto" />
+                                    }
                                 </div>
                             </td>
                             <td>
-                                <p>@item.Name</p>
+                                <p>@person.Name</p>
                             </td>
                         </tr>
                     }
@@ -44,6 +46,8 @@
         }
     </div>
 </div>
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 @section Scripts
 {
@@ -56,5 +60,22 @@
                 ordering: true,
             });
         })
+
+        var myIndex = 0;
+        carousel();
+
+        function carousel() {
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+            if (x.length <= 0)
+                return;
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            myIndex++;
+            if (myIndex > x.length) { myIndex = 1 }
+            x[myIndex - 1].style.display = "block";
+            setTimeout(carousel, 9000); // Change image every 9 seconds
+        }
     </script>
 }

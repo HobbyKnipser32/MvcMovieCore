@@ -50,29 +50,62 @@ namespace MvcMoviesCore.Controllers
 
             if (Directory.Exists(filePath))
             {
-                var files = Directory.GetFiles(filePath).ToList();
-                foreach (var file in files)
+                var directories = Directory.GetDirectories(filePath);
+                foreach (var directory in directories)
                 {
-                    var lastBackSlash = file.LastIndexOf('\\');
-                    var fileNameWithExtension = file[(lastBackSlash + 1)..];
-                    var lastDot = fileNameWithExtension.LastIndexOf('.');
-                    var fileName = fileNameWithExtension[..lastDot];
+                    var lastBackSlash = directory.LastIndexOf('\\');
+                    var guid = directory[(lastBackSlash + 1)..];
                     Guid personId;
                     try
                     {
-                        personId = new Guid(fileName);
+                        personId = new Guid(guid);
                     }
                     catch (Exception)
                     {
                         continue;
                     }
-                    var person = _context.Person.FirstOrDefaultAsync(x => x.Id == personId).GetAwaiter().GetResult();
-                    if (person != null && string.IsNullOrEmpty(person.Image))
+                    var files = Directory.GetFiles(directory).ToList();
+                    foreach (var file in files)
                     {
-                        person.Image = fileNameWithExtension;
-                        _context.Update(person);
-                        await _context.SaveChangesAsync();
-                        persons.Add(person);
+                        var fileNameWithExtension = Path.GetFileName(file);
+                        var fileName = Path.GetFileNameWithoutExtension(fileNameWithExtension);
+                        int number;
+                        try
+                        {
+                            number = int.Parse(fileName);
+                        }
+                        catch (Exception)
+                        {
+                            continue;
+                        }
+                        var personImage = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(personId) && f.Number == number);
+                        if (personImage != null)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            var newPersonImage = new PersonImage()
+                            {
+                                Id = Guid.NewGuid(),
+                                PersonId = personId,
+                                Name = fileNameWithExtension,
+                                Number = number,
+                                IsMain = number == 1,
+                                IsDeleted = false,
+                                ChangedAt = DateTime.Now,
+                                CreatetAt = DateTime.Now,
+                            };
+                            await _context.AddAsync(newPersonImage);
+                            await _context.SaveChangesAsync();
+                        }
+
+
+                        var person = await _context.Person.Include(i => i.PersonImages.Where(w => w.IsDeleted == false).OrderBy(o => o.Number)).FirstOrDefaultAsync(x => x.Id == personId);
+                        if (person != null)
+                        {
+                            persons.Add(person);
+                        }
                     }
                 }
             }
