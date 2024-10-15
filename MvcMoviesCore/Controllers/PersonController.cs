@@ -85,19 +85,27 @@ namespace MvcMoviesCore.Controllers
                         }
                         else
                         {
-                            var newPersonImage = new PersonImage()
+                            try
                             {
-                                Id = Guid.NewGuid(),
-                                PersonId = personId,
-                                Name = fileNameWithExtension,
-                                Number = number,
-                                IsMain = number == 1,
-                                IsDeleted = false,
-                                ChangedAt = DateTime.Now,
-                                CreatetAt = DateTime.Now,
-                            };
-                            await _context.AddAsync(newPersonImage);
-                            await _context.SaveChangesAsync();
+                                var newPersonImage = new PersonImage()
+                                {
+                                    Id = Guid.NewGuid(),
+                                    PersonId = personId,
+                                    Name = fileNameWithExtension,
+                                    Number = number,
+                                    IsMain = number == 1,
+                                    IsDeleted = false,
+                                    ChangedAt = DateTime.Now,
+                                    CreatetAt = DateTime.Now,
+                                };
+                                await _context.AddAsync(newPersonImage);
+                                await _context.SaveChangesAsync();
+                            }
+                            catch 
+                            {
+                                continue;
+                            }
+
                         }
 
 
