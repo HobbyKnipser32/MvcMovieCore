@@ -266,7 +266,20 @@ namespace MvcMoviesCore.Controllers
                     var person = await MapAsync(personViewModel);
                     if (personViewModel.SelectedFile != null)
                     {
-                        person.Image = SaveFile(personViewModel.SelectedFile, person.Id.ToString());
+                        var maxImageNumber = _context.PersonImage.Where(w => w.PersonId.Equals(id)).Max(m => m.Number) + 1;
+                        var personImage = new PersonImage()
+                        {
+                            ChangedAt = DateTime.Now,
+                            CreatetAt = DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsDeleted = false,
+                            IsMain = maxImageNumber == 1 ? true : false,
+                            PersonId = id,
+                            Name = SaveFile(personViewModel.SelectedFile, maxImageNumber.ToString(), person.Id),
+                            Number = maxImageNumber
+                        };
+                        _context.PersonImage.Add(personImage);
+                        await _context.SaveChangesAsync();
                     }
                     else
                     {
@@ -489,6 +502,26 @@ namespace MvcMoviesCore.Controllers
             var filePath = Path.Combine(_webHostEnvironment.WebRootPath, _originalFilePath);
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
+
+            var originalFileExtension = Path.GetExtension(file.FileName);
+            newFileName += originalFileExtension;
+            filePath = Path.Combine(filePath, newFileName);
+
+            using var stream = System.IO.File.Create(filePath);
+            file.CopyTo(stream);
+
+            return newFileName;
+        }
+
+        private string SaveFile(IFormFile file, string newFileName, Guid personId)
+        {
+            if (file == null) return string.Empty;
+
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, _originalFilePath, personId.ToString());
+            if (!Directory.Exists(filePath))
+                Directory.CreateDirectory(filePath);
+
+            var maxImageNumber = _context.PersonImage.Where(w => w.PersonId.Equals(personId)).Max(m => m.Number) + 1;
 
             var originalFileExtension = Path.GetExtension(file.FileName);
             newFileName += originalFileExtension;
