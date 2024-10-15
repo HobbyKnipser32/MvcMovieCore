@@ -27,13 +27,13 @@
             <div class="col-sm-2">
                 <div class="card">
                     @* <div class="card-body" style="max-height: 278px"> *@
-                        <div class="w3-content w3-section">
-                            @foreach (var image in Model.Images)
-                            {
-                                var src = $"{imagePath}/{image.PersonId}/{image.Name}";
-                                <img class="mySlides w3-animate-fading" src="@src" style="max-height:250px; margin-left:auto; margin-right:auto" />
-                            }
-                        </div>
+                    <div class="w3-content w3-section">
+                        @foreach (var image in Model.Images)
+                        {
+                            var src = $"{imagePath}/{image.PersonId}/{image.Name}";
+                            <img class="mySlides w3-animate-fading" src="@src" style="max-height:250px; margin-left:auto; margin-right:auto" />
+                        }
+                    </div>
                     @* </div> *@
                 </div>
             </div>
@@ -147,77 +147,85 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <table id="imagesTable">
-                <thead>
-                    <tr>
-                        <th class="col-md-2">&nbsp;</th>
-                        <th class="col-md-1" sytle="text-align: center">Hauptfoto</th>
-                        <th class="col-md-1">&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Images)
-                    {
-                        var src = $"{imagePath}/{item.PersonId}/{item.Name}";
-                        <tr>
-                            <td>
-                                <div class="image-container" onmouseenter="onMouseEnter(this)" onmouseleave="onMouseLeave(this)">
-                                    <img src="@src" class="image-small" style="height:200px">
-                                    <img src="@src" class="image-large">
-                                </div>
-                            </td>
-                            <td>
-                                <input type="radio" name="images" checked="@item.IsMain" style="display:block; margin-left:auto; margin-right:auto" />
-                            </td>
-                            <td>
-                                <button id="deleteImage" style="background-color: transparent; color: red; border: hidden"
-                                        onClick="deleteLink(@item.Id)" title="Bild löschen">
-                                    <i class="fa-solid fa-trash-can fa-fade fa-lg" style="color: #ff0000; --fa-animation-duration: 2s;"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    }
-                    <tr>
-                        <td>
-                            <input id="newImage" asp-for="SelectedFile" type="file" accept="image/*" class="dropify" />
-                        </td>
-                        <td>&nbsp;</td>
-                        <td>
-                            <button id="addImage" style="background-color: transparent; color: red; border: hidden"
-                                    onClick="addNewImage()" title="Bild hinzufügen">
-                                <i class="fa-regular fa-square-plus fa-beat fa-lg" style="color: #74C0FC;--fa-animation-duration: 2s;"></i>
-                            </button>
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    </div>
+    <hr />
+    <div class=" card-form-horizontal">
+        <div class="col-xs-1">
+            @* <p> *@
+            <a href="@Model.PreviousPage" title="zurück">
+                <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+            </a>
+            @* </p> *@
         </div>
-
-        <div class="col-md-12">
-            <div class="row">
-                <div class="form-group col-md-3">
-                    <button title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
-                </div>
-            </div>
+        <div class="col-xs-1">
+            &nbsp;|&nbsp;
+        </div>
+        <div class="col-xs-1">
+            @* <p> *@
+            <button title="speichern" class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; " />
+            @* </p> *@
         </div>
     </div>
 </form>
+
 <hr />
-<p>
-    <a href="@Model.PreviousPage" title="zurück">
-        <i class="fa-regular fa-circle-left fa-shake fa-2xl" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
-    </a>
-</p>
+<div class="col-md-4">
+    <table id="imagesTable" class=" table display">
+        <thead>
+            <tr>
+                <th class="col-md-2">&nbsp;</th>
+                <th class="col-md-1" sytle="text-align: center">Hauptfoto</th>
+                <th class="col-md-1">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Images)
+            {
+                var src = $"{imagePath}/{item.PersonId}/{item.Name}";
+                <tr>
+                    <td>
+                        <div class="image-container" onmouseenter="onMouseEnter(this)" onmouseleave="onMouseLeave(this)">
+                            <img src="@src" class="image-small" style="height:200px">
+                            <img src="@src" class="image-large">
+                        </div>
+                    </td>
+                    <td>
+                        <input type="radio" name="isMainImage" value="@item.Number" checked="@item.IsMain" style="display:block; margin-left:auto; margin-right:auto" />
+                    </td>
+                    <td>
+                        <button id="deleteImage" tyle="background-color: transparent; color: red; border: hidden"
+                                onClick="deleteImage('@item.Id', '@item.PersonId')" title="Bild löschen">
+                            <i class="fa-solid fa-trash-can fa-fade fa-lg" style="color: #ff0000; --fa-animation-duration: 2s;"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>
+                    <input id="newImage" asp-for="SelectedFile" type="file" accept="image/*" class="dropify" />
+                </td>
+                <td>&nbsp;</td>
+                <td>
+                    <button id="addImage" style="background-color: transparent; color: red; border: hidden"
+                            onClick="addNewImage()" title="Bild hinzufügen">
+                        <i class="fa-regular fa-square-plus fa-beat fa-lg" style="color: #74C0FC;--fa-animation-duration: 2s;"></i>
+                    </button>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script src="~/js/dropifyimageupload.js"></script>
 
 @section Scripts {
 
     <partial name="_ShowImageModalScripts" />
-    
+
     <script>
         $(document).ready(function () {
             var imageAttributes = {
@@ -309,18 +317,45 @@
             xhr.send(formData);
             xhr.onreadystatechange = function () {
                 if (xhr.readystate == 4 && xhr.status == 200) {
-                    location.reload;
                     alert(xhr.responseText);
                 }
             }
+            location.reload();
+        }
 
-            // var image = $('#newImage');
-            // if (!image)
-            //     return;
-            // var file_data = image.files[0];
-            // $.post(url, function () { 
-            //     location.reload();
-            // })
+        function deleteImage(id, personId) {
+            Swal.fire({
+                html: 'Bild löschen?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Nein'
+            }).then(function (result) {
+                if (result.value) {
+                    var url = appRootPath + '/api/PersonApi/DeleteImage?id=' + id + '&personId=' + personId
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        async: false,
+                        statusCode: {
+                            404: function () {
+                                alert("function not found");
+                            }
+                        },
+                        success: function () {
+                            Swal.fire({
+                                icon: 'success',
+                                text: 'Verknüpfung erfolgreich gelöscht.',
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                            location.reload();
+                        },
+                    })
+                };
+            });
         }
 
         var myIndex = 0;
@@ -329,6 +364,8 @@
         function carousel() {
             var i;
             var x = document.getElementsByClassName("mySlides");
+            if (x.length <= 0)
+                return;
             for (i = 0; i < x.length; i++) {
                 x[i].style.display = "none";
             }

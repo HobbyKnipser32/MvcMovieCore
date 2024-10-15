@@ -223,7 +223,7 @@ namespace MvcMoviesCore.Controllers
                 return NotFound();
             }
 
-            var person = await _context.Person.Include(i => i.PersonImages.OrderBy(o => o.Number)).FirstOrDefaultAsync(f => f.Id.Equals(id));
+            var person = await _context.Person.Include(i => i.PersonImages.Where(w => w.IsDeleted == false).OrderBy(o => o.Number)).FirstOrDefaultAsync(f => f.Id.Equals(id));
             if (person == null)
             {
                 return NotFound();
@@ -252,7 +252,7 @@ namespace MvcMoviesCore.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id,
-            [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness,SelectedFile,PreviousPage")] PersonViewModel personViewModel)
+            [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness,PreviousPage")] PersonViewModel personViewModel)
         {
             if (id != personViewModel.Id)
             {
@@ -264,6 +264,7 @@ namespace MvcMoviesCore.Controllers
                 try
                 {
                     var person = await MapAsync(personViewModel);
+                    var mainImage = int.Parse(Request.Form["isMainImage"]);
                     if (personViewModel.SelectedFile != null)
                     {
                         var maxImageNumber = _context.PersonImage.Where(w => w.PersonId.Equals(id)).Max(m => m.Number) + 1;
@@ -273,7 +274,7 @@ namespace MvcMoviesCore.Controllers
                             CreatetAt = DateTime.Now,
                             Id = Guid.NewGuid(),
                             IsDeleted = false,
-                            IsMain = maxImageNumber == 1 ? true : false,
+                            IsMain = maxImageNumber == 1,
                             PersonId = id,
                             Name = SaveFile(personViewModel.SelectedFile, maxImageNumber.ToString(), person.Id),
                             Number = maxImageNumber
@@ -283,7 +284,18 @@ namespace MvcMoviesCore.Controllers
                     }
                     else
                     {
-                        person.Image = null;
+                        var personImage = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(id) && f.IsMain == true);
+                        if (personImage != null && personImage.Number != mainImage)
+                        {
+                            personImage.IsMain = false;
+                            _context.Update(personImage);
+                            personImage = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(id) && f.Number == mainImage);
+                            if (personImage != null)
+                            {
+                                personImage.IsMain = true;
+                                _context.Update(personImage);
+                            }
+                        }
                     }
 
                     _context.Update(person);

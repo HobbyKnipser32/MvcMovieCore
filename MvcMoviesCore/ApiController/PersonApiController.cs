@@ -338,7 +338,7 @@ namespace MvcMoviesCore.ApiController
             {
                 imageNumber = await _context.PersonImage.Where(w => w.PersonId.Equals(personId)).MaxAsync(m => m.Number);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 imageNumber = 0;
             }
@@ -375,7 +375,41 @@ namespace MvcMoviesCore.ApiController
                 return Ok();
             }
             catch (Exception ex)
-            { 
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("DeleteImage")]
+        public async Task<IActionResult> DeleteImage(Guid id, Guid personId)
+        {
+            try
+            {
+                var personImage = await _context.PersonImage.FirstOrDefaultAsync(f => f.Id.Equals(id));
+                if (personImage != null)
+                {
+                    personImage.IsDeleted = true;
+                    if (personImage.IsMain)
+                    {
+                        personImage.IsMain = false;
+                        var personImageNumber = await _context.PersonImage.Where(f => f.PersonId.Equals(personId) && f.IsDeleted == false).MinAsync(m => m.Number);
+                        if (personImageNumber != 0)
+                        {
+                            var personImageMain = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(personId) && f.Number == personImageNumber);
+                            personImageMain.IsMain = true;
+                            _context.Update(personImageMain);
+                        }
+                    }
+                    _context.Update(personImage);
+                    await _context.SaveChangesAsync();
+
+                }
+                var filePath = Path.Combine(_webHostEnvironment.WebRootPath, _originalFilePath, personImage.PersonId.ToString(), personImage.Name);
+                System.IO.File.Delete(filePath);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
         }
