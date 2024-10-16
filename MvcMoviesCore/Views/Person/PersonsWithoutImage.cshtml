@@ -1,21 +1,13 @@
 ﻿@model IEnumerable<MvcMoviesCore.Models.Person>
 
 @{
-    var headline = "Personen";
-    ViewData["Title"] = "Personen";
-    if (ViewData["FilterFor"] != null && !string.IsNullOrEmpty(ViewData["FilterFor"].ToString()))
-    {
-        headline += ViewData["FilterFor"].ToString();
-    }
+    var headline = "Personen ohne Bild";
+    ViewData["Title"] = headline;
     var originalFileDirectory = ViewData["OriginalFileDirectory"];
 }
+
 <div class="container-fluid">
     <h2>@headline</h2>
-    <p>
-        <a asp-action="Create" title="Person hinzufügen">
-            <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
-        </a>
-    </p>
     <hr />
     <table class="table" id="personIndex">
         <thead>
@@ -32,74 +24,10 @@
                 <th>@Html.DisplayNameFor(model => model.PersonType)</th>    @*  9 *@
                 <th>@Html.DisplayNameFor(model => model.Sex)</th>           @* 10 *@
                 <th>Filme</th>                                              @* 11 *@
-                <th>&nbsp;</th>                                             @* 12 *@
-                <th>&nbsp;</th>                                             @* 13 *@
+                @* <th>&nbsp;</th>*@                                              @* 12 *@
+                @* <th>&nbsp;</th> *@                                             @* 13 *@
             </tr>
         </thead>
-        @* <tbody>
-        @foreach (var item in Model)
-        {
-        var imgSrc = originalFileDirectory + "/" + @item.Image;
-        <tr>
-        <td>
-        @if (!string.IsNullOrEmpty(item.Image))
-        {
-        <div class="image-container">
-        <img src="@imgSrc" title="@item.Name" class="image-small" style="max-height: 50px" />
-        <img src="@imgSrc" title="@item.Name" class="image-large" />
-        </div>
-        }
-        else
-        {
-        <div class="image-container">
-        <img src="~/images/noimageexists.png" class="image-small" style="max-height: 35px" />
-        <img src="~/images/noimageexists.png" title="@item.Name" class="image-large" />
-        </div>
-        }
-        </td>
-        <td>
-        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.ActorsAge)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Birthday)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Obit)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Nationality.Name)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Height)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Weight)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Classification)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.PersonType.Name)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Sex.Name)
-        </td>
-        <td>
-        <a asp-action="Edit" asp-route-id="@item.Id">
-        <i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
-        </a>
-        </td>
-        <td>
-        <a asp-action="Delete" asp-route-id="@item.Id">
-        <i class="fa-regular fa-trash-can fa-shake" style="color: #ff0000; --fa-animation-duration: 2s;"></i>
-        </a>
-        </td>
-        </tr>
-        }
-        </tbody> *@
         <a href=""></a>
     </table>
 </div>
@@ -112,28 +40,8 @@
     <script>
         $(document).ready(function () {
             $('#personIndex').DataTable({
-                // initComplete: function () {
-                //     this.api()
-                //         .columns()
-                //         .every(function () {
-                //             let column = this;
-                //             let title = column.header().textContent;
-
-                //             // Create input element
-                //             let input = document.createElement('input');
-                //             input.placeholder = title;
-                //             column.footer().replaceChildren(input);
-
-                //             // Event listener for user input
-                //             input.addEventListener('keyup', () => {
-                //                 if (column.search() !== this.value) {
-                //                     column.search(input.value).draw();
-                //                 }
-                //             });
-                //         });
-                // },
                 ajax: {
-                    url: appRootPath + '/api/PersonApi',
+                    url: appRootPath + '/api/PersonApi/GetPersonsWithoutImage',
                     dataSrc: ''
                 },
                 columns:
@@ -166,7 +74,6 @@
                                 if (type == 'display' && data) {
                                     let link = '@Url.Action("Details", "Person")' + '/' + data;
                                     return '<a href="' + link + '" >' + full["Name"];
-                                    // return '<a asp-action="Details" asp-route-id="' + full["Id"] + '" >' + data + '</a>';
                                 }
                                 return '';
                             },
@@ -195,7 +102,7 @@
                                     return moment(data).format('ll');
                                 }
                                 return '';
-                            }, 
+                            },
                             type: 'date'
                         },
                         {
@@ -226,53 +133,34 @@
                             data: 'MoviesPerson.length',
                             type: 'html-num'
                         },
-                        {
-                            data: 'Id',
-                            render: function (data, type, full) {
-                                if (type == 'display') {
-                                    return '<a asp-action="Edit" asp-route-id="' + data + '" >'
-                                        + '<i class="fa-solid fa-pen fa-bounce" style = "color: #74C0FC; --fa-animation-duration: 2s;" > </i>';
-                                    // + '< /a>';
-                                }
-                                return '';
-                            }
-                        },
-                        {
-                            data: 'Id',
-                            render: function (data, type, full) {
-                                if (type == 'display') {
-                                    return '<a asp-action="Delete" asp-route-id="' + data + '">'
-                                        + '<i class="fa-regular fa-trash-can fa-shake" style = "color: #ff0000; --fa-animation-duration: 2s;" ></i>';
-                                    // + '< /a>'
-                                }
-                                return '';
-                            }
-                        },
+                        // {
+                        //     data: 'Id',
+                        //     render: function (data, type, full) {
+                        //         if (type == 'display') {
+                        //             return '<a asp-action="Edit" asp-route-id="' + data + '" >'
+                        //                 + '<i class="fa-solid fa-pen fa-bounce" style = "color: #74C0FC; --fa-animation-duration: 2s;" > </i>';
+                        //             // + '< /a>';
+                        //         }
+                        //         return '';
+                        //     }
+                        // },
+                        // {
+                        //     data: 'Id',
+                        //     render: function (data, type, full) {
+                        //         if (type == 'display') {
+                        //             return '<a asp-action="Delete" asp-route-id="' + data + '">'
+                        //                 + '<i class="fa-regular fa-trash-can fa-shake" style = "color: #ff0000; --fa-animation-duration: 2s;" ></i>';
+                        //             // + '< /a>'
+                        //         }
+                        //         return '';
+                        //     }
+                        // },
                     ],
                 ordering: true,
                 order: [[1, 'asc']],
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 iDisplayLength: 10,
-                fixedHeader: {
-                    header: true,
-                    footer: false
-                },
-                columnDefs: [{
-                    orderable: false,
-                    targets: [0, 12, 13]
-                }],
-                searchHighlight: true,
-
-            });
-
-            $('#personIndex tbody').on('mouseenter', '.image-container', function () {
-                onMouseEnter(this);
-            });
-
-            $('#personIndex tbody').on('mouseleave', '.image-container', function () {
-                onMouseLeave(this);
-            });
-
-        })
+            })
+        });
     </script>
 }

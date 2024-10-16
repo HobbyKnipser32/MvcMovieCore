@@ -10,7 +10,7 @@ namespace MvcMoviesCore.Models
     {
         public Movies()
         {
-            this.MoviesPerson = new HashSet<MoviesPerson>();
+            MoviesPerson = [];
         }
 
         public Guid Id { get; set; }
