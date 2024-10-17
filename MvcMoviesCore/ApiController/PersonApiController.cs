@@ -55,7 +55,8 @@ namespace MvcMoviesCore.ApiController
                                   .Include(i => i.Sex)
                                   .Include(i => i.Nationality)
                                   .Include(i => i.MoviesPerson)
-                                  .Where(w => string.IsNullOrEmpty(w.Image))
+                                  .Include(i => i.PersonImages)
+                                  .Where(w => w.PersonImages.Count == 0)
                                   .OrderByDescending(o => o.MoviesPerson.Count)
                                   .ThenBy(o => o.Name)
                                   .ToListAsync();

@@ -310,7 +310,8 @@ namespace MvcMoviesCore.Controllers
                 try
                 {
                     var person = await MapAsync(personViewModel);
-                    var mainImage = int.Parse(Request.Form["isMainImage"]);
+                    //var requestIsMainImage = Request.Form["isMainImage"];
+                    _ = int.TryParse(Request.Form["isMainImage"], out var mainImage);
                     if (personViewModel.SelectedFile != null)
                     {
                         var maxImageNumber = _context.PersonImage.Where(w => w.PersonId.Equals(id)).Max(m => m.Number) + 1;
