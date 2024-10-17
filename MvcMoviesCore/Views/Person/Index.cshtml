@@ -36,70 +36,6 @@
                 <th>&nbsp;</th>                                             @* 13 *@
             </tr>
         </thead>
-        @* <tbody>
-        @foreach (var item in Model)
-        {
-        var imgSrc = originalFileDirectory + "/" + @item.Image;
-        <tr>
-        <td>
-        @if (!string.IsNullOrEmpty(item.Image))
-        {
-        <div class="image-container">
-        <img src="@imgSrc" title="@item.Name" class="image-small" style="max-height: 50px" />
-        <img src="@imgSrc" title="@item.Name" class="image-large" />
-        </div>
-        }
-        else
-        {
-        <div class="image-container">
-        <img src="~/images/noimageexists.png" class="image-small" style="max-height: 35px" />
-        <img src="~/images/noimageexists.png" title="@item.Name" class="image-large" />
-        </div>
-        }
-        </td>
-        <td>
-        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.ActorsAge)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Birthday)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Obit)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Nationality.Name)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Height)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Weight)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Classification)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.PersonType.Name)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Sex.Name)
-        </td>
-        <td>
-        <a asp-action="Edit" asp-route-id="@item.Id">
-        <i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
-        </a>
-        </td>
-        <td>
-        <a asp-action="Delete" asp-route-id="@item.Id">
-        <i class="fa-regular fa-trash-can fa-shake" style="color: #ff0000; --fa-animation-duration: 2s;"></i>
-        </a>
-        </td>
-        </tr>
-        }
-        </tbody> *@
         <a href=""></a>
     </table>
 </div>
@@ -112,26 +48,6 @@
     <script>
         $(document).ready(function () {
             $('#personIndex').DataTable({
-                // initComplete: function () {
-                //     this.api()
-                //         .columns()
-                //         .every(function () {
-                //             let column = this;
-                //             let title = column.header().textContent;
-
-                //             // Create input element
-                //             let input = document.createElement('input');
-                //             input.placeholder = title;
-                //             column.footer().replaceChildren(input);
-
-                //             // Event listener for user input
-                //             input.addEventListener('keyup', () => {
-                //                 if (column.search() !== this.value) {
-                //                     column.search(input.value).draw();
-                //                 }
-                //             });
-                //         });
-                // },
                 ajax: {
                     url: appRootPath + '/api/PersonApi',
                     dataSrc: ''
@@ -139,11 +55,11 @@
                 columns:
                     [
                         {
-                            data: 'Image',
+                            data: 'PersonImages',
                             render: function (data, type, full) {
                                 if (type == 'display') {
-                                    if (data) {
-                                        let imgSrc = '@originalFileDirectory' + "/" + data;
+                                    if (data.length > 0) {
+                                        let imgSrc = '@originalFileDirectory/' + data[0].PersonId + '/' + data[0].Name;
                                         return '<div class="image-container" >'
                                             + '<img src="' + imgSrc + '" class="image-small" style = "max-height: 50px" />'
                                             + '<img src="' + imgSrc + '" class="image-large" />'

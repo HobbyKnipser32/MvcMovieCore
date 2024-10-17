@@ -170,7 +170,9 @@
                             {
                                 <th>Rolle</th>
                             }
+                            <th>OnWatch</th>
                             <th>Bewertung</th>
+                            <th>Laufzeit</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -205,6 +207,12 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Movies.OnWatch)
+                                </td>
+                                <td style ="text-align:right">
+                                    @Html.DisplayFor(modelItem => item.Movies.Ranking)
+                                </td>
+                                <td style="text-align:right">
+                                    @Html.DisplayFor(modelItem => item.Movies.RunTime)
                                 </td>
                             </tr>
                         }
@@ -248,7 +256,7 @@
                 fixedHeader: {
                     header: true,
                 },
-                columns: [{ width: '35%' }, { width: '12%' }, { width: '12%' }, { width: '29%' }, { width: '12%' }],
+                columns: [{ width: '30%' }, { width: '10%' }, { width: '5%' }, { width: '30%' }, { width: '10%' }, { width: '10%' }, { width: '5%' }],
                 searchHighlight: true
             });
             const personId = '@Model.Id';

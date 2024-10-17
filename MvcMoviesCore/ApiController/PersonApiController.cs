@@ -89,6 +89,7 @@ namespace MvcMoviesCore.ApiController
                                   .Include(i => i.Sex)
                                   .Include(i => i.Nationality)
                                   .Include(i => i.MoviesPerson)
+                                  .Include(i => i.PersonImages.Where(w => w.IsMain == true && w.IsDeleted == false))
                                   .OrderBy(o => o.Name)
                                   .ToListAsync();
 
@@ -174,11 +175,11 @@ namespace MvcMoviesCore.ApiController
                             .Include(i => i.MovieRole)
                             .Where(w => w.MoviesId.Equals(personMovie.MoviesId) && !w.PersonId.Equals(personId))
                             .ToListAsync();
+                        var referer = Request.GetTypedHeaders().Referer;
+                        var hostUrl = $"{referer.Scheme}://{referer.Host}:{referer.Port}";
                         foreach (var actor in actors)
                         {
                             string person;
-                            var referer = Request.GetTypedHeaders().Referer;
-                            var hostUrl = $"{referer.Scheme}://{referer.Host}:{referer.Port}";
                             string url = $"{hostUrl}/Person/Details/{actor.PersonId}";
                             if (actor.Person.Classification < 8)
                             {
@@ -190,7 +191,8 @@ namespace MvcMoviesCore.ApiController
                             }
                             personScenes.Add(new PersonSceneViewModel()
                             {
-                                Film = new Movies() { Id = personMovie.Movies.Id, Name = $"{personMovie.Movies.Name} ({actor.MovieRole.Name})" },
+                                Film = actor.MovieRole != null ? new Movies() { Id = personMovie.Movies.Id, Name = $"{personMovie.Movies.Name} ({actor.MovieRole.Name})" }
+                                    : new Movies() { Id = personMovie.Movies.Id, Name = $"{personMovie.Movies.Name}" },
                                 Person = person,
                                 Szene = "-"
                             });
@@ -377,7 +379,7 @@ namespace MvcMoviesCore.ApiController
             {
                 imageNumber = await _context.PersonImage.Where(w => w.PersonId.Equals(personId)).MaxAsync(m => m.Number);
             }
-            catch (Exception ex)
+            catch
             {
                 imageNumber = 0;
             }
@@ -447,7 +449,7 @@ namespace MvcMoviesCore.ApiController
                 System.IO.File.Delete(filePath);
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
