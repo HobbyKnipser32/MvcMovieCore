@@ -14,25 +14,36 @@
     <div class="row">
         <div class="col-sm-2">
             <div class="card">
-                @* <div class="card-body" style="max-height: 225px"> *@
+                <div class="card-body" style="max-height: 278px">
                     @if (string.IsNullOrEmpty(imgSrc))
                     {
-                        <div class="image-container" style="width:225px; margin-left:auto; margin-right:auto">
-                            <img src="~/images/noimageexists.png" style="width:225px" />
+                        <div class="image-container">
+                            <img src="~/images/noimageexists.png" style="max-width:185px; margin-left:auto; margin-right:auto; margin-bottom:auto; margin-top:auto" />
                         </div>
                     }
                     else
                     {
-                        <div class="w3-content w3-section">
-                            @foreach (var image in Model.PersonImages)
-                            {
-                                var src = $"{originalFileDirectory}/{image.PersonId}/{image.Name}";
-                                <img class="mySlides w3-animate-fading" src="@src" style="max-height:250px; margin-left:auto; margin-right:auto" />
-                                @* <img src="@src" class="image-large" /> *@
-                            }
-                        </div>
+                        @if (Model.PersonImages.Count == 1)
+                        {
+                            var personImages = Model.PersonImages.ToList();
+                            var singleImgSrc = $"{originalFileDirectory}/{personImages[0].PersonId}/{personImages[0].Name}";
+                            <div class="image-container" >
+                                <img class="image-small" src="@singleImgSrc" style="max-height:200px; margin-left:auto; margin-right:auto; margin-bottom:auto; margin-top:auto" />
+                                <img class="image-large" src="@singleImgSrc" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="w3-content w3-section">
+                                @foreach (var image in Model.PersonImages)
+                                {
+                                    var src = $"{originalFileDirectory}/{image.PersonId}/{image.Name}";
+                                    <img class="mySlides w3-animate-fading" src="@src" style="max-height:250px; max-width:250px; margin-left:auto; margin-right:auto" />
+                                }
+                            </div>
+                        }
                     }
-                @* </div> *@
+                </div>
             </div>
         </div>
 
@@ -208,7 +219,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Movies.OnWatch)
                                 </td>
-                                <td style ="text-align:right">
+                                <td style="text-align:right">
                                     @Html.DisplayFor(modelItem => item.Movies.Ranking)
                                 </td>
                                 <td style="text-align:right">

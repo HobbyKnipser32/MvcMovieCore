@@ -26,15 +26,36 @@
         <div class="row">
             <div class="col-sm-2">
                 <div class="card">
-                    @* <div class="card-body" style="max-height: 278px"> *@
-                    <div class="w3-content w3-section">
-                        @foreach (var image in Model.Images)
+                    <div class="card-body" style="max-height: 278px">
+                        @if (Model.Images == null || Model.Images.Count == 0)
                         {
-                            var src = $"{imagePath}/{image.PersonId}/{image.Name}";
-                            <img class="mySlides w3-animate-fading" src="@src" style="max-height:250px; margin-left:auto; margin-right:auto" />
+                            <div class="image-container">
+                                <img src="~/images/noimageexists.png" style="max-width:185px; margin-left:auto; margin-right:auto; margin-bottom:auto; margin-top:auto" />
+                            </div>
+                        }
+                        else
+                        {
+                            @if (Model.Images.Count == 1)
+                            {
+                                var images = Model.Images.ToList();
+                                var singleImgSrc = $"{imagePath}/{images[0].PersonId}/{images[0].Name}";
+                                <div class="image-container" >
+                                    <img class="image-small" src="@singleImgSrc" style="max-height:200px; margin-left:auto; margin-right:auto; margin-bottom:auto; margin-top:auto" />
+                                    <img class="image-large" src="@singleImgSrc" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="w3-content w3-section">
+                                    @foreach (var image in Model.Images)
+                                    {
+                                        var src = $"{imagePath}/{image.PersonId}/{image.Name}";
+                                        <img class="mySlides w3-animate-fading" src="@src" style="max-height:250px; margin-left:auto; margin-right:auto" />
+                                    }
+                                </div>
+                            }
                         }
                     </div>
-                    @* </div> *@
                 </div>
             </div>
             <div class="col-sm-9">
@@ -313,6 +334,7 @@
             let personId = $('#id').val();
             let url = appRootPath + '/api/PersonApi/SaveImage?personId=' + personId;
             let xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", transferComplete);
             xhr.open('POST', url);
             xhr.send(formData);
             xhr.onreadystatechange = function () {
@@ -320,6 +342,11 @@
                     alert(xhr.responseText);
                 }
             }
+            // location.reload();
+        }
+
+        function transferComplete() {
+            console.log("The transfer is complete.");
             location.reload();
         }
 
