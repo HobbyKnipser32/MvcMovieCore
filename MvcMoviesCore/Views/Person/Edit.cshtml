@@ -40,7 +40,7 @@
                                 var images = Model.Images.ToList();
                                 var singleImgSrc = $"{imagePath}/{images[0].PersonId}/{images[0].Name}";
                                 <div class="image-container" >
-                                    <img class="image-small" src="@singleImgSrc" style="max-height:200px; margin-left:auto; margin-right:auto; margin-bottom:auto; margin-top:auto" />
+                                    <img class="image-small" src="@singleImgSrc" style="height:40px;" />
                                     <img class="image-large" src="@singleImgSrc" />
                                 </div>
                             }
@@ -50,7 +50,7 @@
                                     @foreach (var image in Model.Images)
                                     {
                                         var src = $"{imagePath}/{image.PersonId}/{image.Name}";
-                                        <img class="mySlides w3-animate-fading" src="@src" style="max-height:250px; margin-left:auto; margin-right:auto" />
+                                        <img class="mySlides w3-animate-fading" src="@src" style="height:40px" />
                                     }
                                 </div>
                             }
