@@ -273,7 +273,7 @@ namespace MvcMoviesCore.ApiController
                                             .Include(i => i.PersonType)
                                             .Include(i => i.Sex)
                                             .Include(i => i.Nationality)
-                                            .Include(i => i.PersonImages)
+                                            .Include(i => i.PersonImages.Where(f => f.IsMain == true))
                                             .OrderBy(o => o.PersonType)
                                             .ThenBy(t => t.Name).ToListAsync();
 
