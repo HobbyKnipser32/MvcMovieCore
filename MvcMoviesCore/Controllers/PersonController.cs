@@ -106,7 +106,7 @@ namespace MvcMoviesCore.Controllers
                                 await _context.AddAsync(newPersonImage);
                                 await _context.SaveChangesAsync();
                             }
-                            catch 
+                            catch
                             {
                                 continue;
                             }
@@ -298,7 +298,7 @@ namespace MvcMoviesCore.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id,
-            [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness,PreviousPage")] PersonViewModel personViewModel)
+            [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness,PreviousPage,Image")] PersonViewModel personViewModel)
         {
             if (id != personViewModel.Id)
             {
@@ -310,38 +310,17 @@ namespace MvcMoviesCore.Controllers
                 try
                 {
                     var person = await MapAsync(personViewModel);
-                    //var requestIsMainImage = Request.Form["isMainImage"];
-                    _ = int.TryParse(Request.Form["isMainImage"], out var mainImage);
-                    if (personViewModel.SelectedFile != null)
+                    _ = int.TryParse(person.Image, out var mainImage);
+                    var personImage = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(id) && f.IsMain == true);
+                    if (personImage != null && personImage.Number != mainImage)
                     {
-                        var maxImageNumber = _context.PersonImage.Where(w => w.PersonId.Equals(id)).Max(m => m.Number) + 1;
-                        var personImage = new PersonImage()
+                        personImage.IsMain = false;
+                        _context.Update(personImage);
+                        personImage = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(id) && f.Number == mainImage);
+                        if (personImage != null)
                         {
-                            ChangedAt = DateTime.Now,
-                            CreatetAt = DateTime.Now,
-                            Id = Guid.NewGuid(),
-                            IsDeleted = false,
-                            IsMain = maxImageNumber == 1,
-                            PersonId = id,
-                            Name = SaveFile(personViewModel.SelectedFile, maxImageNumber.ToString(), person.Id),
-                            Number = maxImageNumber
-                        };
-                        _context.PersonImage.Add(personImage);
-                        await _context.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        var personImage = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(id) && f.IsMain == true);
-                        if (personImage != null && personImage.Number != mainImage)
-                        {
-                            personImage.IsMain = false;
+                            personImage.IsMain = true;
                             _context.Update(personImage);
-                            personImage = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(id) && f.Number == mainImage);
-                            if (personImage != null)
-                            {
-                                personImage.IsMain = true;
-                                _context.Update(personImage);
-                            }
                         }
                     }
 
@@ -530,6 +509,7 @@ namespace MvcMoviesCore.Controllers
                 existsPerson.SexId = personViewModel.SexId;
                 existsPerson.StartOfBusiness = personViewModel.StartOfBusiness;
                 existsPerson.Weight = personViewModel.Weight;
+                existsPerson.Image = personViewModel.Image;
             }
             else
             {
@@ -549,6 +529,7 @@ namespace MvcMoviesCore.Controllers
                     SexId = personViewModel.SexId,
                     StartOfBusiness = personViewModel.StartOfBusiness,
                     Weight = personViewModel.Weight,
+                    Image = personViewModel.Image,
                 };
             }
             return existsPerson;

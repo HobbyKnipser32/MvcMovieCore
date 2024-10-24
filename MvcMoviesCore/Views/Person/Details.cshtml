@@ -14,11 +14,11 @@
     <div class="row">
         <div class="col-sm-2">
             <div class="card">
-                <div class="card-body" style="max-height: 278px">
+                <div class="card-body" style="max-height: 300px">
                     @if (string.IsNullOrEmpty(imgSrc))
                     {
                         <div class="image-container">
-                            <img src="~/images/noimageexists.png" style="max-width:185px; margin-left:auto; margin-right:auto; margin-bottom:auto; margin-top:auto" />
+                            <img src="~/images/noimageexists.png" style="display:block; margin-left:auto; margin-right:auto; width:90%;" />
                         </div>
                     }
                     else
@@ -28,7 +28,7 @@
                             var personImages = Model.PersonImages.ToList();
                             var singleImgSrc = $"{originalFileDirectory}/{personImages[0].PersonId}/{personImages[0].Name}";
                             <div class="image-container" >
-                                <img class="image-small" src="@singleImgSrc" style="max-height:200px; margin-left:auto; margin-right:auto; margin-bottom:auto; margin-top:auto" />
+                                <img class="image-small" src="@singleImgSrc" style="display:block; margin-left:auto; margin-right:auto; width:90%;" />
                                 <img class="image-large" src="@singleImgSrc" />
                             </div>
                         }
@@ -38,7 +38,7 @@
                                 @foreach (var image in Model.PersonImages)
                                 {
                                     var src = $"{originalFileDirectory}/{image.PersonId}/{image.Name}";
-                                    <img class="mySlides w3-animate-fading" src="@src" style="max-height:250px; max-width:250px; margin-left:auto; margin-right:auto" />
+                                    <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; width:90%;" />
                                 }
                             </div>
                         }

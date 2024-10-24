@@ -21,6 +21,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" id="id" />
     <input type="hidden" asp-for="PreviousPage" />
+    <input type="hidden" asp-for="Image" value="1" />
 
     <div class="container-fluid">
         <div class="row">
@@ -30,7 +31,7 @@
                         @if (Model.Images == null || Model.Images.Count == 0)
                         {
                             <div class="image-container">
-                                <img src="~/images/noimageexists.png" style="max-width:185px; margin-left:auto; margin-right:auto; margin-bottom:auto; margin-top:auto" />
+                                <img src="~/images/noimageexists.png" class="image-small" style="display:block; margin-left:auto; margin-right:auto; width:80%;" />
                             </div>
                         }
                         else
@@ -40,7 +41,7 @@
                                 var images = Model.Images.ToList();
                                 var singleImgSrc = $"{imagePath}/{images[0].PersonId}/{images[0].Name}";
                                 <div class="image-container" >
-                                    <img class="image-small" src="@singleImgSrc" style="height:40px;" />
+                                    <img class="image-small" src="@singleImgSrc" style="display:block; margin-left:auto; margin-right:auto; width:80%;" />
                                     <img class="image-large" src="@singleImgSrc" />
                                 </div>
                             }
@@ -50,7 +51,7 @@
                                     @foreach (var image in Model.Images)
                                     {
                                         var src = $"{imagePath}/{image.PersonId}/{image.Name}";
-                                        <img class="mySlides w3-animate-fading" src="@src" style="height:40px" />
+                                        <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; width:80%;" />
                                     }
                                 </div>
                             }
@@ -211,7 +212,7 @@
                         </div>
                     </td>
                     <td>
-                        <input type="radio" name="isMainImage" value="@item.Number" checked="@item.IsMain" style="display:block; margin-left:auto; margin-right:auto" />
+                        <input type="radio" name="isMainImage" value="@item.Number" checked="@item.IsMain" style="display:block; margin-left:auto; margin-right:auto" class="is-main-image" />
                     </td>
                     <td>
                         <button id="deleteImage" tyle="background-color: transparent; color: red; border: hidden"
@@ -279,13 +280,15 @@
                     $('#adultStuff').hide();
                 };
             });
+
+            
+            $('input:radio[name="isMainImage"]').on('click', function () {
+                let value = $(this).val();
+                $('#Image').attr('value', value);
+            });
         });
 
         function save() {
-            var fileName = "";
-            if ($('.dz-filename').length != 0) {
-                fileName = $('.dz-filename')[0].innerText;
-            };
             var person = {
                 "Id": $('#id').val(),
                 "Name": $('#name').val(),
@@ -301,8 +304,7 @@
                 "FakeBoobs": $('#fakeBoobs').is(":checked"),
                 "StartOfBusiness": $('#startOfBusiness').val(),
                 "EndOfBusiness": $('#endOfBusiness').val(),
-                "Image": fileName,
-                "SelectedFile": $('#SelectedFile').val(),
+                "Image": $('#isMainImageValue').val(),
             }
             var url = appRootPath + '/api/PersonApi/Update';
             $.post(url, person, function () {
