@@ -72,7 +72,7 @@ namespace MvcMoviesCore.Controllers
 
             foreach (var mpId in movie.MoviesPerson)
             {
-                mpId.Person = await _context.Person.Include(i => i.Sex).FirstOrDefaultAsync(f => f.Id == mpId.PersonId);
+                mpId.Person = await _context.Person.Include(i => i.Sex).Include(i => i.PersonImages.Where(w => w.IsMain)).FirstOrDefaultAsync(f => f.Id == mpId.PersonId);
                 if (mpId.Person.Obit != null && mpId.Person.Obit.Value.Year < movie.YearOfPublication.Value.Year)
                     mpId.Person.ActorsAge = mpId.Person.GetActorsAge(mpId.Person.Birthday, mpId.Person.Obit);
                 else
