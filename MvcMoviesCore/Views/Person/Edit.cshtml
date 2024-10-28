@@ -26,12 +26,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-2">
-                <div class="card">
-                    <div class="card-body" style="max-height: 278px">
+                @* <div class="card">
+                    <div class="card-body" style="max-height: 300px; max-width:280px"> *@
                         @if (Model.Images == null || Model.Images.Count == 0)
                         {
                             <div class="image-container">
-                                <img src="~/images/noimageexists.png" class="image-small" style="display:block; margin-left:auto; margin-right:auto; width:80%;" />
+                                <img src="~/images/noimageexists.png" class="image-small" style="display:block; margin-left:auto; margin-right:auto" />
                             </div>
                         }
                         else
@@ -41,7 +41,7 @@
                                 var images = Model.Images.ToList();
                                 var singleImgSrc = $"{imagePath}/{images[0].PersonId}/{images[0].Name}";
                                 <div class="image-container" >
-                                    <img class="image-small" src="@singleImgSrc" style="display:block; margin-left:auto; margin-right:auto; width:80%;" />
+                                    <img class="image-small" src="@singleImgSrc" style="display:block; margin-left:auto; margin-right:auto; max-height:290px; max-width:270px" />
                                     <img class="image-large" src="@singleImgSrc" />
                                 </div>
                             }
@@ -51,13 +51,13 @@
                                     @foreach (var image in Model.Images)
                                     {
                                         var src = $"{imagePath}/{image.PersonId}/{image.Name}";
-                                        <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; width:80%;" />
+                                        <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:290px; max-width:270px" />
                                     }
                                 </div>
                             }
                         }
-                    </div>
-                </div>
+                    @* </div>
+                </div> *@
             </div>
             <div class="col-sm-9">
                 <div class="card">
