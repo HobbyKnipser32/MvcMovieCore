@@ -158,7 +158,7 @@ namespace MvcMoviesCore.ApiController
                                     personScenes.Add(new PersonSceneViewModel()
                                     {
                                         Film = moviePerson.Practices != null
-                                            ? new Movies() { Id = moviePerson.Movies.Id, Name = $"{ moviePerson.Movies.Name } ({ moviePerson.Practices })" }
+                                            ? new Movies() { Id = moviePerson.Movies.Id, Name = $"{moviePerson.Movies.Name} ({moviePerson.Practices})" }
                                             : new Movies() { Id = moviePerson.Movies.Id, Name = moviePerson.Movies.Name },
                                         Szene = sceneCoActor.Scene.ToString(),
                                         Person = person,
