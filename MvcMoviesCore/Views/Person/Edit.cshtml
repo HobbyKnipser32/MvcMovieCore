@@ -26,8 +26,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-2">
-                @* <div class="card">
-                    <div class="card-body" style="max-height: 300px; max-width:280px"> *@
+                <div class="card">
+                    <div class="card-body">
                         @if (Model.Images == null || Model.Images.Count == 0)
                         {
                             <div class="image-container">
@@ -56,8 +56,8 @@
                                 </div>
                             }
                         }
-                    @* </div>
-                </div> *@
+                    </div>
+                </div> 
             </div>
             <div class="col-sm-9">
                 <div class="card">
@@ -215,7 +215,7 @@
                         <input type="radio" name="isMainImage" value="@item.Number" checked="@item.IsMain" style="display:block; margin-left:auto; margin-right:auto" class="is-main-image" />
                     </td>
                     <td>
-                        <button id="deleteImage" tyle="background-color: transparent; color: red; border: hidden"
+                        <button id="deleteImage" style="background-color: transparent; color: red; border: hidden"
                                 onClick="deleteImage('@item.Id', '@item.PersonId')" title="Bild löschen">
                             <i class="fa-solid fa-trash-can fa-fade fa-lg" style="color: #ff0000; --fa-animation-duration: 2s;"></i>
                         </button>

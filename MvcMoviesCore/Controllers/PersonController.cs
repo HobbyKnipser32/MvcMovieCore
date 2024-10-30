@@ -194,7 +194,7 @@ namespace MvcMoviesCore.Controllers
                 .Include(i => i.PersonType)
                 .Include(i => i.Sex)
                 .Include(i => i.Nationality)
-                .Include(i => i.PersonImages.OrderBy(o => o.Number))
+                .Include(i => i.PersonImages.Where(w => !w.IsDeleted).OrderBy(o => o.Number))
                 .Include(i => i.MoviesPerson)
                 .ThenInclude(t => t.MovieRole)
                 .FirstOrDefaultAsync(m => m.Id == id);
