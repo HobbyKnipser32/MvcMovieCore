@@ -263,7 +263,8 @@ namespace MvcMoviesCore.Controllers
         public IActionResult FileSizes()
         {
             string moviesDirectory = _configuration.GetValue<string>("AppSettings:MoviesDirectory");
-            string moviesAdultDirectory = @"\\192.168.0.254\ErrorLogs\Errors\Filme"; // @"Y:\Errors\Filme";
+            string moviesAdultDirectory = _configuration.GetValue<string>("AppSettings:MoviesADirectory"); 
+            //@"\\192.168.0.254\ErrorLogs\Errors\Filme"; // @"Y:\Errors\Filme";
             List<Movies> updateMovies = [];
 
             if (_showAdult)
