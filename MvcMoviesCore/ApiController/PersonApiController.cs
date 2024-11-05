@@ -78,7 +78,7 @@ namespace MvcMoviesCore.ApiController
             persons.ForEach(f => f.Sex.Person = null);
 
             var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-            var jsonResult = JsonConvert.SerializeObject(persons, Formatting.Indented, jsonSerializerSettings);
+            var jsonResult = JsonConvert.SerializeObject(persons.Where(w => w.MoviesPerson.Count > 0), Formatting.Indented, jsonSerializerSettings);
             return Ok(jsonResult);
         }
 
