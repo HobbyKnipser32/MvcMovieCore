@@ -12,38 +12,18 @@
 <table class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;" id="movieIndex">
     <thead>
         <tr>
-            <th>
-                Film
-            </th>
-            <th>
-                Erscheinungsjahr
-            </th>
-            <th>
-                Vorhanden
-            </th>
-            <th>
-                Laufzeit
-            </th>
-            <th>
-                On View
-            </th>
-            <th width="240px">
-                zuletzt gesehen
-            </th>
-            <th>
-                Genre
-            </th>
-            <th>
-                Speichermedium
-            </th>
-            <th>
-                Speicherort
-            </th>
-            <th>
-                Filegröße [kb]
-            </th>
-            <th></th>
-            <th></th>
+            <th width="20%">Film</th>                   @* #00 *@
+            <th>Erscheinungsjahr</th>                   @* #01 *@
+            <th>Vorhanden</th>                          @* #02 *@
+            <th>Laufzeit</th>                           @* #03 *@
+            <th>On View</th>                            @* #04 *@
+            <th width="220px">zuletzt gesehen</th>      @* #05 *@
+            <th>Genre</th>                              @* #06 *@
+            <th>Speichermedium</th>                     @* #07 *@
+            <th>Speicherort</th>                        @* #08 *@
+            <th width="200px">Filegröße [kb]</th>       @* #09 *@
+            <th width="3%">&nbsp;</th>                  @* #10 *@
+            <th width="3%">&nbsp;</th>                  @* #11 *@
         </tr>
     </thead>
 </table>
@@ -70,7 +50,8 @@
                             }
                             return '';
                         },
-                        searchable: true,
+                        type: 'html',
+                        searchable: true
                     },
                     {
                         data: 'YearOfPublication',
@@ -80,7 +61,9 @@
                                 return yearOfPublication.getUTCFullYear();
                             }
                             return '';
-                        }
+                        },
+                        type: 'num',
+                        className: 'dt-body-right'
                     },
                     {
                         data: 'InStock',
@@ -89,19 +72,23 @@
                                 return '<i class="fa-solid fa-check" style="color: #74C0FC;"></i>';
                             }
                             return '<i class="fa-solid fa-xmark" style="color: #ff0000"></i>';
-                        }
+                        },
+                        type: 'html',
+                        className: 'dt-body-center'
                     },
                     {
                         data: 'RunTime',
-                        render: function (data, type, full, meta) {
-                            if (data && type === 'display') {
-                                let runTime = full.RunTime;
-                                return full.RunTime.toString().replace(".", ",");
-                            }
-                            return '';
-                        }
+                        render: ['number', '.', ',', 1],
+                        className: 'dt-body-right'
+                        // function (data, type, full) {
+                        //     if (data && type === 'display') {
+                        //         return full.RunTime.toString().replace(".", ",");
+                        //     }
+                        //     return '';
+                        // },
+                        // type: 'num-fmt'
                     },
-                    { data: 'OnWatch' },
+                    { data: 'OnWatch', type: 'html', className: 'dt-body-center' },
                     {
                         data: 'LastView',
                         render: function (data, type, full, meta) {
@@ -112,31 +99,33 @@
                                     lastView.getUTCFullYear().toString().padStart(2, "0");
                             }
                             return '';
-                        }
+                        },
+                        type: 'date',
+                        className: 'dt-body-center'
                     },
                     { data: 'Genre.Name' },
                     { data: 'RecordCarrier.Name' },
                     { data: 'StorageLocation.Name' },
-                    {
-                        data: 'FileSizeInKB',
-                        render: ['number', '.', ',', 0],
-                        type: 'num'
-                    },
+                    { data: 'FileSizeInKB', render: ['number', '.', ',', 0], className: 'dt-body-right' },
                     {
                         data: 'Id',
                         orderable: false,
+                        searchable: false,
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
-                                var url = '@Url.Action("Details", "Movies")' + '/' + data;
+                                var url = '@Url.Action("Edit", "Movies")' + '/' + data;
                                 return '<a href = "' + url + '" titel="Details zeigen">' +
                                     '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC;  --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
                         },
+                        type: 'html',
+                        className: 'dt-body-center'
                     },
                     {
                         data: 'Id',
                         orderable: false,
+                        searchable: false,
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
                                 var id = "'" + data + "'";
@@ -145,19 +134,22 @@
                             }
                             return '';
                         },
+                        type: 'html',
+                        className: 'dt-body-center'
                     },
                 ],
                 ordering: true,
-                createdRow: function (row, data, dataIndex) {
-                    if (data.Adult == false) {
-                        $(row).css("background-color", "green");
-                    }
-                },
+                searchable: true,
+                bSearchable: true,
+                // createdRow: function (row, data, dataIndex) {
+                //     if (data['adult'] === false) {
+                //         $(row).css("background-color", "green");
+                //     }
+                // },
                 fixedHeader: {
                     header: true,
                     footer: false
                 },
-                columnDefs: [{ width: 400, targets: 9 }],
                 searchHighlight: true,
             });
         })

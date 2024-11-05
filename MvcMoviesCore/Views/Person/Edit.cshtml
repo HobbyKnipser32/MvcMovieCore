@@ -31,7 +31,7 @@
                         @if (Model.Images == null || Model.Images.Count == 0)
                         {
                             <div class="image-container">
-                                <img src="~/images/noimageexists.png" class="image-small" style="display:block; margin-left:auto; margin-right:auto" />
+                                <img src="~/images/noimageexists.png" class="image-small" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" />
                             </div>
                         }
                         else
@@ -41,7 +41,7 @@
                                 var images = Model.Images.ToList();
                                 var singleImgSrc = $"{imagePath}/{images[0].PersonId}/{images[0].Name}";
                                 <div class="image-container" >
-                                    <img class="image-small" src="@singleImgSrc" style="display:block; margin-left:auto; margin-right:auto; max-height:290px; max-width:270px" />
+                                    <img class="image-small" src="@singleImgSrc" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" />
                                     <img class="image-large" src="@singleImgSrc" />
                                 </div>
                             }
@@ -51,7 +51,7 @@
                                     @foreach (var image in Model.Images)
                                     {
                                         var src = $"{imagePath}/{image.PersonId}/{image.Name}";
-                                        <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:290px; max-width:270px" />
+                                        <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" />
                                     }
                                 </div>
                             }
