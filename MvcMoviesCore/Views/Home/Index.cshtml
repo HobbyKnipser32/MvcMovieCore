@@ -125,10 +125,10 @@
                         orderable: false
                     },
                     {
-                        data: 'Id',
+                        data: 'Name',
                         render: function (data, type, full, meta) {
                             if (data && type === 'display') {
-                                var url = '@Url.Action("Details", "Person")' + '/' + data;
+                                var url = '@Url.Action("Details", "Person")' + '/' + full["Id"];
                                 return '<a href="' + url + '" title="ansehen">' + full["Name"];
                             }
                             return '';
