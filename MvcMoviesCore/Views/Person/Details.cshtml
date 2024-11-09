@@ -27,7 +27,7 @@
                         {
                             var personImages = Model.PersonImages.ToList();
                             var singleImgSrc = $"{originalFileDirectory}/{personImages[0].PersonId}/{personImages[0].Name}";
-                            <div class="image-container" >
+                            <div class="image-container">
                                 <img class="image-small" src="@singleImgSrc" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" />
                                 <img class="image-large" src="@singleImgSrc" />
                             </div>
