@@ -132,7 +132,8 @@ namespace MvcMoviesCore.Controllers
                 movies = _context.Movies.Where(w => w.Name.Contains(searchText) && w.Adult == _showAdult).ToList();
             foreach (var movie in movies)
             {
-                var result = new SearchResult() { Id = movie.Id, Name = movie.Name, TypeOf = "Movies" };
+                var name = movie.RunTime == null ? $"{movie.Name}" : $"{movie.Name} ({movie.RunTime?.ToString("N0")} min)";
+                var result = new SearchResult() { Id = movie.Id, Name = name, TypeOf = "Movies" };
                 model.Add(result);
             }
             return model;
