@@ -49,15 +49,15 @@
                 <td>
                     @* 0 *@
                     <div class="image-container">
-                        @if (string.IsNullOrEmpty(item.Image))
+                        @if (item.PersonImages != null && item.PersonImages.Count > 0)
                         {
-                            <img src="/images/noimageexists.png" class="image-small" style="max-height: 50px" />
+                            var imgSrc = originalFileDirectory + "/" + item.Id + "/" + item.PersonImages.FirstOrDefault(f=>f.IsMain==true).Name; 
+                            <img src="@imgSrc" class="image-small" title="@item.Name" style="max-height: 50px" />
+                            <img src="@imgSrc" class="image-large" />
                         }
                         else
                         {
-                            var imgSrc = originalFileDirectory + "/" + @item.Image;
-                            <img src="@imgSrc" class="image-small" title="@item.Name" style="max-height: 50px" />
-                            <img src="@imgSrc" class="image-large" />
+                            <img src="/images/noimageexists.png" class="image-small" style="max-height: 50px" />
                         }
                     </div>
                 </td>
