@@ -108,7 +108,7 @@ body {
     display: none;
     position: fixed;
     max-width: auto;
-    max-height: auto;
+    max-height: 800px;
     z-index: 100;
     background-color: rgba(222, 222, 222);
     padding: 5px;

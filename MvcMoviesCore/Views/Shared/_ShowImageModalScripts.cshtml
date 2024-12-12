@@ -7,11 +7,7 @@
         if (container.children.length >= 2) {
             const padding = 5;
             const border = 1;
-            const offsetLeft = 50;
-            const offsetTop = 75;
-            const offsetBelow = 20;
-            const offsetAbove = offsetBelow;
-            const maxImageHeight = 800;
+            const offset = 20;
 
             let nodeSmall = container.children[0];
             let rectSmall = nodeSmall.getBoundingClientRect();
@@ -19,39 +15,86 @@
             let rectLarge = nodeLarge.getBoundingClientRect();
             let viewWidth = document.documentElement.clientWidth;
             let viewHeight = document.documentElement.clientHeight;
-            let left = rectSmall.left + rectSmall.width + offsetLeft;
-            let top = rectSmall.top - offsetTop;
-            let nodeLargeWidth = nodeLarge.width + padding + border;
-            let nodeLargeHeight = nodeLarge.height + padding + border;
+            let left = rectSmall.left + rectSmall.width + Number(offset);
+            let top = rectSmall.top - Number(offset);
+            let nodeLargeWidth = nodeLarge.naturalWidth + Number(padding) + Number(border);
+            let nodeLargeHeight = nodeLarge.naturalHeight + Number(padding) + Number(border);
+            let maxImageHeight = getMaxHeight($(nodeLarge).css("max-height"));
 
-            if (nodeLarge.height > maxImageHeight) {
-                nodeLargeHeight = maxImageHeight + padding + border;
-                nodeLargeWidth = Number(maxImageHeight * nodeLarge.width / nodeLarge.height) + padding + border;
+            // image larger than maxImageHeight
+            if (nodeLargeHeight > maxImageHeight) {
+                nodeLargeHeight = Number(maxImageHeight) + Number(padding) + Number(border);
+                nodeLargeWidth = Number(maxImageHeight * nodeLarge.naturalWidth / nodeLarge.naturalHeight) + Number(padding) + Number(border);
                 nodeLarge.height = nodeLargeHeight;
                 nodeLarge.width = nodeLargeWidth;
             }
 
-            // not enough space on the left
-            let placeLeft = viewWidth - rectSmall.x - rectSmall.width - offsetLeft;
-            if (placeLeft < nodeLargeWidth) {
-                left = rectSmall.x - offsetLeft - nodeLargeWidth;
+            // Image larger than viewHeight
+            if(nodeLarge.height > viewHeight){
+                nodeLargeHeight = Number(viewHeight) - Number(padding) - Number(border) - 2 * Number(offset);
+                nodeLargeWidth = Number(nodeLargeHeight * nodeLarge.naturalWidth / nodeLarge.naturalHeight) + Number(padding) + Number(border);
+                nodeLarge.height = nodeLargeHeight + Number(padding) + Number(border);
+                nodeLarge.width = nodeLargeWidth;
             }
 
-            // not enough space below
-            let placeBellow = viewHeight - rectSmall.y - rectSmall.width + offsetTop;
-            if (placeBellow < nodeLargeHeight) {
-                top = viewHeight - offsetBelow - nodeLargeHeight;
+            let placeRight = Number(viewWidth) - rectSmall.left - rectSmall.width - Number(offset);
+            let placeLeft = rectSmall.left - Number(offset);
+            let placeAbove = Number(rectSmall.top) - Number(offset);
+            let placeBelow = Number(viewHeight) - Number(rectSmall.top) - Number(rectSmall.height) - Number(offset);
+
+            let showLargeRight = false;
+            if (placeRight >= nodeLargeWidth) {
+                showLargeRight = true;
+                if (placeBelow < nodeLargeHeight) {
+                    top = Number(viewHeight) - Number(nodeLargeHeight) - Number(offset);
+                }
             }
 
-            // not enough space above
-            if (top < offsetAbove) {
-                top = offsetAbove;
+            // not enough space on the right, show on the left side
+            let showLargeLeft = false;
+            if (placeLeft >= nodeLargeWidth && !showLargeRight) {
+                left = rectSmall.x - Number(offset) - Number(nodeLargeWidth);
+                if (placeBelow < nodeLargeHeight) {
+                    top = Number(viewHeight) - Number(nodeLargeHeight) - Number(offset);
+                }
+                showLargeLeft = true;
             }
 
-            //is too high
-            if (rectLarge < nodeLarge.x) {
-                nodeLarge.height = rectLarge - padding - border;
+            // not enough space on the left or right, show below or above
+            if (!showLargeRight && !showLargeLeft) {
+                // on below is more place
+                if (placeBelow >= placeAbove) {
+                    top = rectSmall.top + rectSmall.height + Number(offset);
+                    if (Number(placeBelow) < Number(nodeLargeHeight)) {
+                        nodeLargeHeight = Number(placeBelow) - Number(offset);
+                        nodeLargeWidth = Number(nodeLargeHeight * nodeLarge.naturalWidth / nodeLarge.naturalHeight);
+                        nodeLarge.height = nodeLargeHeight;
+                        nodeLarge.width = nodeLargeWidth;
+                    }
+                }
+                else {
+                    top = rectSmall.top - Number(nodeLargeHeight) - Number(offset);
+                    if (Number(placeAbove) < Number(nodeLargeHeight)) {
+                        nodeLargeHeight = Number(placeAbove) - Number(offset);
+                        nodeLargeWidth = Number(nodeLargeHeight * nodeLarge.naturalWidth / nodeLarge.naturalHeight);
+                        nodeLarge.height = nodeLargeHeight;
+                        nodeLarge.width = nodeLargeWidth;
+                        top = Number(offset);
+                    }
+                }
 
+                let align = Number(rectSmall.left) + (Number(rectSmall.width) / 2);
+                // not enough space left, shift at right
+                if (align < (Number(nodeLargeWidth / 2))) {
+                    left = Number(offset);
+                }
+                // not enough space right, shift at left
+                else if ((Number(viewWidth) - Number(align)) < (Number(nodeLargeWidth / 2))) {
+                    left = Number(viewWidth) - Number(nodeLargeWidth) - Number(offset);
+                }
+                else {
+                    left = Number(align) - (Number(nodeLargeWidth) / 2);
+                }
             }
 
             nodeLarge.style.left = left + "px";
@@ -67,4 +110,15 @@
             node.style.display = "none";
         }
     }
+
+    function getMaxHeight(nodeMaxHeight) {
+        if (nodeMaxHeight == "none"){
+            return 800;
+        }
+        else
+        {
+            return nodeMaxHeight.substring(0, nodeMaxHeight.indexOf("px"));
+        }
+    }
+
 </script>
