@@ -163,6 +163,8 @@ namespace MvcMoviesCore.Controllers
                                   .Include(i => i.PersonType)
                                   .Include(i => i.Sex)
                                   .Include(i => i.Nationality)
+                                  .Include(i => i.MoviesPerson)
+                                  .Include(i => i.PersonImages)
                                   .Where(w => w.NationalityId.Equals(id))
                                   .OrderBy(o => o.Name)
                                   .AsQueryable();
@@ -179,7 +181,8 @@ namespace MvcMoviesCore.Controllers
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
             ViewData["FilterFor"] = GetNationalityName(id);
 
-            return View("Index", persons);
+            return View(persons);
+            //return View("Index", persons);
         }
 
         // GET: Person/Details/5
@@ -489,8 +492,13 @@ namespace MvcMoviesCore.Controllers
             if (id == Guid.Empty) return string.Empty;
             var nationality = _context.Nationalities.FirstOrDefault(f => f.Id.Equals(id));
             if (nationality != null)
-                return $" für {nationality.Description}";
-            return string.Empty;
+            {
+                if (!string.IsNullOrWhiteSpace(nationality.Description))
+                    return $" für {nationality.Description}";
+                else
+                    return $" für {nationality.Name}";
+            }
+            return " für ? (unbkannt)";
         }
 
         private async Task<Person> MapAsync(PersonViewModel personViewModel)

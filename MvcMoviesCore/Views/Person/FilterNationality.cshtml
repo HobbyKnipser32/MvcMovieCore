@@ -1,0 +1,222 @@
+﻿@model IEnumerable<MvcMoviesCore.Models.Person>
+
+@{
+    var headline = "Personen";
+    ViewData["Title"] = "Personen";
+    if (ViewData["FilterFor"] != null && !string.IsNullOrEmpty(ViewData["FilterFor"].ToString()))
+    {
+        headline += ViewData["FilterFor"].ToString();
+    }
+    var originalFileDirectory = ViewData["OriginalFileDirectory"];
+}
+<div class="container-fluid">
+    <h2>@headline</h2>
+    <hr />
+    <table class="table" id="personIndex">
+        <thead>
+            <tr>
+                <th style="width: 50px">&nbsp;</th>                         @*  0 *@
+                <th>@Html.DisplayNameFor(model => model.Name)</th>          @*  1 *@
+                <th>&nbsp;</th>                                             @*  2 *@
+                <th>@Html.DisplayNameFor(model => model.Birthday)</th>      @*  3 *@
+                <th>@Html.DisplayNameFor(model => model.Obit)</th>          @*  4 *@
+                <th>@Html.DisplayNameFor(model => model.Nationality)</th>   @*  5 *@
+                <th>@Html.DisplayNameFor(model => model.Height)</th>        @*  6 *@
+                <th>@Html.DisplayNameFor(model => model.Weight)</th>        @*  7 *@
+                <th>&nbsp;</th>                                             @*  8 *@
+                <th>@Html.DisplayNameFor(model => model.PersonType)</th>    @*  9 *@
+                <th>@Html.DisplayNameFor(model => model.Sex)</th>           @* 10 *@
+                <th>Filme</th>                                              @* 11 *@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var person in Model)
+            {
+                @* var imageSrc = $"{originalFileDirectory}/{person.Id}/{person.PersonImages.FirstOrDefault(f => f.IsMain).Name}"; *@
+                var link = $"{Url.Action("Details", "Person")}/{person.Id}";
+                <tr>
+                    <td>
+                        @if (person.PersonImages != null && person.PersonImages.Count > 0)
+                        {
+                            var imageSrc = $"{originalFileDirectory}/{person.Id}/{person.PersonImages.FirstOrDefault(f => f.IsMain).Name}";
+                            <div class="image-container">
+                                <img src="@imageSrc" class="image-small" style="max-height: 50px" />
+                                <img src="@imageSrc" class="image-large" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="image-container">
+                                <img src="/images/noimageexists.png" class="image-small" style="max-height: 50px" />
+                            </div>
+                        }
+                    </td>
+                    <td><a href="@link">@Html.DisplayFor(d => person.Name)</a></td>
+                    <td>@Html.DisplayFor(d => person.ActorsAge)</td>
+                    <td>@Html.DisplayFor(d => person.Birthday)</td>
+                    <td>@Html.DisplayFor(d => person.Obit)</td>
+                    <td>@Html.DisplayFor(d => person.Nationality.Name)</td>
+                    <td>@Html.DisplayFor(d => person.Height)</td>
+                    <td>@Html.DisplayFor(d => person.Weight)</td>
+                    <td>@Html.DisplayFor(d => person.Classification)</td>
+                    <td>@Html.DisplayFor(d => person.PersonType.Name)</td>
+                    <td>@Html.DisplayFor(d => person.Sex.Name)</td>
+                    <td>@Html.DisplayFor(d => person.MoviesPerson.Count)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    <partial name="_DataTableScripts" />
+    <partial name="_ShowImageModalScripts" />
+
+    <script>
+        $(document).ready(function () {
+            $('#personIndex').DataTable({
+                // ajax: {
+                //     url: appRootPath + '/api/PersonApi',
+                //     dataSrc: ''
+                // },
+                // columns:
+                //     [
+                //         {
+                //             data: 'PersonImages',
+                //             render: function (data, type, full) {
+                //                 if (type == 'display') {
+                //                     if (data.length > 0) {
+                //                         let imgSrc = '@originalFileDirectory/' + data[0].PersonId + '/' + data[0].Name;
+                //                         return '<div class="image-container" >'
+                //                             + '<img src="' + imgSrc + '" class="image-small" style = "max-height: 50px" />'
+                //                             + '<img src="' + imgSrc + '" class="image-large" />'
+                //                             + '</div>';
+                //                     }
+                //                     else {
+                //                         return '<div class="image-container" >'
+                //                             + '<img src="/images/noimageexists.png" class="image-small" style = "max-height: 35px" />'
+                //                             + '<img src="/images/noimageexists.png" class="image-large" />'
+                //                             + '</div>';
+                //                     }
+                //                 }
+                //                 return '';
+                //             },
+                //             type: 'html'
+                //         },
+                //         {
+                //             data: 'Id',
+                //             render: function (data, type, full) {
+                //                 if (type == 'display' && data) {
+                //                     let link = '@Url.Action("Details", "Person")' + '/' + data;
+                //                     return '<a href="' + link + '" >' + full["Name"];
+                //                     // return '<a asp-action="Details" asp-route-id="' + full["Id"] + '" >' + data + '</a>';
+                //                 }
+                //                 return '';
+                //             },
+                //             type: 'html'
+                //         },
+                //         {
+                //             data: 'ActorsAge',
+                //             type: 'html-num'
+                //         },
+                //         {
+                //             data: 'Birthday',
+                //             render: function (data, type, full) {
+                //                 if (type = 'display' && data) {
+                //                     moment.locale('de');
+                //                     return moment(data).format('ll');
+                //                 }
+                //                 return '';
+                //             },
+                //             type: 'date'
+                //         },
+                //         {
+                //             data: 'Obit',
+                //             render: function (data, type, full) {
+                //                 if (type = 'display' && data) {
+                //                     moment.locale('de');
+                //                     return moment(data).format('ll');
+                //                 }
+                //                 return '';
+                //             },
+                //             type: 'date'
+                //         },
+                //         {
+                //             data: 'Nationality.Name',
+                //             type: 'html'
+                //         },
+                //         {
+                //             data: 'Height',
+                //             type: 'html-num'
+                //         },
+                //         {
+                //             data: 'Weight',
+                //             type: 'html-num'
+                //         },
+                //         {
+                //             data: 'Classification',
+                //             type: 'html-num'
+                //         },
+                //         {
+                //             data: 'PersonType.Name',
+                //             type: 'html'
+                //         },
+                //         {
+                //             data: 'Sex.Name',
+                //             type: 'html'
+                //         },
+                //         {
+                //             data: 'MoviesPerson.length',
+                //             type: 'html-num'
+                //         },
+                //         {
+                //             data: 'Id',
+                //             render: function (data, type, full) {
+                //                 if (type == 'display') {
+                //                     return '<a asp-action="Edit" asp-route-id="' + data + '" >'
+                //                         + '<i class="fa-solid fa-pen fa-bounce" style = "color: #74C0FC; --fa-animation-duration: 2s;" > </i>';
+                //                     // + '< /a>';
+                //                 }
+                //                 return '';
+                //             }
+                //         },
+                //         {
+                //             data: 'Id',
+                //             render: function (data, type, full) {
+                //                 if (type == 'display') {
+                //                     return '<a asp-action="Delete" asp-route-id="' + data + '">'
+                //                         + '<i class="fa-regular fa-trash-can fa-shake" style = "color: #ff0000; --fa-animation-duration: 2s;" ></i>';
+                //                     // + '< /a>'
+                //                 }
+                //                 return '';
+                //             }
+                //         },
+                //     ],
+                ordering: true,
+                order: [[1, 'asc']],
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                iDisplayLength: 10,
+                fixedHeader: {
+                    header: true,
+                    footer: false
+                },
+                columnDefs: [{
+                    orderable: false,
+                    targets: [0]
+                }],
+                searchHighlight: true,
+
+            });
+
+            $('#personIndex tbody').on('mouseenter', '.image-container', function () {
+                onMouseEnter(this);
+            });
+
+            $('#personIndex tbody').on('mouseleave', '.image-container', function () {
+                onMouseLeave(this);
+            });
+
+        })
+    </script>
+}
