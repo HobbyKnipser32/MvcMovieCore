@@ -22,7 +22,7 @@ namespace MvcMoviesCore.Controllers
         private readonly MvcMovieCoreContext _context;
         private readonly IConfiguration _configuration;
         private readonly string _originalFileDirectory = "/Images/Original";
-        private bool _showAdult;
+        private readonly bool _showAdult;
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace MvcMoviesCore.Controllers
         #region public functions
 
         // GET: Movies
-        public IActionResult Index(string filter, bool? adult)
+        public IActionResult Index()
         {
             //var practices = GetPractices();
 
@@ -79,7 +79,7 @@ namespace MvcMoviesCore.Controllers
                     mpId.Person.ActorsAge = mpId.Person.GetActorsAgeInMovie(mpId.Person.Birthday, movie.YearOfPublication);
             }
 
-            movie.MoviesPerson = movie.MoviesPerson.OrderBy(o => o.Person.Classification).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
+            movie.MoviesPerson = [.. movie.MoviesPerson.OrderBy(o => o.Person.Classification).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name)];
 
             movie.Scenes = await GetScenesAsync(id);
 
@@ -209,7 +209,7 @@ namespace MvcMoviesCore.Controllers
             foreach (var moviePerson in moviesPerson)
             {
                 var scenes = _context.Scenes.Where(w => w.MoviesPersonsId == moviePerson.Id).ToList();
-                if (scenes.Any())
+                if (scenes.Count != 0)
                 {
                     _context.Scenes.RemoveRange(scenes);
                     _context.SaveChanges();
@@ -235,7 +235,7 @@ namespace MvcMoviesCore.Controllers
             if (moviePerson == null)
                 return NotFound();
 
-            ViewData["Referer"] = Request.Headers["Referer"].ToString();
+            ViewData["Referer"] = Request.Headers.Referer.ToString();
 
             return View(moviePerson);
         }
@@ -248,7 +248,7 @@ namespace MvcMoviesCore.Controllers
             if (moviePerson != null)
             {
                 var scenes = _context.Scenes.Where(w => w.MoviesPersonsId.Equals(moviePerson.Id)).ToList();
-                if (scenes.Any())
+                if (scenes.Count != 0)
                 {
                     _context.Scenes.RemoveRange(scenes);
                     await _context.SaveChangesAsync();
@@ -335,12 +335,12 @@ namespace MvcMoviesCore.Controllers
 
         private List<SelectListItem> GetRoles()
         {
-            return PrepareListWithNull(_context.MovieRole.Distinct().OrderBy(o => o.Name).Select(s => new SelectListItem(s.Name, s.Id.ToString())).ToList());
+            return PrepareListWithNull([.. _context.MovieRole.Distinct().OrderBy(o => o.Name).Select(s => new SelectListItem(s.Name, s.Id.ToString()))]);
         }
 
         private List<SelectListItem> GetActors()
         {
-            return PrepareListWithNull(_context.Person.Distinct().OrderBy(o => o.Name).Select(s => new SelectListItem(s.Name, s.Id.ToString())).ToList());
+            return PrepareListWithNull([.. _context.Person.Distinct().OrderBy(o => o.Name).Select(s => new SelectListItem(s.Name, s.Id.ToString()))]);
         }
 
         private bool MoviesExists(Guid id)
@@ -356,7 +356,7 @@ namespace MvcMoviesCore.Controllers
                 .ThenInclude(t => t.Sex)
                 .ToListAsync();
 
-            if (!moviePersons.Any())
+            if (moviePersons.Count == 0)
                 return null;
 
             var scenes = new List<ScenesViewModel>();
@@ -364,7 +364,7 @@ namespace MvcMoviesCore.Controllers
             foreach (var moviePerson in moviePersons)
             {
                 var scenen = await _context.Scenes.Where(w => w.MoviesPersonsId.Equals(moviePerson.Id)).ToListAsync();
-                if (scenen.Any())
+                if (scenen.Count != 0)
                 {
                     foreach (var scene in scenen)
                     {
@@ -399,11 +399,11 @@ namespace MvcMoviesCore.Controllers
         {
             var practices = new List<string>();
             var allPractices = _context.MoviesPerson.Where(w => !string.IsNullOrEmpty(w.Practices)).GroupBy(g => g.Practices).ToList();
-            if (allPractices.Any())
+            if (allPractices.Count != 0)
             {
                 foreach (var practice in allPractices)
                 {
-                    if (practice.Key.Contains(","))
+                    if (practice.Key.Contains(','))
                     {
                         var keys = practice.Key.Split(',').ToList();
                         foreach (var key in keys)
@@ -427,15 +427,15 @@ namespace MvcMoviesCore.Controllers
         {
             var filterContent = new List<string>();
             var genres = _context.Genre.Where(w => !string.IsNullOrEmpty(w.Name)).ToList();
-            if (genres.Any())
+            if (genres.Count != 0)
             {
                 foreach (var genre in genres)
                 {
                     var g = genre.Name.Split(".");
-                    if (g.Any())
+                    if (g.Length != 0)
                     {
                         foreach (var item in g)
-                            if (!string.IsNullOrWhiteSpace(item) && !item.Contains("-") && !filterContent.Contains(item))
+                            if (!string.IsNullOrWhiteSpace(item) && !item.Contains('-') && !filterContent.Contains(item))
                                 filterContent.Add(item.Trim());
                     }
                 }
@@ -446,21 +446,21 @@ namespace MvcMoviesCore.Controllers
                 foreach (var practic in practices)
                 {
                     var p = practic.Practices.Split(",", StringSplitOptions.RemoveEmptyEntries);
-                    if (p.Any())
+                    if (p.Length != 0)
                     {
                         foreach (var item in p)
-                            if (!string.IsNullOrWhiteSpace(item) && !item.Contains("-") && !filterContent.Contains(item.Trim()))
+                            if (!string.IsNullOrWhiteSpace(item) && !item.Contains('-') && !filterContent.Contains(item.Trim()))
                                 filterContent.Add(item.Trim());
                     }
                 }
             }
-            return filterContent.OrderBy(o => o).ToList();
+            return [.. filterContent.OrderBy(o => o)];
         }
 
         private static List<SelectListItem> PrepareListWithNull(List<SelectListItem> items)
         {
             items.Insert(0, new SelectListItem(null, null));
-            return items.ToList();
+            return [.. items];
         }
 
         private static decimal GetVideoDuration(string filePath)
@@ -468,8 +468,7 @@ namespace MvcMoviesCore.Controllers
             try
             {
                 using var shell = ShellObject.FromParsingName(filePath);
-                IShellProperty prop = shell.Properties.System.Media.Duration;
-                var t = TimeSpan.FromTicks((long)(ulong)prop.ValueAsObject);
+                var t = TimeSpan.FromTicks((long)(ulong)((IShellProperty)shell.Properties.System.Media.Duration).ValueAsObject);
                 var hour = t.Hours;
                 var minute = t.Minutes;
                 var second = decimal.Round((decimal)t.Seconds / 60, 2);

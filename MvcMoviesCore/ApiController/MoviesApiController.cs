@@ -37,7 +37,7 @@ namespace MvcMoviesCore.ApiController
                     moviePerson.Person.ActorsAge = moviePerson.Person.GetActorsAgeInMovie(moviePerson.Person.Birthday, movie.YearOfPublication);
             }
 
-            moviePersons = moviePersons.OrderBy(o => o.Person.Classification).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name).ToList();
+            moviePersons = [.. moviePersons.OrderBy(o => o.Person.Classification).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name)];
             string jsonResult;
             try
             {
@@ -81,7 +81,7 @@ namespace MvcMoviesCore.ApiController
             }
             try
             {
-                moviePersons = moviePersons.OrderBy(o => o.Actor).ThenBy(t => t.Role).ToList();
+                moviePersons = [.. moviePersons.OrderBy(o => o.Actor).ThenBy(t => t.Role)];
                 var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
                 jsonResult = JsonConvert.SerializeObject(moviePersons, Formatting.Indented, jsonSerializerSettings);
                 return Ok(jsonResult);
@@ -152,7 +152,7 @@ namespace MvcMoviesCore.ApiController
                 foreach (var moviePerson in moviesPerson)
                 {
                     var scenes = await _context.Scenes.Where(w => w.MoviesPersonsId == moviePerson.Id).ToListAsync();
-                    if (scenes.Any())
+                    if (scenes.Count != 0)
                     {
                         _context.Scenes.RemoveRange(scenes);
                         await _context.SaveChangesAsync();

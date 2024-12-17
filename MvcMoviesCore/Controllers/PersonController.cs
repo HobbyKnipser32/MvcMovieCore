@@ -213,7 +213,7 @@ namespace MvcMoviesCore.Controllers
                 mpId.Movies.ActorsAge = mpId.Movies.GetActorsAgeInMovie(person.Birthday, mpId.Movies.YearOfPublication);
             }
 
-            person.MoviesPerson = person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication).ToList();
+            person.MoviesPerson = [.. person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication)];
 
             ViewData["AdultPersonType"] = GetAdultPersonTypeId();
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;

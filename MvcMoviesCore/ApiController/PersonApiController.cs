@@ -167,7 +167,7 @@ namespace MvcMoviesCore.ApiController
                             }
                         }
 
-                        personScenes = personScenes.OrderBy(o => o.Person).ThenBy(t => t.Film.Name).ThenBy(t => t.Szene).ToList();
+                        personScenes = [.. personScenes.OrderBy(o => o.Person).ThenBy(t => t.Film.Name).ThenBy(t => t.Szene)];
                     }
                     else
                     {
@@ -201,7 +201,7 @@ namespace MvcMoviesCore.ApiController
                             });
                         }
 
-                        personScenes = personScenes.OrderBy(o => o.Person).ThenBy(t => t.Film.Name).ToList();
+                        personScenes = [.. personScenes.OrderBy(o => o.Person).ThenBy(t => t.Film.Name)];
                     }
                 }
                 try
