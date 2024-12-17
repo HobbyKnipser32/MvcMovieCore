@@ -182,7 +182,6 @@ namespace MvcMoviesCore.Controllers
             ViewData["FilterFor"] = GetNationalityName(id);
 
             return View(persons);
-            //return View("Index", persons);
         }
 
         // GET: Person/Details/5
