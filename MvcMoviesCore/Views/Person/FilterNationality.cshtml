@@ -32,7 +32,6 @@
         <tbody>
             @foreach (var person in Model)
             {
-                @* var imageSrc = $"{originalFileDirectory}/{person.Id}/{person.PersonImages.FirstOrDefault(f => f.IsMain).Name}"; *@
                 var link = $"{Url.Action("Details", "Person")}/{person.Id}";
                 <tr>
                     <td>
@@ -76,123 +75,6 @@
     <script>
         $(document).ready(function () {
             $('#personIndex').DataTable({
-                // ajax: {
-                //     url: appRootPath + '/api/PersonApi',
-                //     dataSrc: ''
-                // },
-                // columns:
-                //     [
-                //         {
-                //             data: 'PersonImages',
-                //             render: function (data, type, full) {
-                //                 if (type == 'display') {
-                //                     if (data.length > 0) {
-                //                         let imgSrc = '@originalFileDirectory/' + data[0].PersonId + '/' + data[0].Name;
-                //                         return '<div class="image-container" >'
-                //                             + '<img src="' + imgSrc + '" class="image-small" style = "max-height: 50px" />'
-                //                             + '<img src="' + imgSrc + '" class="image-large" />'
-                //                             + '</div>';
-                //                     }
-                //                     else {
-                //                         return '<div class="image-container" >'
-                //                             + '<img src="/images/noimageexists.png" class="image-small" style = "max-height: 35px" />'
-                //                             + '<img src="/images/noimageexists.png" class="image-large" />'
-                //                             + '</div>';
-                //                     }
-                //                 }
-                //                 return '';
-                //             },
-                //             type: 'html'
-                //         },
-                //         {
-                //             data: 'Id',
-                //             render: function (data, type, full) {
-                //                 if (type == 'display' && data) {
-                //                     let link = '@Url.Action("Details", "Person")' + '/' + data;
-                //                     return '<a href="' + link + '" >' + full["Name"];
-                //                     // return '<a asp-action="Details" asp-route-id="' + full["Id"] + '" >' + data + '</a>';
-                //                 }
-                //                 return '';
-                //             },
-                //             type: 'html'
-                //         },
-                //         {
-                //             data: 'ActorsAge',
-                //             type: 'html-num'
-                //         },
-                //         {
-                //             data: 'Birthday',
-                //             render: function (data, type, full) {
-                //                 if (type = 'display' && data) {
-                //                     moment.locale('de');
-                //                     return moment(data).format('ll');
-                //                 }
-                //                 return '';
-                //             },
-                //             type: 'date'
-                //         },
-                //         {
-                //             data: 'Obit',
-                //             render: function (data, type, full) {
-                //                 if (type = 'display' && data) {
-                //                     moment.locale('de');
-                //                     return moment(data).format('ll');
-                //                 }
-                //                 return '';
-                //             },
-                //             type: 'date'
-                //         },
-                //         {
-                //             data: 'Nationality.Name',
-                //             type: 'html'
-                //         },
-                //         {
-                //             data: 'Height',
-                //             type: 'html-num'
-                //         },
-                //         {
-                //             data: 'Weight',
-                //             type: 'html-num'
-                //         },
-                //         {
-                //             data: 'Classification',
-                //             type: 'html-num'
-                //         },
-                //         {
-                //             data: 'PersonType.Name',
-                //             type: 'html'
-                //         },
-                //         {
-                //             data: 'Sex.Name',
-                //             type: 'html'
-                //         },
-                //         {
-                //             data: 'MoviesPerson.length',
-                //             type: 'html-num'
-                //         },
-                //         {
-                //             data: 'Id',
-                //             render: function (data, type, full) {
-                //                 if (type == 'display') {
-                //                     return '<a asp-action="Edit" asp-route-id="' + data + '" >'
-                //                         + '<i class="fa-solid fa-pen fa-bounce" style = "color: #74C0FC; --fa-animation-duration: 2s;" > </i>';
-                //                     // + '< /a>';
-                //                 }
-                //                 return '';
-                //             }
-                //         },
-                //         {
-                //             data: 'Id',
-                //             render: function (data, type, full) {
-                //                 if (type == 'display') {
-                //                     return '<a asp-action="Delete" asp-route-id="' + data + '">'
-                //                         + '<i class="fa-regular fa-trash-can fa-shake" style = "color: #ff0000; --fa-animation-duration: 2s;" ></i>';
-                //                     // + '< /a>'
-                //                 }
-                //                 return '';
-                //             }
-                //         },
-                //     ],
                 ordering: true,
                 order: [[1, 'asc']],
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
