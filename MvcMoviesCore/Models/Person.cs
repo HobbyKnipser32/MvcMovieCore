@@ -15,6 +15,7 @@ namespace MvcMoviesCore.Models
 
         public Guid Id { get; set; }
 
+        [Required(ErrorMessage = "Der Name ist erforderlich!")]
         public string? Name { get; set; }
 
         public Guid SexId { get; set; }
@@ -59,7 +60,7 @@ namespace MvcMoviesCore.Models
             {
                 if (Height == null || Weight == null)
                     return string.Empty;
-                
+
                 var bmi = Weight.GetValueOrDefault() / (Height.GetValueOrDefault() * Height.GetValueOrDefault());
 #if DEBUG
                 return Math.Round(bmi, 2).ToString();

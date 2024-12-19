@@ -11,8 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace MvcMoviesCore.ApiController
 {
@@ -457,6 +457,30 @@ namespace MvcMoviesCore.ApiController
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost("Delete/{personId}")]
+        public async Task<IActionResult> Delete(Guid personId)
+        {
+            if (personId == Guid.Empty)
+                return BadRequest();
+
+            var person = await _context.Person.FirstOrDefaultAsync(f => f.Id.Equals(personId));
+
+            if (person == null)
+                return BadRequest(HttpStatusCode.NotFound);
+
+            var personImages = await _context.PersonImage.Where(w => w.PersonId.Equals(personId)).ToListAsync();
+            if (personImages.Count != 0)
+                _context.PersonImage.RemoveRange(personImages);
+
+            var personMovies = await _context.MoviesPerson.Where(w => w.PersonId.Equals(personId)).ToListAsync();
+            if (personMovies.Count != 0)
+                _context.MoviesPerson.RemoveRange(personMovies);
+
+            _context.Person.Remove(person);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         #endregion

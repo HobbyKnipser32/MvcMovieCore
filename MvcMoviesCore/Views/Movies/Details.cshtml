@@ -264,7 +264,7 @@
                     },
                     {
                         data: 'Practices',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type, full) {
                             if (type === 'display') {
                                 if (data) {
                                     return full["Practices"];
@@ -279,7 +279,7 @@
                     },
                     {
                         data: 'Id',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type, full) {
                             if (data && type === 'display') {
                                 var id = "'" + data + "'";
                                 var actor = "'" + full.Person.Name + "'";

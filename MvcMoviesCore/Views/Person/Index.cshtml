@@ -111,7 +111,7 @@
                                     return moment(data).format('ll');
                                 }
                                 return '';
-                            }, 
+                            },
                             type: 'date'
                         },
                         {
@@ -146,9 +146,9 @@
                             data: 'Id',
                             render: function (data, type, full) {
                                 if (type == 'display') {
-                                    return '<a asp-action="Edit" asp-route-id="' + data + '" >'
+                                    let link = '@Url.Action("Details", "Person")' + '/' + data;
+                                    return '<a href="' + link + '" >'
                                         + '<i class="fa-solid fa-pen fa-bounce" style = "color: #74C0FC; --fa-animation-duration: 2s;" > </i>';
-                                    // + '< /a>';
                                 }
                                 return '';
                             }
@@ -157,9 +157,10 @@
                             data: 'Id',
                             render: function (data, type, full) {
                                 if (type == 'display') {
-                                    return '<a asp-action="Delete" asp-route-id="' + data + '">'
-                                        + '<i class="fa-regular fa-trash-can fa-shake" style = "color: #ff0000; --fa-animation-duration: 2s;" ></i>';
-                                    // + '< /a>'
+                                var id = "'" + data + "'";
+                                var actor = "'" + full.Name + "'";
+                                return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deletePerson(' + id + ', ' + actor + ')" title="Person löschen">' +
+                                    '<i class="fa-regular fa-trash-can fa-shake" style = "color: #ff0000; --fa-animation-duration: 2s;" ></i>';
                                 }
                                 return '';
                             }
@@ -190,5 +191,40 @@
             });
 
         })
+
+        function deletePerson(id, actor) {
+            Swal.fire({
+                html: '<b>' + actor + '</b> löschen?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Nein'
+            }).then(function (result) {
+                if (result.value) {
+                    var url = appRootPath + '/api/PersonApi/Delete/' + id;
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        async: false,
+                        statusCode: {
+                            404: function () {
+                                alert("person not found");
+                            }
+                        },
+                        success: function () {
+                            $('#personIndex').DataTable().ajax.reload();
+                            Swal.fire({
+                                icon: 'success',
+                                text: 'Person erfolgreich gelöscht.',
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                        },
+                    })
+                };
+            });
+        };
     </script>
 }
