@@ -215,11 +215,9 @@ namespace MvcMoviesCore.Controllers
 
             person.MoviesPerson = [.. person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication)];
 
-            ViewData["AdultPersonType"] = GetAdultPersonTypeId();
+            ViewData["AdultPersonType"] = await GetAdultPersonTypeId();
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
             ViewData["ImageSource"] = "";
-            //if (!string.IsNullOrEmpty(person.Image))
-            //    ViewData["ImageSource"] = $"{_originalFileDirectory}/{person.Image}";
             if (person.PersonImages != null && person.PersonImages.Count != 0)
             {
                 var personImage = person.PersonImages.FirstOrDefault(f => f.IsMain == true);
@@ -229,12 +227,12 @@ namespace MvcMoviesCore.Controllers
             return View(person);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name");
             ViewData["SexId"] = new SelectList(_context.Sex.OrderBy(o => o.Name), "Id", "Name");
-            ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name");
-            ViewData["AdultPersonType"] = GetAdultPersonTypeId();
+            ViewData["NationalityId"] = await GetNationalities();
+            ViewData["AdultPersonType"] = await GetAdultPersonTypeId();
             return View();
         }
 
@@ -258,8 +256,9 @@ namespace MvcMoviesCore.Controllers
             }
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypesId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", personViewModel.SexId);
-            ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", personViewModel.NationalityId);
-            ViewData["AdultPersonType"] = GetAdultPersonTypeId();
+            //ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", personViewModel.NationalityId);
+            ViewData["NationalityId"] = await GetNationalities(personViewModel.NationalityId);
+            ViewData["AdultPersonType"] = await GetAdultPersonTypeId();
             return View(personViewModel);
         }
 
@@ -279,8 +278,9 @@ namespace MvcMoviesCore.Controllers
             person.ActorsAge = person.GetActorsAge(person.Birthday, person.Obit);
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", person.PersonTypesId);
             ViewData["SexId"] = new SelectList(_context.Sex.OrderBy(o => o.Name), "Id", "Name", person.SexId);
-            ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
-            ViewData["AdultPersonType"] = GetAdultPersonTypeId();
+            //ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
+            ViewData["NationalityId"] = await GetNationalities(person.NationalityId);
+            ViewData["AdultPersonType"] = await GetAdultPersonTypeId();
             ViewData["ImagePath"] = _originalFileDirectory;
             if (!string.IsNullOrEmpty(person.Image))
                 ViewData["ImageSource"] = $"{_originalFileDirectory}/{person.Image}";
@@ -346,13 +346,12 @@ namespace MvcMoviesCore.Controllers
             }
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypesId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", personViewModel.SexId);
-            ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", personViewModel.NationalityId);
-            ViewData["AdultPersonType"] = GetAdultPersonTypeId();
+            ViewData["NationalityId"] = await GetNationalities(personViewModel.NationalityId);
+            ViewData["AdultPersonType"] = await GetAdultPersonTypeId();
             ViewData["ImageSource"] = $"/{_originalFileDirectory}/{personViewModel.Image}";
             return View(personViewModel);
         }
 
-        // GET: Person/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -374,7 +373,6 @@ namespace MvcMoviesCore.Controllers
             return View(person);
         }
 
-        // POST: Person/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
@@ -478,9 +476,9 @@ namespace MvcMoviesCore.Controllers
             return _context.Person.Any(e => e.Id.Equals(id));
         }
 
-        private string GetAdultPersonTypeId()
+        private async Task<string> GetAdultPersonTypeId()
         {
-            var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
+            var personType = await _context.PersonType.FirstOrDefaultAsync(f => f.Name.ToLower().Contains("adult"));
             if (personType != null)
                 return personType.Id.ToString();
             return string.Empty;
@@ -580,6 +578,22 @@ namespace MvcMoviesCore.Controllers
             file.CopyTo(stream);
 
             return newFileName;
+        }
+
+        private async Task<List<SelectListItem>> GetNationalities(Guid? nationalityId = null)
+        {
+            var nationalities = await _context.Nationalities.OrderBy(o => o.Name).ToListAsync();
+            var selectedList = new List<SelectListItem>();
+            foreach (var nationality in nationalities)
+            {
+                string text = nationality.Name;
+                if (!string.IsNullOrEmpty(nationality.Description))
+                    text += $" | {nationality.Description}";
+                var selectListItem = new SelectListItem(text, nationality.Id.ToString(), nationality.Id.Equals(nationalityId));
+                selectedList.Add(selectListItem);
+            }
+
+            return selectedList;
         }
 
         #endregion
