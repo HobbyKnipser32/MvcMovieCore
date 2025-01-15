@@ -8,7 +8,6 @@
     var adultPersonType = ViewData["AdultPersonType"].ToString();
     var minValue = DateTime.Now.Year - 120;
     var maxValue = DateTime.Now.Year;
-    // var fakeBoobs = Model.FakeBoobs.GetValueOrDefault();
 }
 
 <h2>Person</h2>
@@ -116,13 +115,6 @@
                                     <span asp-validation-for="CupSize" class="text-danger"></span>
                                 </div>
                             </div>
-                            @* <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="fakeBoobs" class="form-label">Fakeboobs:</label>
-                                    <input type="checkbox" asp-items="@fakeBoobs" class="form-check" id="fakeBoobs" />
-                                    <span asp-validation-for="FakeBoobs" class="text-danger"></span>
-                                </div>
-                            </div> *@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="startOfBusiness" class="form-label">Start of Business:</label>
