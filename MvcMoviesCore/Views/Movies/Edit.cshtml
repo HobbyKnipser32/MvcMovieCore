@@ -114,7 +114,7 @@
                             <div class="col-md-12">
                                 <div class="form-floating">
                                     <span for="shortDescription" class="from-label">Kurzbeschreibung:</span>
-                                    <textarea asp-for="ShortDescription" class="form-control" id="shortDescription" ></textarea>
+                                    <textarea asp-for="ShortDescription" class="form-control" id="shortDescription"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -263,6 +263,27 @@
                 bFilter: false
             });
         });
-    </script>
 
+        function addActor(){
+            var actor = $.trim($('#newActor option:selected').text());
+            var role = $.trim($('#newRole option:selected').text());
+            if (!actor || !role){
+                Swal.fire({
+                    text: 'Darsteller oder Rolle müssen ausgefüllt werden!',
+                    icon: 'warning',
+                    showCancelButton: false,
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Ok'
+                });
+                return;
+            }
+            var actorsTable = $('#actorsTable').DataTable();
+            var actorsTableData = actorsTable.rows().data();
+            if (actorsTableData.length > 0){
+
+            }
+            var actors = actorsTable.rows().data().get(0);
+        }
+
+    </script>
 }
