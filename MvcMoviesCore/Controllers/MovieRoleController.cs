@@ -1,13 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
-using MvcMoviesCore.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MvcMoviesCore.Controllers
@@ -17,20 +11,14 @@ namespace MvcMoviesCore.Controllers
         #region privat fields
 
         private readonly MvcMovieCoreContext _context;
-        private readonly IConfiguration _configuration;
-        private readonly bool _showAdult;
-        private readonly string _originalFileDirectory = "Images/Original";
 
         #endregion
 
         #region constructor
 
-        public MovieRoleController(MvcMovieCoreContext context, IConfiguration configuration)
+        public MovieRoleController(MvcMovieCoreContext context)
         {
             _context = context;
-            _configuration = configuration;
-            _showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
-            _originalFileDirectory = _configuration.GetValue<string>("AppSettings:OriginalFileDirectory");
         }
 
         #endregion

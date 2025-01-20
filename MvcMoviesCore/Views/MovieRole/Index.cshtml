@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Rollen";
+}
+<h2>Rollen</h2>
+<p>
+    <a asp-action="Create" title="Rolle hinzufügen">
+        <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
+    </a>
+</p>
+<table id="roleIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
+    <thead>
+        <tr>
+            <th>Rolle</th>
+            <th>Anzahl</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+@section Scripts
+{
+    <partial name="_DataTableScripts" />
+
+    <script>
+        $(document).ready(function () {
+            $('#roleIndex').DataTable({
+                ajax: {
+                    url: appRootPath + '/api/RoleApi',
+                    dataSrc: ''
+                },
+                columns: [
+                    { 
+                        data: 'Name' ,
+                         render: function (data, type, full) {
+                            if (data && type === 'display') {
+                                var url = '@Url.Action("Details", "MovieRole")' + '/' + full.Id;
+                                return '<a href="' + url + '" title="Details ansehen">' + full.Name; /*  + '< /a>'; */
+                                // return full.Name;
+                            }
+                            return '';
+                        },
+                    },
+                    { 
+                        data: 'Count',
+                        type: 'num',
+                        className: 'dt-body-right'
+                    },
+                    {
+                        data: 'Id',
+                        render: function (data, type) {
+                            if (data && type === 'display') {
+                                var url = '@Url.Action("Edit", "MovieRole")' + '/' + data;
+                                return '<a href="' + url + '" title="Rolle bearbeiten">' +
+                                    '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>';
+                            }
+                            return '';
+                        }
+                    },
+                    {
+                        data: 'Id',
+                        render: function (data, type) {
+                            if (data && type === 'display') {
+                                var id = "'" + data + "'";
+                                return '<button name="id" style="background-color: transparent; color: red; border: hidden"' +
+                                    'onClick="deleteLink(' + id + ')" title="Rolle löschen">' +
+                                    '<i class="fa-regular fa-trash-can fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
+                            }
+                            return '';
+                        }
+                    },
+                ],
+                ordering: true,
+                fixedHeader: {
+                    header: true,
+                },
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                iDisplayLength: 10,
+            });
+        })
+
+        function deleteLink(id) {
+            Swal.fire({
+                text: 'Rolle löschen?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Nein'
+            }).then(function (result) {
+                if (result.value) {
+                    var url = appRootPath + '/api/RoleApi/' + id;
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        async: false,
+                        statusCode: {
+                            404: function () {
+                                alert("function not found");
+                            }
+                        },
+                        success: function () {
+                            $('#roleIndex').DataTable().ajax.reload();
+                            Swal.fire({
+                                icon: 'success',
+                                text: 'Rolle erfolgreich gelöscht.',
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                        },
+                        error: function (response) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Rolle konnte nicht gelöscht werden!',
+                                footer: response.responseText
+                            })
+                        }
+                    })
+                };
+            });
+        };
+    </script>
+}

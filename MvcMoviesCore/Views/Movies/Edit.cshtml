@@ -20,8 +20,8 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <span class="from-label" for="name">Titel:</span>
                                     <input type="text" asp-for="Name" class="form-control" id="name" />
+                                    <label class="from-label" for="name">Titel:</label>
                                     <span asp-validation-for="Name" class="text-danger"></span>
                                 </div>
                             </div>
@@ -60,29 +60,29 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <span asp-for="YearOfPublication" class="from-label" for="yearOfPublication">erschienen:</span>
                                     <input asp-for="YearOfPublication" class="form-control" type="date" id="yearOfPublication" />
+                                    <label asp-for="YearOfPublication" class="from-label" for="yearOfPublication">erschienen:</label>
                                     <span asp-validation-for="YearOfPublication" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <span class="from-label" for="runTime">Laufzeit:</span>
                                     <input asp-for="RunTime" class="form-control" id="runTime" />
+                                    <label class="from-label" for="runTime">Laufzeit:</label>
                                     <span asp-validation-for="LastView" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <span class="from-label" for="lastView">zuletzt gesehen:</span>
                                     <input asp-for="LastView" class="form-control" type="date" id="lastView" />
+                                    <label class="from-label" for="lastView">zuletzt gesehen:</label>
                                     <span asp-validation-for="LastView" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <span class="from-label" for="owner">Besitzer:</span>
                                     <input asp-for="Owner" class="form-control" id="owner" />
+                                    <label class="from-label" for="owner">Besitzer:</label>
                                     <span asp-validation-for="Owner" class="text-danger"></span>
                                 </div>
                             </div>
@@ -90,22 +90,22 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <span for="onWatch" class="from-label">auf dem Zettel:</span>
                                     <input asp-for="OnWatch" class="form-control" id="onWatch" />
+                                    <label for="onWatch" class="from-label">auf dem Zettel:</label>
                                     <span asp-validation-for="OnWatch" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <span for="added" class="from-label">hinzugefügt:</span>
                                     <input asp-for="Added" class="form-control" type="date" id="added" />
+                                    <label for="added" class="from-label">hinzugefügt:</label>
                                     <span asp-validation-for="Added" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <span class="from-label" for="remark">Bemerkung:</span>
                                     <input asp-for="Remark" class="form-control" id="remark" />
+                                    <label class="from-label" for="remark">Bemerkung:</label>
                                     <span asp-validation-for="Remark" class="text-danger"></span>
                                 </div>
                             </div>
@@ -113,85 +113,83 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-floating">
-                                    <span for="shortDescription" class="from-label">Kurzbeschreibung:</span>
                                     <textarea asp-for="ShortDescription" class="form-control" id="shortDescription"></textarea>
+                                    <label for="shortDescription" class="from-label">Kurzbeschreibung:</label>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <span for="imdb" class="from-label">IMDB Wertung:</span>
                                     <input asp-for="IMDB" class="form-control" id="imdb" />
+                                    <label for="imdb" class="from-label">IMDB Wertung:</label>
                                     <span asp-validation-for="IMDB" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <span for="ranking" class="from-label">Wertung:</span>
                                     <input asp-for="Ranking" class="form-control" id="ranking" />
+                                    <label for="ranking" class="from-label">Wertung:</label>
                                     <span asp-validation-for="Ranking" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <span for="fileSize" class="from-label">Dateigröße:</span>
                                     <input asp-for="FileSize" class="form-control" id="fileSize" />
+                                    <label for="fileSize" class="from-label">Dateigröße:</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <span for="filePath" class="from-label">Dateispeicherort:</span>
                                     <input asp-for="FilePath" class="form-control" id="filePath" />
+                                    <label for="filePath" class="from-label">Dateispeicherort:</label>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="form-floating">
+                                <div class="form-floating" style="text-align:center">
                                     <input asp-for="InStock.HasValue" type="checkbox" class="form-checkbox" id="inStock" />
-                                    <span class="from-label" for="inStock">vorhanden</span>
+                                    <label class="from-label" for="inStock">vorhanden</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-floating">
+                                <div class="form-floating" style="text-align:center">
                                     <input asp-for="Adult" type="checkbox" class="form-checkbox" id="adult" />
-                                    <span class="from-label" for="adult">für Erwachsene</span>
+                                    <label class="from-label" for="adult">für Erwachsene</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-floating">
+                                <div class="form-floating" style="text-align:center">
                                     <input asp-for="ThreeD.HasValue" type="checkbox" class="form-checkbox" id="threeD" />
-                                    <span class="from-label" for="threeD">3D</span>
+                                    <label class="from-label" for="threeD">3D</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <hr />
-                <div class="row">
+                <div class="row" style="background-color:aliceblue">
                     <div class="col-md-12" id="addActor">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-floating">
-                                    <select id="newActor" asp-items="@actors" class="form-control" data-live-search="true"></select>
+                                    <select id="newActor" asp-items="@actors" class="form-select" data-live-search="true"></select>
                                     <label class="form-label" for="newActor">Darsteller</label>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-floating">
-                                    <select id="newRole" asp-items="@roles" class="form-control" data-live-search="true"></select>
+                                    <input id="newRole" asp-items="@roles" class="form-control" />
                                     <label for="newRole" class="form-label">Rolle</label>
                                 </div>
                             </div>
-                            <div class="col-md-4" style="margin-top:auto;margin-bottom:auto;">
-                                <div class="form-floating" style="margin-top:auto; margin-bottom:auto;">
-                                    <p>
-                                        <a onclick="addActor()" title="Person hinzufügen">
-                                            <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s;"></i>
-                                        </a>
-                                    </p>
-                                </div>
+                            <div class="col-md-4" style="margin-top:auto; margin-bottom:auto;">
+                                <p style="margin-top:auto; margin-bottom:auto;">
+                                    <a onclick="addActor()" title="Person hinzufügen">
+                                        <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s;"></i>
+                                    </a>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -231,11 +229,12 @@
 @section Scripts {
 
     <partial name="_DataTableScripts" />
+    @* <partial name="_Select2InitScript" /> *@
 
     <script>
         $(document).ready(function () {
             const movieId = '@Model.Id';
-            var actorsTable = $('#actorsTable').DataTable({
+            $('#actorsTable').DataTable({
                 ajax: {
                     url: appRootPath + '/api/MoviesApi/GetActors/' + movieId,
                     dataSrc: ''
@@ -264,25 +263,60 @@
             });
         });
 
+
+
         function addActor(){
             var actor = $.trim($('#newActor option:selected').text());
-            var role = $.trim($('#newRole option:selected').text());
+            var role = $.trim($('#newRole').val());
             if (!actor || !role){
-                Swal.fire({
-                    text: 'Darsteller oder Rolle müssen ausgefüllt werden!',
-                    icon: 'warning',
-                    showCancelButton: false,
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'Ok'
-                });
+                showWarning('Darsteller oder Rolle müssen ausgefüllt werden!');
                 return;
             }
             var actorsTable = $('#actorsTable').DataTable();
             var actorsTableData = actorsTable.rows().data();
             if (actorsTableData.length > 0){
-
+                for(let i = 0; i <actorsTableData.length; i++){
+                    let rowActor = actorsTableData[i].Actor;
+                    let rowRole = actorsTableData[i].Role
+                    if (actor === rowActor && role === rowRole){
+                        showWarning('Die Kombination aus Darsteller und Rolle existiert bereits!');
+                        return;
+                    }
+                }
             }
-            var actors = actorsTable.rows().data().get(0);
+            let data = {
+                "MovieId": $('#movieId').val(),
+                "Actor": actor,
+                "Role": role
+            };
+            var url = appRootPath + '/api/MoviesApi/AddMovieActorRole';
+            $.post(url, data, function () {
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Daten erfolgreich gespeichert.',
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+                $('#actorsTable').DataTable().ajax.reload();
+            })
+            .fail(function (response) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Daten konnten nicht gespeichert werden!',
+                    footer: response.responseText
+                })
+            });
+        }
+
+        function showWarning(warningText){
+            Swal.fire({
+                text: warningText,
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Ok'
+            });
         }
 
     </script>

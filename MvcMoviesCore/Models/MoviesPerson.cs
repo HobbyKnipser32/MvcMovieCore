@@ -1,14 +1,18 @@
+using System;
+
 namespace MvcMoviesCore.Models
 {
     public partial class MoviesPerson
     {
-        public System.Guid Id { get; set; }
+        public Guid Id { get; set; }
 
-        public System.Guid MoviesId { get; set; }
+        public Guid MoviesId { get; set; }
 
-        public System.Guid PersonId { get; set; }
+        public Guid PersonId { get; set; }
 
-        public string Practices { get; set; }
+        public Guid? MovieRoleId { get; set; }
+
+        public string? Practices { get; set; }
 
         public virtual Movies Movies { get; set; }
 

@@ -171,5 +171,43 @@ namespace MvcMoviesCore.ApiController
                 return BadRequest(ex.Message.ToString());
             }
         }
+
+        [HttpPost("AddMovieActorRole")]
+        public async Task<IActionResult> AddMovieActorRole([FromForm] MoviePersonsViewModel moviesPerson)
+        {
+            var movieRoleId = await GetMovieRoleId(moviesPerson.Role);
+            var person = await _context.Person.FirstOrDefaultAsync(f => f.Name.Equals(moviesPerson.Actor));
+            if (person == null)
+                return BadRequest($"Kann {moviesPerson.Actor} nicht finden!");
+
+            MoviesPerson moviePerson = new() 
+            { 
+                Id = Guid.NewGuid(),
+                MoviesId = moviesPerson.MovieId,
+                PersonId = person.Id,
+                MovieRoleId = movieRoleId
+            };
+            _context.MoviesPerson.Add(moviePerson);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        #region private functions
+
+        private async Task<Guid> GetMovieRoleId(string roleName)
+        {
+            var role = await _context.MovieRole.FirstOrDefaultAsync(f => f.Name.Equals(roleName));
+            if (role != null)
+                return role.Id;
+
+            MovieRole movieRole = new() { Id = Guid.NewGuid(), Name = roleName};
+            _context.MovieRole.Add(movieRole);
+            await _context.SaveChangesAsync();
+            
+            return movieRole.Id;
+        }
+
+        #endregion
     }
 }
