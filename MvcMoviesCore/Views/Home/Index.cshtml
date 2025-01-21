@@ -12,7 +12,7 @@
         <div class="col-sm-6">
             <div class="card shadow p-3 mb-5 bg-white rounded">
                 <div class="card-body">
-                    <h5 class="card-title" style="color:#00bcd4; background-image: linear-gradient(to right, antiquewhite, white)">Neu</h5>
+                    <h5 class="card-title" style="color:blue; background-image: linear-gradient(to right, aliceblue, white); "><b>Neu</b></h5>
                     <div>
                         <table class="table table-striped" id="homeIndex">
                             <thead>
@@ -50,7 +50,7 @@
         <div class="col-sm-6">
             <div class="card shadow p-3 mb-5 bg-white rounded">
                 <div class="card-body">
-                    <h5 class="card-title" style="color:#00bcd4; background-image: linear-gradient(to right, antiquewhite, white)">Heutige Geburtstage</h5>
+                    <h5 class="card-title" style="color:forestgreen; background-image: linear-gradient(to right, aliceblue, white)">Heutige Geburtstage</h5>
                     <table class="table table-striped compact nowrap" id="birthdayTable">
                         <thead>
                             <tr>
@@ -67,7 +67,7 @@
             </div>
             <div class="card shadow p-3 mb-5 bg-white rounded">
                 <div class="card-body">
-                    <h5 class="card-title" style="color:#00bcd4; background-image: linear-gradient(to right, antiquewhite, white)">Heutige Todestage</h5>
+                    <h5 class="card-title" style="color:dimgrey; background-image: linear-gradient(to right, aliceblue, white)">Heutige Todestage</h5>
                     <table class="table table-striped compact" id="obitTable">
                         <thead>
                             <tr>
@@ -111,7 +111,7 @@
                 columns: [
                     {
                         data: 'PersonImages',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type) {
                             if (data && data.length > 0  && type === 'display') {
                                 var src = '@imageSource/' + data[0].PersonId + '/' + data[0].Name;
                                 return '<div class="image-container">'
@@ -126,7 +126,7 @@
                     },
                     {
                         data: 'Name',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type, full) {
                             if (data && type === 'display') {
                                 var url = '@Url.Action("Details", "Person")' + '/' + full["Id"];
                                 return '<a href="' + url + '" title="ansehen">' + full["Name"];

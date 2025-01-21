@@ -145,7 +145,7 @@ namespace MvcMoviesCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,YearOfPublication,GenreId,RecordCarrierId,InStock,StorageLocationId,Added,OnWatch,Remark,Adult,ThreeD,Owner,IMDB,Ranking,LastView,ShortDesription")] Movies movies)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,YearOfPublication,GenreId,RecordCarrierId,InStock,StorageLocationId,Added,OnWatch,Remark,Adult,ThreeD,Owner,IMDB,Ranking,LastView,ShortDescription")] Movies movies)
         {
             if (id != movies.Id)
             {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MvcMoviesCore.Models;
 using MvcMoviesCore.ViewModels;
 using Newtonsoft.Json;
@@ -13,23 +14,28 @@ namespace MvcMoviesCore.ApiController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoleApiController(MvcMovieCoreContext context) : ControllerBase
+    public class RoleApiController(MvcMovieCoreContext context, IConfiguration configuration) : ControllerBase
     {
 
         private readonly MvcMovieCoreContext _context = context;
+        private readonly IConfiguration _configuration = configuration;
 
         public async Task<IActionResult> Get()
         {
+            var showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
             var roles = await _context.MovieRole.OrderBy(o => o.Name).ToListAsync();
             var movieRoles = new List<MovieRoleViewModel>();
 
+            if (!showAdult)
+                roles = roles.Where(w => !w.IsAdult).ToList();
+
             if (roles.Count != 0)
             {
-                foreach (var role in roles) 
-                { 
-                    var movies = await _context.MoviesPerson.Where(w=>w.MovieRoleId.Equals(role.Id)).ToListAsync();
-                    MovieRoleViewModel movieRole = new() 
-                    { 
+                foreach (var role in roles)
+                {
+                    var movies = await _context.MoviesPerson.Where(w => w.MovieRoleId.Equals(role.Id)).ToListAsync();
+                    MovieRoleViewModel movieRole = new()
+                    {
                         Count = movies.Count,
                         Id = role.Id,
                         Name = role.Name,
@@ -50,7 +56,7 @@ namespace MvcMoviesCore.ApiController
             if (role == null)
                 return BadRequest("Konnte Genre nicht finden!");
 
-            if (IsGenreUsed(id))
+            if (IsRoleUsed(id))
                 return BadRequest("Genre wird verwendet und kann daher nicht gelöscht werden!");
 
             _context.MovieRole.Remove(role);
@@ -61,7 +67,7 @@ namespace MvcMoviesCore.ApiController
 
         #region private fields
 
-        private bool IsGenreUsed(Guid id)
+        private bool IsRoleUsed(Guid id)
         {
             return _context.MoviesPerson.Any(a => a.MovieRoleId.Equals(id));
         }
