@@ -80,25 +80,15 @@
                         data: 'RunTime',
                         render: ['number', '.', ',', 1],
                         className: 'dt-body-right'
-                        // function (data, type, full) {
-                        //     if (data && type === 'display') {
-                        //         return full.RunTime.toString().replace(".", ",");
-                        //     }
-                        //     return '';
-                        // },
-                        // type: 'num-fmt'
                     },
                     { data: 'Ranking', type: 'num', className: 'dt-body-center' },
                     {
                         data: 'LastView',
-                        render: function (data, type, full, meta) {
-                            if (data && type === 'display') {
-                                let lastView = new Date(data);
-                                return lastView.getUTCDay().toString().padStart(2, "0") + "." +
-                                    (lastView.getUTCMonth() + 1).toString().padStart(2, "0") + "." +
-                                    lastView.getUTCFullYear().toString().padStart(2, "0");
+                        render: function (data, type) {
+                            if (type === 'sort'){
+                                return data
                             }
-                            return '';
+                            return data ? moment(data).format('L') : "";
                         },
                         type: 'date',
                         className: 'dt-body-center'

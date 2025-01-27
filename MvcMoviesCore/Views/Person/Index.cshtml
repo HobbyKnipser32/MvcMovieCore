@@ -95,40 +95,52 @@
                         {
                             data: 'Birthday',
                             render: function (data, type, full) {
-                                if (type = 'display' && data) {
+                                if (type === 'sort'){
+                                    return data;
+                                }
+                                if (type === 'display' && data) {
                                     moment.locale('de');
-                                    return moment(data).format('ll');
+                                    return moment(data).format('dddd[,] L');
                                 }
                                 return '';
                             },
-                            type: 'date'
+                            type: 'date',
+                            className: 'dt-body-right'
                         },
                         {
                             data: 'Obit',
-                            render: function (data, type, full) {
-                                if (type = 'display' && data) {
+                            render: function (data, type) {
+                                if (type === 'sort'){
+                                    return data;
+                                }
+                                if (type === 'display' && data) {
                                     moment.locale('de');
-                                    return moment(data).format('ll');
+                                    return moment(data).format('dddd[,] L');
                                 }
                                 return '';
                             },
-                            type: 'date'
+                            type: 'date',
+                            className: 'dt-body-right'
                         },
                         {
                             data: 'Nationality.Name',
-                            type: 'html'
+                            type: 'html',
+                            className: 'dt-body-center'
                         },
                         {
                             data: 'Height',
-                            type: 'html-num'
+                            type: 'html-num',
+                            className: 'dt-body-right'
                         },
                         {
                             data: 'Weight',
-                            type: 'html-num'
+                            type: 'html-num',
+                            className: 'dt-body-right'
                         },
                         {
                             data: 'Classification',
-                            type: 'html-num'
+                            type: 'html-num',
+                            className: 'dt-body-center'
                         },
                         {
                             data: 'PersonType.Name',
@@ -136,11 +148,13 @@
                         },
                         {
                             data: 'Sex.Name',
-                            type: 'html'
+                            type: 'html',
+                            className: 'dt-body-center'
                         },
                         {
                             data: 'MoviesPerson.length',
-                            type: 'html-num'
+                            type: 'html-num',
+                            className: 'dt-body-center'
                         },
                         {
                             data: 'Id',
@@ -151,7 +165,8 @@
                                         + '<i class="fa-solid fa-pen fa-bounce" style = "color: #74C0FC; --fa-animation-duration: 2s;" > </i>';
                                 }
                                 return '';
-                            }
+                            },
+                            className: 'dt-body-center'
                         },
                         {
                             data: 'Id',
@@ -163,7 +178,8 @@
                                     '<i class="fa-regular fa-trash-can fa-shake" style = "color: #ff0000; --fa-animation-duration: 2s;" ></i>';
                                 }
                                 return '';
-                            }
+                            },
+                            className: 'dt-body-center'
                         },
                     ],
                 ordering: true,
