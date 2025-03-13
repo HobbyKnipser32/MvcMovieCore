@@ -34,7 +34,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#movieIndex').DataTable({
+            var table = $('#movieIndex').DataTable({
                 ajax: {
                     url: appRootPath + '/api/MoviesApi/GetMovies',
                     dataSrc: ''
@@ -42,11 +42,10 @@
                 columns: [
                     {
                         data: 'Name',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type, full) {
                             if (data && type === 'display') {
                                 var url = '@Url.Action("Details", "Movies")' + '/' + full.Id;
                                 return '<a href="' + url + '" title="Details ansehen">' + full.Name; /*  + '< /a>'; */
-                                // return full.Name;
                             }
                             return '';
                         },
@@ -55,7 +54,7 @@
                     },
                     {
                         data: 'YearOfPublication',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type) {
                             if (data && type === 'display') {
                                 let yearOfPublication = new Date(data);
                                 return yearOfPublication.getUTCFullYear();
@@ -67,7 +66,7 @@
                     },
                     {
                         data: 'InStock',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type, full) {
                             if (data && type === 'display' && full.InStock) {
                                 return '<i class="fa-solid fa-check" style="color: #74C0FC;"></i>';
                             }
@@ -101,7 +100,7 @@
                         data: 'Id',
                         orderable: false,
                         searchable: false,
-                        render: function (data, type, full, meta) {
+                        render: function (data, type) {
                             if (data && type === 'display') {
                                 var url = '@Url.Action("Edit", "Movies")' + '/' + data;
                                 return '<a href = "' + url + '" titel="Details zeigen">' +
@@ -116,7 +115,7 @@
                         data: 'Id',
                         orderable: false,
                         searchable: false,
-                        render: function (data, type, full, meta) {
+                        render: function (data, type) {
                             if (data && type === 'display') {
                                 var id = "'" + data + "'";
                                 return '<button name="id" style="background-color: transparent; color: red; border: hidden" onClick="deleteMovie(' + id + ')" title="Film löschen">' +
@@ -141,6 +140,19 @@
                     footer: false
                 },
                 searchHighlight: true,
+            });
+
+            $("#movieIndex tfoot th").each( function ( i ) {
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(this).empty() )
+                    .on( 'change', function () {
+                        table.column( i )
+                            .search( $(this).val() )
+                            .draw();
+                    });
+                table.column( i ).data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                });
             });
         })
 

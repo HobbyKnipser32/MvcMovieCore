@@ -145,23 +145,27 @@ namespace MvcMoviesCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,YearOfPublication,GenreId,RecordCarrierId,InStock,StorageLocationId,Added,OnWatch,Remark,Adult,ThreeD,Owner,IMDB,Ranking,LastView,ShortDescription")] Movies movies)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,YearOfPublication,GenreId,RecordCarrierId,InStock,StorageLocationId,Added,OnWatch,Remark,Adult,ThreeD,Owner,IMDB,Ranking,LastView,ShortDescription")] Movies movie)
         {
-            if (id != movies.Id)
+            if (id != movie.Id)
             {
                 return NotFound();
             }
+
+            //movies.Genre ??= await GetGenre(movies.GenreId);
+            //ModelState.ClearValidationState(nameof(Movies));
+            //TryValidateModel(movies);
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(movies);
+                    _context.Update(movie);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MoviesExists(movies.Id))
+                    if (!MoviesExists(movie.Id))
                     {
                         return NotFound();
                     }
@@ -170,12 +174,12 @@ namespace MvcMoviesCore.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return View("Details", movie);
             }
-            ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(o => o.Name), "Id", "Name", movies.GenreId);
-            ViewData["RecordCarrierId"] = new SelectList(_context.RecordCarrier.OrderBy(o => o.Name), "Id", "Name", movies.RecordCarrierId);
-            ViewData["StorageLocationId"] = new SelectList(_context.StorageLocation.OrderBy(o => o.Name), "Id", "Name", movies.StorageLocationId);
-            return View(movies);
+            ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(o => o.Name), "Id", "Name", movie.GenreId);
+            ViewData["RecordCarrierId"] = new SelectList(_context.RecordCarrier.OrderBy(o => o.Name), "Id", "Name", movie.RecordCarrierId);
+            ViewData["StorageLocationId"] = new SelectList(_context.StorageLocation.OrderBy(o => o.Name), "Id", "Name", movie.StorageLocationId);
+            return View("Edit", movie);
         }
 
         // GET: Movies/Delete/5
@@ -279,6 +283,15 @@ namespace MvcMoviesCore.Controllers
         #endregion
 
         #region private functions
+
+        private async Task<Genre> GetGenre(Guid genreId)
+        {
+            if (genreId == null)
+                return null;
+
+            return await _context.Genre.FirstOrDefaultAsync(f => f.Id.Equals(genreId));
+
+        }
 
         private List<Movies> FileSizes(string moviesPath, bool showAdult)
         {

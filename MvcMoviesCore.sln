@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcMoviesCore", "MvcMoviesCore\MvcMoviesCore.csproj", "{4873AEF1-7413-4247-8C3D-CF0E3F26CE33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcMoviesCoreTests", "MvcMoviesCoreTests\MvcMoviesCoreTests.csproj", "{B954BE7F-716E-4283-B195-26B23F25370C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4873AEF1-7413-4247-8C3D-CF0E3F26CE33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4873AEF1-7413-4247-8C3D-CF0E3F26CE33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4873AEF1-7413-4247-8C3D-CF0E3F26CE33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B954BE7F-716E-4283-B195-26B23F25370C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B954BE7F-716E-4283-B195-26B23F25370C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B954BE7F-716E-4283-B195-26B23F25370C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B954BE7F-716E-4283-B195-26B23F25370C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

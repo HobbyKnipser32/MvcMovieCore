@@ -87,7 +87,6 @@ namespace MvcMoviesCore.Models
         [NotMapped]
         public List<ScenesViewModel> Scenes { get; set; }
 
-        [Required]
         public virtual Genre Genre { get; set; }
 
         public virtual RecordCarrier RecordCarrier { get; set; }
