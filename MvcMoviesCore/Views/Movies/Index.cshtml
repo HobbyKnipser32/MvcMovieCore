@@ -116,7 +116,7 @@
                         data: 'Id',
                         orderable: false,
                         searchable: false,
-                        render: function (data, type) {
+                        render: function (data, type, full) {
                             if (data && type === 'display') {
                                 var id = "'" + data + "'";
                                 var movie = "'" + full.Name + "'";
