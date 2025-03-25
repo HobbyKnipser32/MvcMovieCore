@@ -167,6 +167,26 @@
                     bottomStart: null
                 },
                 responsive: true,
+                stateSave: true,
+                stateSaveCallback: function (settings, data) {
+                    var dataTableConfigs = JSON.parse(sessionStorage.getItem("dataTableConfigs") || '{}');
+                    dataTableConfigs[settings.sTableId] = data;
+                    sessionStorage.setItem('dataTableConfigs', JSON.stringify(dataTableConfigs));
+                },
+                stateLoadCallback: function (settings, callback) {
+                    var restoreFilter = window.location.href.slice(window.location.href.indexOf('?') + 1)
+                        .split('&')
+                        .filter(function (param) {
+                            return param.toLowerCase().indexOf('restorefilter') === 0;
+                        }).length > 0;
+                    if (restoreFilter) {
+                        var dataTableConfigs = JSON.parse(sessionStorage.getItem("dataTableConfigs") || '{}');
+                        if (dataTableConfigs[settings.sTableId]) {
+                            return dataTableConfigs[settings.sTableId];
+                        }
+                    }
+                    return null;
+                },
             });
 
             $('#birthdayTable tbody').on('mouseenter', '.image-container', function () {
