@@ -116,6 +116,47 @@ namespace MvcMoviesCore.ApiController
             return Ok(jsonResult);
         }
 
+        [HttpGet("GetMovies/{personId}")]
+        public async Task<IActionResult> GetMovies(Guid personId)
+        {
+            string jsonResult;
+            var personMovies = await _context.MoviesPerson
+                .Include(i => i.Person)
+                .Include(i => i.Movies)
+                .Include(i => i.MovieRole)
+                .Where(w => w.PersonId.Equals(personId)).ToListAsync();
+            List<PersonMoviesViewModel> movies = [];
+            try
+            {
+                foreach (var personMovie in personMovies)
+                {
+                    var movie = new PersonMoviesViewModel()
+                    {
+                        Alter = personMovie.Movies.GetActorsAgeInMovie(personMovie.Person.Birthday, personMovie.Movies.YearOfPublication),
+                        Bewertung = personMovie.Movies.Ranking,
+                        Id = personMovie.MoviesId,
+                        Laufzeit = personMovie.Movies.RunTime,
+                        Name = personMovie.Movies.Name,
+                        OnWatch = personMovie.Movies.OnWatch,
+                        Role = personMovie.MovieRole?.Name != null ? personMovie.MovieRole.Name : string.Empty
+                    };
+                    if (!string.IsNullOrEmpty(personMovie.Practices)) { movie.Praxis = personMovie.Practices; }
+                    if (personMovie.Movies.YearOfPublication != null) { movie.Erscheinungsjahr = personMovie.Movies.YearOfPublication.Value.Year.ToString(); }
+                    else { movie.Erscheinungsjahr = string.Empty; }
+                    movies.Add(movie);
+                }
+
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                jsonResult = JsonConvert.SerializeObject(movies.OrderBy(o => o.Name).ThenBy(t => t.Alter), Formatting.Indented, jsonSerializerSettings);
+            }
+            catch (Exception ex)
+            {
+                jsonResult = string.Empty;
+            }
+
+            return Ok(jsonResult);
+        }
+
         [HttpGet("GetScenes/{personId}")]
         public async Task<IActionResult> GetScenes(Guid personId)
         {

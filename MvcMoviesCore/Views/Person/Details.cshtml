@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-sm-2">
             <div class="card">
-                <div class="card-body"> 
+                <div class="card-body">
                     @if (string.IsNullOrEmpty(imgSrc))
                     {
                         <div class="image-container">
@@ -44,7 +44,7 @@
                         }
                     }
                 </div>
-            </div> 
+            </div>
         </div>
 
         <div class="col-sm-9">
@@ -167,7 +167,7 @@
 
         <div class="tab-content">
             <div id="moviesTab" class="tab-pane active">
-                <table class="table display" id="personDetails">
+                <table class="table display" id="personMovies">
                     <thead>
                         <tr>
                             <th>Film</th>
@@ -187,7 +187,7 @@
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @* <tbody>
                         @foreach (var item in Model.MoviesPerson)
                         {
                             <tr>
@@ -233,7 +233,7 @@
                                 </td>
                             </tr>
                         }
-                    </tbody>
+                    </tbody> *@
                 </table>
             </div>
             <div id="scenesTab" class="tab-pane">
@@ -266,17 +266,89 @@
 
     <script>
         $(document).ready(function () {
-            $('#personDetails').DataTable({
+            const personId = '@Model.Id';
+            $('#personMovies').DataTable({
                 ordering: true,
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 iDisplayLength: 25,
                 fixedHeader: {
                     header: true,
                 },
-                columns: [{ width: '30%' }, { width: '10%' }, { width: '5%' }, { width: '25%' }, { width: '10%' }, { width: '10%' }, { width: '5%' }, { width: '5%' }],
+                ajax: {
+                    url: appRootPath + '/api/PersonApi/GetMovies/' + personId,
+                    dataSrc: ''
+                },
+                columns: [
+                    {
+                        width: '30%',
+                        data: 'Name',
+                        render: function(data, type, full){
+                            if (data && type === 'display'){
+                                var url = '@Url.Action("Details", "Movies")' + '/' + full.Id;
+                                return '<a href="' + url + '">' + data;
+                            }
+                             return '';
+                        }
+                    },
+                    {
+                        width: '13%',
+                        data: 'Erscheinungsjahr',
+                        className: 'dt-body-right'
+                    },
+                    {
+                        width: '5%',
+                        data: 'Alter',
+                        className: 'dt-body-center'
+                    },
+                    {
+                        width: '25%',
+                        data: 'Role',
+                        render: function(data, type, full){
+                            if (data){
+                                if (full.Praxis === null){
+                                    return data;
+                                }
+                                else{
+                                    return full.Praxis;
+                                }
+                            }
+                            else{
+                                return '';
+                            }
+                        }
+                    },
+                    { 
+                        width: '7%',
+                        data: 'OnWatch',
+                        className: 'dt-body-center'
+                    },
+                    { 
+                        width: '10%',
+                        data: 'Bewertung',
+                        className: 'dt-body-right'
+                    },
+                    { 
+                        width: '8%',
+                        data: 'Laufzeit',
+                        className: 'dt-body-right'
+                    },
+                    { 
+                        width: '7%',
+                        data: 'Id',
+                        render: function(data, type, full){
+                            if (data && type === 'display'){
+                                let movieId = "'" + data + "'";
+                                let movie = "'" + full.Name + "'";
+                                return '<a title="löschen" onclick="deleteMovie(' + movieId + ', ' + movie + ')">' +
+                                        '<i class="fa-solid fa-trash fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>'
+                            }
+                            return '';
+                        },
+                        className: 'dt-body-center'
+                    }
+                ],
                 searchHighlight: true
             });
-            const personId = '@Model.Id';
             var groupColumn = 0;
             $('#personScenes').DataTable({
                 columnDefs: [{ visible: false, targets: groupColumn }],
@@ -289,7 +361,7 @@
                     { data: 'Person' },
                     {
                         data: 'Film',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type) {
                             if (data && type === 'display') {
                                 var url = '@Url.Action("Details", "Movies")' + '/' + data.Id;
                                 return '<a href="' + url + '">' + data.Name; /*  + '< /a>'; */
@@ -376,8 +448,7 @@
 
         function deleteMovie(id, movie) {
             Swal.fire({
-                // text: 'Verknüpfung mit ' + actor + ' löschen?',
-                html: 'Verknüpfung mit <b>' + movie + '</b> löschen?',
+                html: 'Film: <b>' + movie + '</b> löschen?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -397,13 +468,13 @@
                             }
                         },
                         success: function () {
-                            $('#personDetails').DataTable().ajax.reload();
+                            $('#personMovies').DataTable().ajax.reload();
                             Swal.fire({
                                 icon: 'success',
                                 text: 'Verknüpfung erfolgreich gelöscht.',
                                 showConfirmButton: false,
                                 timer: 2000
-                            })
+                            });
                         },
                     })
                 };
