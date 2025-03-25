@@ -284,7 +284,7 @@ namespace MvcMoviesCore.Controllers
 
         #region private functions
 
-        private async Task<Genre> GetGenre(Guid genreId)
+        private async Task<Genre> GetGenre(Guid? genreId)
         {
             if (genreId == null)
                 return null;
@@ -344,7 +344,6 @@ namespace MvcMoviesCore.Controllers
 
             return updateMovies;
         }
-
 
         private List<SelectListItem> GetRoles()
         {

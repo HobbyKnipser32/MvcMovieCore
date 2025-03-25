@@ -184,6 +184,7 @@
                             <th>OnWatch</th>
                             <th>Bewertung</th>
                             <th>Laufzeit</th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -224,6 +225,11 @@
                                 </td>
                                 <td style="text-align:right">
                                     @Html.DisplayFor(modelItem => item.Movies.RunTime)
+                                </td>
+                                <td style="text-align:center">
+                                    <a title="löschen" onclick="deleteMovie('@item.MoviesId', '@item.Movies.Name')">
+                                        <i class="fa-solid fa-trash fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>
+                                    </a>
                                 </td>
                             </tr>
                         }
@@ -267,7 +273,7 @@
                 fixedHeader: {
                     header: true,
                 },
-                columns: [{ width: '30%' }, { width: '10%' }, { width: '5%' }, { width: '30%' }, { width: '10%' }, { width: '10%' }, { width: '5%' }],
+                columns: [{ width: '30%' }, { width: '10%' }, { width: '5%' }, { width: '25%' }, { width: '10%' }, { width: '10%' }, { width: '5%' }, { width: '5%' }],
                 searchHighlight: true
             });
             const personId = '@Model.Id';
@@ -367,5 +373,41 @@
             x[myIndex - 1].style.display = "block";
             setTimeout(carousel, 9000); // Change image every 9 seconds
         }
+
+        function deleteMovie(id, movie) {
+            Swal.fire({
+                // text: 'Verknüpfung mit ' + actor + ' löschen?',
+                html: 'Verknüpfung mit <b>' + movie + '</b> löschen?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Nein'
+            }).then(function (result) {
+                if (result.value) {
+                    var url = appRootPath + '/api/MoviesApi/DeleteMovie/' + id;
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        async: false,
+                        statusCode: {
+                            404: function () {
+                                alert("function not found");
+                            }
+                        },
+                        success: function () {
+                            $('#personDetails').DataTable().ajax.reload();
+                            Swal.fire({
+                                icon: 'success',
+                                text: 'Verknüpfung erfolgreich gelöscht.',
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                        },
+                    })
+                };
+            });
+        };
     </script>
 }
