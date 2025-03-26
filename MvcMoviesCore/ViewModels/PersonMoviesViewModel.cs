@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcMoviesCore.ViewModels
 {
@@ -20,10 +18,8 @@ namespace MvcMoviesCore.ViewModels
 
         public string OnWatch { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal? Bewertung { get; set; }
+        public string Bewertung { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal? Laufzeit { get; set; }
+        public string Laufzeit { get; set; }
     }
 }

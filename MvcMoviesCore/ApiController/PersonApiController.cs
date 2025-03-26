@@ -133,13 +133,13 @@ namespace MvcMoviesCore.ApiController
                     var movie = new PersonMoviesViewModel()
                     {
                         Alter = personMovie.Movies.GetActorsAgeInMovie(personMovie.Person.Birthday, personMovie.Movies.YearOfPublication),
-                        Bewertung = personMovie.Movies.Ranking,
+                        Bewertung = string.Format("{0:0.#}", personMovie.Movies.Ranking), //.ToString(),
                         Id = personMovie.MoviesId,
-                        Laufzeit = personMovie.Movies.RunTime,
+                        Laufzeit = string.Format("{0:0.0}", personMovie.Movies.RunTime), //.ToString(),
                         Name = personMovie.Movies.Name,
                         OnWatch = personMovie.Movies.OnWatch,
                         Role = personMovie.MovieRole?.Name != null ? personMovie.MovieRole.Name : string.Empty
-                    };
+                    }; 
                     if (!string.IsNullOrEmpty(personMovie.Practices)) { movie.Praxis = personMovie.Practices; }
                     if (personMovie.Movies.YearOfPublication != null) { movie.Erscheinungsjahr = personMovie.Movies.YearOfPublication.Value.Year.ToString(); }
                     else { movie.Erscheinungsjahr = string.Empty; }
@@ -149,7 +149,7 @@ namespace MvcMoviesCore.ApiController
                 var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
                 jsonResult = JsonConvert.SerializeObject(movies.OrderBy(o => o.Name).ThenBy(t => t.Alter), Formatting.Indented, jsonSerializerSettings);
             }
-            catch (Exception ex)
+            catch 
             {
                 jsonResult = string.Empty;
             }
