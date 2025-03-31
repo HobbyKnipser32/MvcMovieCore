@@ -41,11 +41,12 @@ namespace MvcMoviesCore.Controllers
         #region public functions
 
         // GET: Movies
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //var practices = GetPractices();
 
             ViewData["ShowAdult"] = _showAdult;
+            await LoadDropdowns();
             return View();
         }
 
@@ -283,6 +284,14 @@ namespace MvcMoviesCore.Controllers
         #endregion
 
         #region private functions
+
+        private async Task LoadDropdowns()
+        {
+            var genre = await _context.Genre.Where(w => !string.IsNullOrEmpty(w.Name)).OrderBy(o => o.Name).ToListAsync();
+            ViewData["Genre"] = PrepareListWithNull([.. genre.Select(s => new SelectListItem(s.Name, s.Id.ToString()))]);
+            var recordCarrier = await _context.RecordCarrier.Where(w => !string.IsNullOrEmpty(w.Name)).OrderBy(o => o.Name).ToListAsync();
+            ViewData["RecordCarrier"] = PrepareListWithNull([.. recordCarrier.Select(s => new SelectListItem(s.Name, s.Id.ToString()))]);
+        }
 
         private async Task<Genre> GetGenre(Guid? genreId)
         {

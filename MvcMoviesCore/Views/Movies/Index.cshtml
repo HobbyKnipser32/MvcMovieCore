@@ -2,31 +2,83 @@
 
 @{
     ViewData["Title"] = "Movies";
+    var genres = ViewData["Genre"] as IEnumerable<SelectListItem>;
+    var recordCarriers = ViewData["RecordCarrier"] as IEnumerable<SelectListItem>;
 }
+<div class="container-fluid">
+    <h2>Movies</h2>
+    <div class="card shadow p-3 mb-5 bg-white rounded">
+        <h4 class="card-title" style="color:blue; background-image: linear-gradient(to right, aliceblue, white); "><b>Filter</b></h4>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label">Film:</label>
+                        <input id="title" class="form-control" type="text" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Erscheinungsjahr:</label>
+                        <input id="yearOfPuplication" class="form-control" type="number" min="1900" max="2025" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Laufzeit von:</label>
+                        <input id="runTimeFrom" class="form-control" type="number" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Laufzeit bis:</label>
+                        <input id="runTimeTo" class="form-control" type="number" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Genre</label>
+                        @Html.DropDownList("genre", genres, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Datenträger:</label>
+                        @Html.DropDownList("recordCarrier", recordCarriers, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-1">
+                        <div class="form-group">
+                            <button class="btn btn-rose btn-fab fa-pull-right" type="button" id="submitFilter" title="Daten filtern">
+                                <i class="fas fa-search fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <div class="form-group">
+                            <button class="btn btn-rose btn-fab fa-pull-right" type="button" id="deleteFilter" title="Filter löschen">
+                                <i class="fa-regular fa-trash-can fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <div class="card shadow p-3 mb-5 bg-white rounded">
 
-<h2>Movies</h2>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<table class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;" id="movieIndex">
-    <thead>
-        <tr>
-            <th width="20%">Film</th>                   @* #00 *@
-            <th>Erscheinungsjahr</th>                   @* #01 *@
-            <th>Vorhanden</th>                          @* #02 *@
-            <th>Laufzeit</th>                           @* #03 *@
-            <th>Bewrtg.</th>                            @* #04 *@
-            <th width="220px">zuletzt gesehen</th>      @* #05 *@
-            <th>Genre</th>                              @* #06 *@
-            <th>Speichermedium</th>                     @* #07 *@
-            <th>Speicherort</th>                        @* #08 *@
-            <th width="200px">Filegröße [kb]</th>       @* #09 *@
-            <th width="3%">&nbsp;</th>                  @* #10 *@
-            <th width="3%">&nbsp;</th>                  @* #11 *@
-        </tr>
-    </thead>
-</table>
+        <table class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;" id="movieIndex">
+            <thead>
+                <tr>
+                    <th width="20%">Film</th>                   @* #00 *@
+                    <th>Erscheinungsjahr</th>                   @* #01 *@
+                    <th>Vorhanden</th>                          @* #02 *@
+                    <th>Laufzeit</th>                           @* #03 *@
+                    <th>Bewrtg.</th>                            @* #04 *@
+                    <th width="220px">zuletzt gesehen</th>      @* #05 *@
+                    <th>Genre</th>                              @* #06 *@
+                    <th>Speichermedium</th>                     @* #07 *@
+                    <th>Speicherort</th>                        @* #08 *@
+                    <th width="200px">Filegröße [kb]</th>       @* #09 *@
+                    <th width="3%">&nbsp;</th>                  @* #10 *@
+                    <th width="3%">&nbsp;</th>                  @* #11 *@
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
 
 @section Scripts
 {
@@ -35,6 +87,7 @@
     <script>
         $(document).ready(function () {
             let table = $('#movieIndex').DataTable({
+                retrieve: true,
                 ajax: {
                     url: appRootPath + '/api/MoviesApi/GetMovies',
                     dataSrc: ''
@@ -79,9 +132,10 @@
                     {
                         data: 'RunTime',
                         render: ['number', '.', ',', 1],
-                        className: 'dt-body-right'
+                        className: 'dt-body-right',
+                        defaultContent: '-'
                     },
-                    { data: 'Ranking', type: 'num', className: 'dt-body-center' },
+                    { data: 'Ranking', type: 'num', className: 'dt-body-center', defaultContent: '-' },
                     {
                         data: 'LastView',
                         render: function (data, type) {
@@ -93,10 +147,10 @@
                         type: 'date',
                         className: 'dt-body-center'
                     },
-                    { data: 'Genre.Name' },
-                    { data: 'RecordCarrier.Name' },
-                    { data: 'StorageLocation.Name' },
-                    { data: 'FileSizeInKB', render: ['number', '.', ',', 0], className: 'dt-body-right' },
+                    { data: 'Genre.Name', defaultContent: '' },
+                    { data: 'RecordCarrier.Name', defaultContent: '' },
+                    { data: 'StorageLocation.Name', defaultContent: '' },
+                    { data: 'FileSizeInKB', render: ['number', '.', ',', 0], className: 'dt-body-right', defaultContent: '' },
                     {
                         data: 'Id',
                         orderable: false,
@@ -143,7 +197,7 @@
                 },
                 // searchHighlight: true,
             });
-            
+
             table.columns('.select-filter').every(function () {
                 var that = this;
 
@@ -175,9 +229,55 @@
                     select.append( '<option value="'+d+'">'+d+'</option>' )
                 });
             });
+
+            $('#submitFilter').click(function () {
+                executeSearch();
+            });
+
+            $('#deleteFilter').click(function(){
+                $('#title').val(null);
+                $('#yearOfPuplication').val(null);
+                $('#runTimeFrom').val(null);
+                $('#runTimeTo').val(null);
+                $('#genre').val(null);
+                $('#recordCarrier').val(null);
+                table.ajax.reload();
+            });
         })
 
-
+        function executeSearch(){
+            let titleValue = $('#title').val();
+            let yearOfPuplicationValue = $('#yearOfPuplication').val();
+            let runTimeFromValue = $('#runTimeFrom').val();
+            let runTimeToValue = $('#runTimeTo').val();
+            let genreValue = $('#genre').val();
+            let recordCarrierValue = $('#recordCarrier').val();
+            if (titleValue || yearOfPuplicationValue || runTimeFromValue || runTimeToValue || genreValue || recordCarrierValue){
+                let filter = {
+                    "Title": titleValue,
+                    "YearOfPuplication": yearOfPuplicationValue,
+                    "RunTimeFrom": runTimeFromValue,
+                    "RunTimeTo": runTimeToValue,
+                    "Genre": genreValue,
+                    "RecordCarrier": recordCarrierValue
+                };
+                var url = appRootPath + '/api/MoviesApi/SetFilter';
+                $.post(url, filter, function (content) {
+                    let movieTable = $('#movieIndex').DataTable();
+                    movieTable.clear().draw();
+                    movieTable.rows.add(JSON.parse(content));
+                    movieTable.draw(false);
+                })
+                .fail(function (response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Daten konnten nicht gefiltert werden!',
+                        footer: response.responseText
+                    })
+                });
+            }
+        }
 
         function deleteMovie(id, movie) {
             Swal.fire({
@@ -223,4 +323,4 @@
             });
         };
     </script>
-}
+    }

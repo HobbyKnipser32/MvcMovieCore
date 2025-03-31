@@ -128,7 +128,7 @@ namespace MvcMoviesCore.ApiController
             }
 
             if (!showAdult)
-                movies = movies.Where(w => w.Adult == false).ToList();
+                movies = [.. movies.Where(w => w.Adult == false)];
 
             try
             {
@@ -180,8 +180,8 @@ namespace MvcMoviesCore.ApiController
             if (person == null)
                 return BadRequest($"Kann {moviesPerson.Actor} nicht finden!");
 
-            MoviesPerson moviePerson = new() 
-            { 
+            MoviesPerson moviePerson = new()
+            {
                 Id = Guid.NewGuid(),
                 MoviesId = moviesPerson.MovieId,
                 PersonId = person.Id,
@@ -193,6 +193,51 @@ namespace MvcMoviesCore.ApiController
             return Ok();
         }
 
+        [HttpPost("SetFilter")]
+        public async Task<IActionResult> SetFilter([FromForm] SearchMovieViewModel filter)
+        {
+            var movies = await _context.Movies
+                                .Include(m => m.Genre)
+                                .Include(m => m.RecordCarrier)
+                                .Include(m => m.StorageLocation)
+                                .OrderBy(o => o.Name).ToListAsync();
+
+            foreach (var movie in movies)
+            {
+                movie.Genre.Movies.Clear();
+                movie.RecordCarrier?.Movies.Clear();
+                movie.StorageLocation?.Movies.Clear();
+            }
+            var showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
+            if (!showAdult) 
+                movies = [.. movies.Where(w => w.Adult == false)];
+            if (!string.IsNullOrEmpty(filter.Title)) 
+                movies = [.. movies.Where(w => w.Name.ToLower().Contains(filter.Title.ToLower()))];
+            if (filter.YearOfPuplication > 0) 
+                movies = [.. movies.Where(w => w.YearOfPublication.GetValueOrDefault().Year == filter.YearOfPuplication)];
+            if (filter.Genre != null && filter.Genre != Guid.Empty)
+                movies = [.. movies.Where(w => w.GenreId.Equals(filter.Genre))];
+            if (filter.RecordCarrier != null && filter.RecordCarrier != Guid.Empty)
+                movies = [.. movies.Where(w => w.RecordCarrierId.Equals(filter.RecordCarrier))];
+            if (filter.RunTimeFrom > 0 && (filter.RunTimeTo == null || filter.RunTimeTo == 0))
+                movies = [.. movies.Where(w => w.RunTime >= filter.RunTimeFrom)];
+            else if ((filter.RunTimeFrom == null || filter.RunTimeFrom == 0) && filter.RunTimeTo > 0)
+                movies = [.. movies.Where(w => w.RunTime <= filter.RunTimeTo)];
+            else if (filter.RunTimeFrom > 0 && filter.RunTimeTo > 0)
+                movies = [.. movies.Where(w => w.RunTime >= filter.RunTimeFrom && w.RunTime <= filter.RunTimeTo)];
+
+            try
+            {
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                var jsonResult = JsonConvert.SerializeObject(movies, Formatting.Indented, jsonSerializerSettings);
+                return Ok(jsonResult);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
         #region private functions
 
         private async Task<Guid> GetMovieRoleId(string roleName)
@@ -201,10 +246,10 @@ namespace MvcMoviesCore.ApiController
             if (role != null)
                 return role.Id;
 
-            MovieRole movieRole = new() { Id = Guid.NewGuid(), Name = roleName};
+            MovieRole movieRole = new() { Id = Guid.NewGuid(), Name = roleName };
             _context.MovieRole.Add(movieRole);
             await _context.SaveChangesAsync();
-            
+
             return movieRole.Id;
         }
 
