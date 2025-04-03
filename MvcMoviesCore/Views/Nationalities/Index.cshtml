@@ -37,7 +37,7 @@
                 columns: [
                     {
                         data: 'Id',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type, full) {
                             if (data && type === 'display') {
                                 var imgSrc = "@originalFileDirectory" + "/flags/" + full["Name"] + ".png";
                                 return '<img src="' + imgSrc + '" style="max-width: 50px; max-heigth: 100%" />';
@@ -47,31 +47,31 @@
                     },
                     {
                         data: 'Id',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type, full) {
                             if (data && type === 'display') {
                                 var url = '@Url.Action("FilterNationality", "Person")' + '/' + data;
                                 return '<a href="' + url + '" title="Filter Nationalität">' + full['Name'];
-                                // '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
                         }
                     },
                     { data: 'Description' },
-                    { data: 'Count' },
+                    { data: 'Count', type: 'num', class:'dt-body-right', render: ['number', '.', ',', 0] },
                     {
                         data: 'Id',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type) {
                             if (data && type === 'display') {
                                 var url = '@Url.Action("Edit", "Nationalities")' + '/' + data;
                                 return '<a href="' + url + '" title="Nationalität bearbeiten">' +
                                     '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
-                        }
+                        }, 
+                        class:'dt-body-center'
                     },
                     {
                         data: 'Id',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type) {
                             if (data && type === 'display') {
                                 var id = "'" + data + "'";
                                 return '<button name="id" style="background-color: transparent; color: red; border: hidden"' +
@@ -79,7 +79,8 @@
                                     '<i class="fa-regular fa-trash-can fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
-                        }
+                        }, 
+                        class:'dt-body-center'
                     },
                 ],
                 ordering: true,

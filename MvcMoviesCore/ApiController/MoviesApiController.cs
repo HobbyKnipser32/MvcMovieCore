@@ -209,16 +209,18 @@ namespace MvcMoviesCore.ApiController
                 movie.StorageLocation?.Movies.Clear();
             }
             var showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
-            if (!showAdult) 
+            if (!showAdult)
                 movies = [.. movies.Where(w => w.Adult == false)];
-            if (!string.IsNullOrEmpty(filter.Title)) 
+            if (!string.IsNullOrEmpty(filter.Title))
                 movies = [.. movies.Where(w => w.Name.ToLower().Contains(filter.Title.ToLower()))];
-            if (filter.YearOfPuplication > 0) 
+            if (filter.YearOfPuplication > 0)
                 movies = [.. movies.Where(w => w.YearOfPublication.GetValueOrDefault().Year == filter.YearOfPuplication)];
             if (filter.Genre != null && filter.Genre != Guid.Empty)
                 movies = [.. movies.Where(w => w.GenreId.Equals(filter.Genre))];
             if (filter.RecordCarrier != null && filter.RecordCarrier != Guid.Empty)
                 movies = [.. movies.Where(w => w.RecordCarrierId.Equals(filter.RecordCarrier))];
+            if (filter.Ranking != null && filter.Ranking > 0)
+                movies = [.. movies.Where(w => (int)w.Ranking.GetValueOrDefault() == filter.Ranking)];
             if (filter.RunTimeFrom > 0 && (filter.RunTimeTo == null || filter.RunTimeTo == 0))
                 movies = [.. movies.Where(w => w.RunTime >= filter.RunTimeFrom)];
             else if ((filter.RunTimeFrom == null || filter.RunTimeFrom == 0) && filter.RunTimeTo > 0)
