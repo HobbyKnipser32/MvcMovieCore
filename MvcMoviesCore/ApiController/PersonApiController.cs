@@ -85,31 +85,7 @@ namespace MvcMoviesCore.ApiController
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var persons = await _context.Person
-                                  .Include(i => i.PersonType)
-                                  .Include(i => i.Sex)
-                                  .Include(i => i.Nationality)
-                                  .Include(i => i.MoviesPerson)
-                                  .Include(i => i.PersonImages.Where(w => w.IsMain == true && w.IsDeleted == false))
-                                  .OrderBy(o => o.Name)
-                                  .ToListAsync();
-
-            if (!_showAdult)
-            {
-                var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
-                if (personType != null)
-                    persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id)).ToList();
-            }
-
-            persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
-            foreach (var person in persons)
-            {
-                person.MoviesPerson.ToList().ForEach(f => f.Person = null);
-            }
-            //persons.ForEach(f => f.MoviesPerson = null);
-            persons.ForEach(f => f.Nationality.Person = null);
-            persons.ForEach(f => f.PersonType.Person = null);
-            persons.ForEach(f => f.Sex.Person = null);
+            var persons = await GetPersons();
 
             var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var jsonResult = JsonConvert.SerializeObject(persons, Formatting.Indented, jsonSerializerSettings);
@@ -139,7 +115,7 @@ namespace MvcMoviesCore.ApiController
                         Name = personMovie.Movies.Name,
                         OnWatch = personMovie.Movies.OnWatch,
                         Role = personMovie.MovieRole?.Name != null ? personMovie.MovieRole.Name : string.Empty
-                    }; 
+                    };
                     if (!string.IsNullOrEmpty(personMovie.Practices)) { movie.Praxis = personMovie.Practices; }
                     if (personMovie.Movies.YearOfPublication != null) { movie.Erscheinungsjahr = personMovie.Movies.YearOfPublication.Value.Year.ToString(); }
                     else { movie.Erscheinungsjahr = string.Empty; }
@@ -149,7 +125,7 @@ namespace MvcMoviesCore.ApiController
                 var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
                 jsonResult = JsonConvert.SerializeObject(movies.OrderBy(o => o.Name).ThenBy(t => t.Alter), Formatting.Indented, jsonSerializerSettings);
             }
-            catch 
+            catch
             {
                 jsonResult = string.Empty;
             }
@@ -524,9 +500,85 @@ namespace MvcMoviesCore.ApiController
             return Ok();
         }
 
+        [HttpPost("Filter")]
+        public async Task<IActionResult> Filter([FromForm] FilterPersonViewModel filter)
+        {
+            var persons = await GetPersons();
+            decimal heightFrom = 0;
+            decimal heightTo = 0;
+            decimal weightFrom = 0;
+            decimal weightTo = 0;
+
+            if (!string.IsNullOrEmpty(filter.HeightFrom))
+                heightFrom = decimal.Parse(filter.HeightFrom) / 100;
+            if (!string.IsNullOrEmpty(filter.HeightTo))
+                heightTo = decimal.Parse(filter.HeightTo) / 100;
+            if (!string.IsNullOrEmpty(filter.WeightFrom))
+                weightFrom = decimal.Parse(filter.HeightFrom) / 100;
+            if (!string.IsNullOrEmpty(filter.WeightTo))
+                weightTo = decimal.Parse(filter.WeightTo) / 100;
+
+            if (!string.IsNullOrEmpty(filter.Name))
+                persons = [.. persons.Where(w => w.Name.ToLower().Contains(filter.Name.ToLower()))];
+            if (filter.YearOfBirth != null && filter.YearOfBirth > 0)
+                persons = [.. persons.Where(w => w.Birthday.GetValueOrDefault().Year == filter.YearOfBirth)];
+            if (filter.Nationality != null && filter.Nationality != Guid.Empty)
+                persons = [.. persons.Where(w => w.NationalityId.Equals(filter.Nationality))];
+            if (heightFrom > 0 && heightTo == 0)
+                persons = [.. persons.Where(w => w.Height >= heightFrom)];
+            else if (heightFrom == 0 && heightTo > 0)
+                persons = [.. persons.Where(w => w.Height <= heightTo)];
+            else if (heightFrom > 0 && heightTo > 0)
+                persons = [.. persons.Where(w => w.Height >= heightFrom && w.Height <= heightTo)];
+            if (weightFrom > 0 && weightTo == 0)
+                persons = [.. persons.Where(w => w.Weight >= weightFrom)];
+            else if (weightFrom == 0 && weightTo > 0)
+                persons = [.. persons.Where(w => w.Weight <= weightTo)];
+            else if (weightFrom > 0 && weightTo > 0)
+                persons = [.. persons.Where(w => w.Weight >= weightFrom && w.Weight <= weightTo)];
+            if (filter.PersonType != null && filter.PersonType != Guid.Empty)
+                persons = [.. persons.Where(w => w.PersonTypesId.Equals(filter.PersonType))];
+            if (filter.Sex != null && filter.Sex != Guid.Empty)
+                persons = [.. persons.Where(w => w.SexId.Equals(filter.Sex))];
+
+            var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            var jsonResult = JsonConvert.SerializeObject(persons, Formatting.Indented, jsonSerializerSettings);
+            return Ok(jsonResult);
+        }
+
         #endregion
 
         #region private functions
+
+        private async Task<List<Person>> GetPersons()
+        {
+            var persons = await _context.Person
+                                  .Include(i => i.PersonType)
+                                  .Include(i => i.Sex)
+                                  .Include(i => i.Nationality)
+                                  .Include(i => i.MoviesPerson)
+                                  .Include(i => i.PersonImages.Where(w => w.IsMain == true && w.IsDeleted == false))
+                                  .OrderBy(o => o.Name)
+                                  .ToListAsync();
+
+            if (!_showAdult)
+            {
+                var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
+                if (personType != null)
+                    persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id)).ToList();
+            }
+
+            persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
+            foreach (var person in persons)
+            {
+                person.MoviesPerson.ToList().ForEach(f => f.Person = null);
+            }
+            persons.ForEach(f => f.Nationality.Person = null);
+            persons.ForEach(f => f.PersonType.Person = null);
+            persons.ForEach(f => f.Sex.Person = null);
+
+            return persons;
+        }
 
         private bool RenameImage(Person person, out string newFileName)
         {

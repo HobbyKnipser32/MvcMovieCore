@@ -8,36 +8,118 @@
         headline += ViewData["FilterFor"].ToString();
     }
     var originalFileDirectory = ViewData["OriginalFileDirectory"];
+
+    var nationalities = ViewData["Nationalities"] as IEnumerable<SelectListItem>;
+    var personTypes = ViewData["PersonTypes"] as IEnumerable<SelectListItem>;
+    var sex = ViewData["Sex"] as IEnumerable<SelectListItem>;
 }
 <div class="container-fluid">
-    <h2>@headline</h2>
-    <p>
-        <a asp-action="Create" title="Person hinzufügen">
-            <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
-        </a>
-    </p>
-    <hr />
-    <table class="table" id="personIndex">
-        <thead>
+    <div class="row">
+        <table>
             <tr>
-                <th style="width: 50px">&nbsp;</th>                         @*  0 *@
-                <th>@Html.DisplayNameFor(model => model.Name)</th>          @*  1 *@
-                <th>&nbsp;</th>                                             @*  2 *@
-                <th>@Html.DisplayNameFor(model => model.Birthday)</th>      @*  3 *@
-                <th>@Html.DisplayNameFor(model => model.Obit)</th>          @*  4 *@
-                <th>@Html.DisplayNameFor(model => model.Nationality)</th>   @*  5 *@
-                <th>@Html.DisplayNameFor(model => model.Height)</th>        @*  6 *@
-                <th>@Html.DisplayNameFor(model => model.Weight)</th>        @*  7 *@
-                <th>&nbsp;</th>                                             @*  8 *@
-                <th>@Html.DisplayNameFor(model => model.PersonType)</th>    @*  9 *@
-                <th>@Html.DisplayNameFor(model => model.Sex)</th>           @* 10 *@
-                <th>Filme</th>                                              @* 11 *@
-                <th>&nbsp;</th>                                             @* 12 *@
-                <th>&nbsp;</th>                                             @* 13 *@
+                <td class="col-sm-2"><h2>@headline</h2></td>
+                <td style="vertical-align:top">
+                    <a asp-action="Create" title="Person hinzufügen" style="vertical-align:bottom">
+                        <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
+                    </a>
+                </td>
             </tr>
-        </thead>
-        <a href=""></a>
-    </table>
+        </table>
+        @*         <div class="col-md-2" style="display:table-cell; vertical-align:middle">
+            <h2>@headline</h2>
+        </div>
+        <div class="col-md-1" style="position:relative">
+            <div style="display:table-cell; height:100%">
+                <p>
+                    <a asp-action="Create" title="Person hinzufügen" style="vertical-align:bottom">
+                        <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
+                    </a>
+                </p>
+            </div>
+        </div> *@
+    </div>
+    <div class="card shadow p-3 mb-5 bg-white rounded">
+        <h4 class="card-title" style="color:blue; background-image: linear-gradient(to right, aliceblue, white); "><b>Filter</b></h4>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group col-md-2">
+                        <label class="col-form-label">Name:</label>
+                        <input id="personName" class="form-control" type="text" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Geburtsjahr:</label>
+                        <input id="yearOfBirth" class="form-control" type="number" min="1900" max="2025" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Nationalität:</label>
+                        @Html.DropDownList("nationality", nationalities, new { @class = "form-select" })
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Größe von:</label>
+                        <input id="heightFrom" class="form-control" type="number" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Größe bis:</label>
+                        <input id="heightTo" class="form-control" type="number" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Gewicht von:</label>
+                        <input id="weightFrom" class="form-control" type="number" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Gewicht bis:</label>
+                        <input id="weightTo" class="form-control" type="number" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Personentyp:</label>
+                        @Html.DropDownList("personType", personTypes, new { @class = "form-select" })
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Geschlecht:</label>
+                        @Html.DropDownList("sex", sex, new { @class = "form-select" })
+                    </div>
+                    <div class="form-group col-md-1">
+                        <div class="form-group">
+                            <button class="btn btn-rose btn-fab fa-pull-right" type="button" id="submitFilter" title="Daten filtern">
+                                <i class="fas fa-search fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <div class="form-group">
+                            <button class="btn btn-rose btn-fab fa-pull-right" type="button" id="deleteFilter" title="Filter löschen">
+                                <i class="fa-regular fa-trash-can fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow p-3 mb-5 bg-white rounded">
+        <table class="table" id="personIndex">
+            <thead>
+                <tr>
+                    <th style="width: 50px">&nbsp;</th>                         @*  0 *@
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>          @*  1 *@
+                    <th>&nbsp;</th>                                             @*  2 *@
+                    <th>@Html.DisplayNameFor(model => model.Birthday)</th>      @*  3 *@
+                    <th>@Html.DisplayNameFor(model => model.Obit)</th>          @*  4 *@
+                    <th>@Html.DisplayNameFor(model => model.Nationality)</th>   @*  5 *@
+                    <th>@Html.DisplayNameFor(model => model.Height)</th>        @*  6 *@
+                    <th>@Html.DisplayNameFor(model => model.Weight)</th>        @*  7 *@
+                    <th>&nbsp;</th>                                             @*  8 *@
+                    <th>@Html.DisplayNameFor(model => model.PersonType)</th>    @*  9 *@
+                    <th>@Html.DisplayNameFor(model => model.Sex)</th>           @* 10 *@
+                    <th>Filme</th>                                              @* 11 *@
+                    <th>&nbsp;</th>                                             @* 12 *@
+                    <th>&nbsp;</th>                                             @* 13 *@
+                </tr>
+            </thead>
+            <a href=""></a>
+        </table>
+    </div>
 </div>
 
 @section Scripts
@@ -47,7 +129,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#personIndex').DataTable({
+            let table = $('#personIndex').DataTable({
                 ajax: {
                     url: appRootPath + '/api/PersonApi',
                     dataSrc: ''
@@ -205,8 +287,65 @@
             $('#personIndex tbody').on('mouseleave', '.image-container', function () {
                 onMouseLeave(this);
             });
+            
+            $('#submitFilter').click(function () {
+                executeSearch();
+            });
 
+            $('#deleteFilter').click(function(){
+                $('#personName').val(null);
+                $('#yearOfBirth').val(null);
+                $('#nationality').val(null);
+                $('#heightFrom').val(null);
+                $('#heightTo').val(null);
+                $('#weightFrom').val(null);
+                $('#weightTo').val(null);
+                $('#personType').val(null);
+                $('#sex').val(null);
+                table.ajax.reload();
+            });
         })
+
+         function executeSearch(){
+            let personNameValue = $('#personName').val();
+            let yearOfBirthValue = $('#yearOfBirth').val();
+            let nationalityValue = $('#nationality').val();
+            let heightFromValue = $('#heightFrom').val();
+            let heightToValue = $('#heightTo').val();
+            let weightFromValue = $('#weightFrom').val();
+            let weightToValue = $('#weightTo').val();
+            let personTypeValue = $('#personType').val();
+            let sexValue = $('#sex').val();
+
+            if (personNameValue || yearOfBirthValue || nationalityValue || heightFromValue || heightToValue || weightFromValue || weightToValue || personTypeValue || sexValue){
+                let filter = {
+                    "Name": personNameValue,
+                    "YearOfBirth": yearOfBirthValue,
+                    "Nationality": nationalityValue,
+                    "HeightFrom": heightFromValue,
+                    "HeightTo": heightToValue,
+                    "WeightFrom": weightFromValue,
+                    "WeightTo" : weightToValue,
+                    "PersonType": personTypeValue,
+                    "Sex" : sexValue
+                };
+                var url = appRootPath + '/api/PersonApi/Filter';
+                $.post(url, filter, function (content) {
+                    let movieTable = $('#personIndex').DataTable();
+                    movieTable.clear().draw();
+                    movieTable.rows.add(JSON.parse(content));
+                    movieTable.draw(false);
+                })
+                .fail(function (response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Daten konnten nicht gefiltert werden!',
+                        footer: response.responseText
+                    })
+                });
+            }
+        }
 
         function deletePerson(id, actor) {
             Swal.fire({

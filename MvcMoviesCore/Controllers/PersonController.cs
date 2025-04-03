@@ -147,10 +147,11 @@ namespace MvcMoviesCore.Controllers
         }
 
         // GET: Person
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
 
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
+            await LoadDropDonws();
             return View();
         }
 
@@ -252,7 +253,7 @@ namespace MvcMoviesCore.Controllers
                 }
                 _context.Add(person);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexAsync));
             }
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypesId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", personViewModel.SexId);
@@ -342,7 +343,7 @@ namespace MvcMoviesCore.Controllers
                 }
                 if (!string.IsNullOrEmpty(personViewModel.PreviousPage))
                     return Redirect(personViewModel.PreviousPage);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexAsync));
             }
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypesId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", personViewModel.SexId);
@@ -395,7 +396,7 @@ namespace MvcMoviesCore.Controllers
             }
             _context.Person.Remove(person);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(IndexAsync));
         }
 
         public async Task<IActionResult> Birthdays(string combine, DateTime birthday = new DateTime(), int year = 0)
@@ -470,6 +471,22 @@ namespace MvcMoviesCore.Controllers
         #endregion
 
         #region private functions
+
+        private async Task LoadDropDonws()
+        {
+            var nationalities = await _context.Nationalities.Where(w => !string.IsNullOrEmpty(w.Name)).OrderBy(o => o.Name).ToListAsync();
+            ViewData["Nationalities"] = PrepareListWithNull([.. nationalities.Select(s => new SelectListItem($"{s.Name} | {s.Description}", s.Id.ToString()))]);
+            var personTypes = await _context.PersonType.Where(w => !string.IsNullOrEmpty(w.Name)).OrderBy(o => o.Name).ToListAsync();
+            ViewData["PersonTypes"] = PrepareListWithNull([.. personTypes.Select(s => new SelectListItem(s.Name, s.Id.ToString()))]);
+            var sex = await _context.Sex.Where(w => !string.IsNullOrEmpty(w.Name)).OrderBy(o => o.Name).ToListAsync();
+            ViewData["Sex"] = PrepareListWithNull([.. sex.Select(s => new SelectListItem($"{s.Name} | {s.Description}", s.Id.ToString()))]);
+        }
+
+        private static List<SelectListItem> PrepareListWithNull(List<SelectListItem> items)
+        {
+            items.Insert(0, new SelectListItem(null, null));
+            return [.. items];
+        }
 
         private bool PersonExists(Guid id)
         {

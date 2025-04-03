@@ -194,7 +194,7 @@ namespace MvcMoviesCore.ApiController
         }
 
         [HttpPost("SetFilter")]
-        public async Task<IActionResult> SetFilter([FromForm] SearchMovieViewModel filter)
+        public async Task<IActionResult> SetFilter([FromForm] FilterMovieViewModel filter)
         {
             var movies = await _context.Movies
                                 .Include(m => m.Genre)

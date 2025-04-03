@@ -2,7 +2,7 @@
 
 namespace MvcMoviesCore.ViewModels
 {
-    public class SearchMovieViewModel
+    public class FilterMovieViewModel
     {
         public string Title { get; set; }
         public int? YearOfPuplication {  get; set; }
