@@ -149,9 +149,9 @@ namespace MvcMoviesCore.Controllers
         // GET: Person
         public async Task<IActionResult> IndexAsync()
         {
-
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
             await LoadDropDonws();
+            await LoadLimits();
             return View();
         }
 
@@ -471,6 +471,17 @@ namespace MvcMoviesCore.Controllers
         #endregion
 
         #region private functions
+
+        private async Task LoadLimits()
+        {
+            var person = await _context.Person.Where(w => w.Birthday != null).OrderBy(o => o.Birthday).ToListAsync();
+            ViewData["YearOfBirthMin"] = person[0].Birthday.GetValueOrDefault().Year;
+            ViewData["YearOfBirthMax"] = person[^1].Birthday.GetValueOrDefault().Year;
+            ViewData["HeightMin"] = (int)(await _context.Person.MinAsync(m => m.Height) * 100);
+            ViewData["HeightMax"] = (int)(await _context.Person.MaxAsync(m => m.Height) * 100);
+            ViewData["WeightMin"] = (int)await _context.Person.MinAsync(m => m.Weight);
+            ViewData["WeightMax"] = (int)await _context.Person.MaxAsync(m => m.Weight);
+        }
 
         private async Task LoadDropDonws()
         {

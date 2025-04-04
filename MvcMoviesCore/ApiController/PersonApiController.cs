@@ -514,9 +514,9 @@ namespace MvcMoviesCore.ApiController
             if (!string.IsNullOrEmpty(filter.HeightTo))
                 heightTo = decimal.Parse(filter.HeightTo) / 100;
             if (!string.IsNullOrEmpty(filter.WeightFrom))
-                weightFrom = decimal.Parse(filter.HeightFrom) / 100;
+                weightFrom = decimal.Parse(filter.WeightFrom);
             if (!string.IsNullOrEmpty(filter.WeightTo))
-                weightTo = decimal.Parse(filter.WeightTo) / 100;
+                weightTo = decimal.Parse(filter.WeightTo);
 
             if (!string.IsNullOrEmpty(filter.Name))
                 persons = [.. persons.Where(w => w.Name.ToLower().Contains(filter.Name.ToLower()))];

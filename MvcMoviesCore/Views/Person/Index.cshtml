@@ -12,6 +12,12 @@
     var nationalities = ViewData["Nationalities"] as IEnumerable<SelectListItem>;
     var personTypes = ViewData["PersonTypes"] as IEnumerable<SelectListItem>;
     var sex = ViewData["Sex"] as IEnumerable<SelectListItem>;
+    var yearOfBirthMin = ViewData["YearOfBirthMin"];
+    var yearOfBirthMax = ViewData["YearOfBirthMax"];
+    var heightMin = ViewData["HeightMin"];
+    var heightMax = ViewData["HeightMax"];
+    var weightMin = ViewData["WeightMin"];
+    var weightMax = ViewData["WeightMax"];
 }
 <div class="container-fluid">
     <div class="row">
@@ -25,19 +31,13 @@
                 </td>
             </tr>
         </table>
-        @*         <div class="col-md-2" style="display:table-cell; vertical-align:middle">
-            <h2>@headline</h2>
-        </div>
-        <div class="col-md-1" style="position:relative">
-            <div style="display:table-cell; height:100%">
-                <p>
-                    <a asp-action="Create" title="Person hinzufügen" style="vertical-align:bottom">
-                        <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
-                    </a>
-                </p>
-            </div>
-        </div> *@
     </div>
+    <div id="loader" style="display:none; position:fixed; z-index:100; padding-top:200px; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgb(0,0,0); background-color:rgba(0,0,0,0.4);">
+        <div style="background-color:#fefefe; margin:auto; padding:20px; border:1px solid #888; width:30%;">
+            <div class="loader"></div>
+        </div>
+    </div>
+
     <div class="card shadow p-3 mb-5 bg-white rounded">
         <h4 class="card-title" style="color:blue; background-image: linear-gradient(to right, aliceblue, white); "><b>Filter</b></h4>
         <div class="row">
@@ -49,7 +49,7 @@
                     </div>
                     <div class="form-group col-md-1">
                         <label class="col-form-label">Geburtsjahr:</label>
-                        <input id="yearOfBirth" class="form-control" type="number" min="1900" max="2025" />
+                        <input id="yearOfBirth" class="form-control" type="number" min="@yearOfBirthMin" max="@yearOfBirthMax" />
                     </div>
                     <div class="form-group col-md-1">
                         <label class="col-form-label">Nationalität:</label>
@@ -57,19 +57,19 @@
                     </div>
                     <div class="form-group col-md-1">
                         <label class="col-form-label">Größe von:</label>
-                        <input id="heightFrom" class="form-control" type="number" />
+                        <input id="heightFrom" class="form-control" type="number" min="@heightMin" max="@heightMax" />
                     </div>
                     <div class="form-group col-md-1">
                         <label class="col-form-label">Größe bis:</label>
-                        <input id="heightTo" class="form-control" type="number" />
+                        <input id="heightTo" class="form-control" type="number" min="@heightMin" max="@heightMax" />
                     </div>
                     <div class="form-group col-md-1">
                         <label class="col-form-label">Gewicht von:</label>
-                        <input id="weightFrom" class="form-control" type="number" />
+                        <input id="weightFrom" class="form-control" type="number" min="@weightMin" max="@weightMax" />
                     </div>
                     <div class="form-group col-md-1">
                         <label class="col-form-label">Gewicht bis:</label>
-                        <input id="weightTo" class="form-control" type="number" />
+                        <input id="weightTo" class="form-control" type="number" min="@weightMin" max="@weightMax" />
                     </div>
                     <div class="form-group col-md-1">
                         <label class="col-form-label">Personentyp:</label>
@@ -287,26 +287,33 @@
             $('#personIndex tbody').on('mouseleave', '.image-container', function () {
                 onMouseLeave(this);
             });
-            
+
             $('#submitFilter').click(function () {
                 executeSearch();
             });
 
             $('#deleteFilter').click(function(){
-                $('#personName').val(null);
-                $('#yearOfBirth').val(null);
-                $('#nationality').val(null);
-                $('#heightFrom').val(null);
-                $('#heightTo').val(null);
-                $('#weightFrom').val(null);
-                $('#weightTo').val(null);
-                $('#personType').val(null);
-                $('#sex').val(null);
-                table.ajax.reload();
+                deleteFilter();
             });
+
+            deleteFilter();
         })
 
-         function executeSearch(){
+        function deleteFilter(){
+            $('#personName').val(null);
+            $('#yearOfBirth').val(null);
+            $('#nationality').val(null);
+            $('#heightFrom').val(null);
+            $('#heightTo').val(null);
+            $('#weightFrom').val(null);
+            $('#weightTo').val(null);
+            $('#personType').val(null);
+            $('#sex').val(null);
+            $('#personIndex').DataTable().ajax.reload();
+        }
+
+        function executeSearch(){
+            $('#loader').show();
             let personNameValue = $('#personName').val();
             let yearOfBirthValue = $('#yearOfBirth').val();
             let nationalityValue = $('#nationality').val();
@@ -345,6 +352,7 @@
                     })
                 });
             }
+            $('#loader').hide();
         }
 
         function deletePerson(id, actor) {
