@@ -291,6 +291,8 @@ namespace MvcMoviesCore.Controllers
             ViewData["Genre"] = PrepareListWithNull([.. genre.Select(s => new SelectListItem(s.Name, s.Id.ToString()))]);
             var recordCarrier = await _context.RecordCarrier.Where(w => !string.IsNullOrEmpty(w.Name)).OrderBy(o => o.Name).ToListAsync();
             ViewData["RecordCarrier"] = PrepareListWithNull([.. recordCarrier.Select(s => new SelectListItem(s.Name, s.Id.ToString()))]);
+            var markers = await _context.Movies.GroupBy(g => g.OnWatch).ToListAsync();
+            ViewData["Markers"] = PrepareListWithNull([.. markers.Select(s => new SelectListItem(s.Key, s.Key))]);
         }
 
         private async Task<Genre> GetGenre(Guid? genreId)

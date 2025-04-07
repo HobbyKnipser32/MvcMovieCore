@@ -4,6 +4,7 @@
     ViewData["Title"] = "Movies";
     var genres = ViewData["Genre"] as IEnumerable<SelectListItem>;
     var recordCarriers = ViewData["RecordCarrier"] as IEnumerable<SelectListItem>;
+    var markers = ViewData["Markers"] as IEnumerable<SelectListItem>;
 }
 <div class="container-fluid">
     <div class="row">
@@ -25,7 +26,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label class="col-form-label">Film:</label>
                         <input id="title" class="form-control" type="text" />
                     </div>
@@ -45,6 +46,10 @@
                         <label class="col-form-label">Bewertung:</label>
                         <input id="ranking" class="form-control" type="number" min="1" max="10" />
                     </div>
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Marker</label>
+                        @Html.DropDownList("marker", markers, new { @class = "form-select" })
+                    </div>
                     <div class="form-group col-md-2">
                         <label class="col-form-label">Genre</label>
                         @Html.DropDownList("genre", genres, new { @class = "form-select" })
@@ -62,7 +67,7 @@
                     </div>
                     <div class="form-group col-md-1">
                         <div class="form-group">
-                            <button class="btn btn-rose btn-fab fa-pull-right" type="button" id="deleteFilter" title="Filter löschen">
+                            <button class="btn btn-rose btn-fab fa-align-center" type="button" id="deleteFilter" title="Filter löschen">
                                 <i class="fa-regular fa-trash-can fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
                             </button>
                         </div>
@@ -81,13 +86,14 @@
                     <th>Vorhanden</th>                          @* #02 *@
                     <th>Laufzeit</th>                           @* #03 *@
                     <th>Bewrtg.</th>                            @* #04 *@
-                    <th width="220px">zuletzt gesehen</th>      @* #05 *@
-                    <th>Genre</th>                              @* #06 *@
-                    <th>Speichermedium</th>                     @* #07 *@
-                    <th>Speicherort</th>                        @* #08 *@
-                    <th width="200px">Filegröße [kb]</th>       @* #09 *@
-                    <th width="3%">&nbsp;</th>                  @* #10 *@
+                    <th>Marker</th>                             @* #05 *@
+                    <th width="200px">zuletzt gesehen</th>      @* #06 *@
+                    <th>Genre</th>                              @* #07 *@
+                    <th>Speichermedium</th>                     @* #08 *@
+                    <th>Speicherort</th>                        @* #09 *@
+                    <th width="175px">Filegröße [kb]</th>       @* #10 *@
                     <th width="3%">&nbsp;</th>                  @* #11 *@
+                    <th width="3%">&nbsp;</th>                  @* #12 *@
                 </tr>
             </thead>
         </table>
@@ -144,7 +150,8 @@
                         className: 'dt-body-center'
                     },
                     { data: 'RunTime', render: ['number', '.', ',', 1], className: 'dt-body-right', type: 'num' },
-                    { data: 'Ranking', type: 'num', className: 'dt-body-center', type: 'num' },
+                    { data: 'Ranking', type: 'num', className: 'dt-body-center' },
+                    { data: 'OnWatch', className: 'dt-body-center' },
                     {
                         data: 'LastView',
                         render: function (data, type) {
