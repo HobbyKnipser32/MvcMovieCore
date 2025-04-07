@@ -11,5 +11,6 @@ namespace MvcMoviesCore.ViewModels
         public int? Ranking { get; set; }
         public Guid? Genre { get; set; }
         public Guid? RecordCarrier { get; set; }
+        public string Marker {  get; set; }
     }
 }

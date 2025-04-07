@@ -5,6 +5,10 @@
     var genres = ViewData["Genre"] as IEnumerable<SelectListItem>;
     var recordCarriers = ViewData["RecordCarrier"] as IEnumerable<SelectListItem>;
     var markers = ViewData["Markers"] as IEnumerable<SelectListItem>;
+    var minYearOfPublication = ViewData["MinYearOfPublication"];
+    var maxYearOfPublication = ViewData["MaxYearOfPublication"];
+    var minRunTime = ViewData["MinRunTime"];
+    var maxRunTime = ViewData["MaxRunTime"];
 }
 <div class="container-fluid">
     <div class="row">
@@ -32,15 +36,15 @@
                     </div>
                     <div class="form-group col-md-1">
                         <label class="col-form-label">Erscheinungsjahr:</label>
-                        <input id="yearOfPuplication" class="form-control" type="number" min="1900" max="2025" />
+                        <input id="yearOfPuplication" class="form-control" type="number" min="@minYearOfPublication" max="@maxYearOfPublication" />
                     </div>
                     <div class="form-group col-md-1">
                         <label class="col-form-label">Laufzeit von:</label>
-                        <input id="runTimeFrom" class="form-control" type="number" />
+                        <input id="runTimeFrom" class="form-control" type="number" min="@minRunTime" max="@maxRunTime" />
                     </div>
                     <div class="form-group col-md-1">
                         <label class="col-form-label">Laufzeit bis:</label>
-                        <input id="runTimeTo" class="form-control" type="number" />
+                        <input id="runTimeTo" class="form-control" type="number" min="@minRunTime" max="@maxRunTime" />
                     </div>
                     <div class="form-group col-md-1">
                         <label class="col-form-label">Bewertung:</label>
@@ -60,14 +64,14 @@
                     </div>
                     <div class="form-group col-md-1">
                         <div class="form-group">
-                            <button class="btn btn-rose btn-fab fa-pull-right" type="button" id="submitFilter" title="Daten filtern">
+                            <button style="vertical-align:central" class="btn btn-rose btn-fab" type="button" id="submitFilter" title="Daten filtern">
                                 <i class="fas fa-search fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
                             </button>
                         </div>
                     </div>
                     <div class="form-group col-md-1">
                         <div class="form-group">
-                            <button class="btn btn-rose btn-fab fa-align-center" type="button" id="deleteFilter" title="Filter löschen">
+                            <button style="vertical-align:central" class="btn btn-rose btn-fab" type="button" id="deleteFilter" title="Filter löschen">
                                 <i class="fa-regular fa-trash-can fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
                             </button>
                         </div>
@@ -258,6 +262,7 @@
                 $('#genre').val(null);
                 $('#recordCarrier').val(null);
                 $('#ranking').val(null);
+                $('#marker').val(null);
                 table.ajax.reload();
             });
         })
@@ -270,7 +275,8 @@
             let genreValue = $('#genre').val();
             let recordCarrierValue = $('#recordCarrier').val();
             let ranking = $('#ranking').val();
-            if (titleValue || yearOfPuplicationValue || runTimeFromValue || runTimeToValue || genreValue || recordCarrierValue || ranking){
+            let marker = $('#marker').val();
+            if (titleValue || yearOfPuplicationValue || runTimeFromValue || runTimeToValue || genreValue || recordCarrierValue || ranking || marker ){
                 let filter = {
                     "Title": titleValue,
                     "YearOfPuplication": yearOfPuplicationValue,
@@ -278,7 +284,8 @@
                     "RunTimeTo": runTimeToValue,
                     "Genre": genreValue,
                     "RecordCarrier": recordCarrierValue,
-                    "Ranking" : ranking
+                    "Ranking" : ranking,
+                    "Marker": marker
                 };
                 var url = appRootPath + '/api/MoviesApi/SetFilter';
                 $.post(url, filter, function (content) {
@@ -322,6 +329,7 @@
                         },
                         success: function () {
                             $('#movieIndex').DataTable().ajax.reload();
+                            executeSearch();
                             Swal.fire({
                                 icon: 'success',
                                 text: 'Film wurde gelöscht.',

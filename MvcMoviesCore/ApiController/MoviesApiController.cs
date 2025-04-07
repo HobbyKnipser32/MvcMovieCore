@@ -213,6 +213,8 @@ namespace MvcMoviesCore.ApiController
                 movies = [.. movies.Where(w => w.Adult == false)];
             if (!string.IsNullOrEmpty(filter.Title))
                 movies = [.. movies.Where(w => w.Name.ToLower().Contains(filter.Title.ToLower()))];
+            if (!string.IsNullOrEmpty(filter.Marker))
+                movies = [.. movies.Where(w => !string.IsNullOrEmpty(w.OnWatch) && w.OnWatch.ToLower().Contains(filter.Marker.ToLower()))];
             if (filter.YearOfPuplication > 0)
                 movies = [.. movies.Where(w => w.YearOfPublication.GetValueOrDefault().Year == filter.YearOfPuplication)];
             if (filter.Genre != null && filter.Genre != Guid.Empty)

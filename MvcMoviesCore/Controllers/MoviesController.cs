@@ -47,6 +47,7 @@ namespace MvcMoviesCore.Controllers
 
             ViewData["ShowAdult"] = _showAdult;
             await LoadDropdowns();
+            await LoadLimits();
             return View();
         }
 
@@ -285,13 +286,36 @@ namespace MvcMoviesCore.Controllers
 
         #region private functions
 
+        private async Task LoadLimits()
+        {
+            var minYearOfPublication = 1900;
+            var maxYearOfPublication = DateTime.Now.Year;
+            var minRunTime = 1;
+            var maxRunTime = 999;
+            var movies = await _context.Movies.ToListAsync();
+            if (movies.Count > 0)
+            {
+                var yoPMovies = movies.Where(w => w.YearOfPublication != null).OrderBy(o => o.YearOfPublication.GetValueOrDefault().Year).ToList();
+                minYearOfPublication = yoPMovies[0].YearOfPublication.GetValueOrDefault().Year;
+                maxYearOfPublication = yoPMovies[^1].YearOfPublication.GetValueOrDefault().Year;
+                var rtMovies = movies.Where(w => w.RunTime != null && w.RunTime > 0).OrderBy(o => o.RunTime.GetValueOrDefault()).ToList();
+                minRunTime = (int)rtMovies[0].RunTime.GetValueOrDefault();
+                maxRunTime = (int)rtMovies[^1].RunTime.GetValueOrDefault();
+            }
+
+            ViewData["MinYearOfPublication"] = minYearOfPublication;
+            ViewData["MaxYearOfPublication"] = maxYearOfPublication;
+            ViewData["MinRunTime"] = minRunTime;
+            ViewData["MaxRunTime"] = maxRunTime;
+        }
+
         private async Task LoadDropdowns()
         {
             var genre = await _context.Genre.Where(w => !string.IsNullOrEmpty(w.Name)).OrderBy(o => o.Name).ToListAsync();
             ViewData["Genre"] = PrepareListWithNull([.. genre.Select(s => new SelectListItem(s.Name, s.Id.ToString()))]);
             var recordCarrier = await _context.RecordCarrier.Where(w => !string.IsNullOrEmpty(w.Name)).OrderBy(o => o.Name).ToListAsync();
             ViewData["RecordCarrier"] = PrepareListWithNull([.. recordCarrier.Select(s => new SelectListItem(s.Name, s.Id.ToString()))]);
-            var markers = await _context.Movies.GroupBy(g => g.OnWatch).ToListAsync();
+            var markers = await _context.Movies.Where(w => !string.IsNullOrEmpty(w.OnWatch)).GroupBy(g => g.OnWatch).ToListAsync();
             ViewData["Markers"] = PrepareListWithNull([.. markers.Select(s => new SelectListItem(s.Key, s.Key))]);
         }
 
