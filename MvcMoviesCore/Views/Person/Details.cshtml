@@ -187,53 +187,6 @@
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
-                    @* <tbody>
-                        @foreach (var item in Model.MoviesPerson)
-                        {
-                            <tr>
-                                <td>
-                                    <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.Movies.Id">
-                                        @Html.DisplayFor(modelItem => item.Movies.Name)
-                                    </a>
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Movies.YearOfPublication)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Movies.ActorsAge)
-                                </td>
-                                <td>
-                                    @if (string.IsNullOrEmpty(item.Practices))
-                                    {
-                                        @if (item.MovieRole != null)
-                                        {
-                                            <a asp-controller="MovieRole" asp-action="Details" asp-route-id="@item.MovieRole.Id">
-                                                @Html.DisplayFor(modelItem => item.MovieRole.Name)
-                                            </a>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        @Html.DisplayFor(modelItem => item.Practices)
-                                    }
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Movies.OnWatch)
-                                </td>
-                                <td style="text-align:right">
-                                    @Html.DisplayFor(modelItem => item.Movies.Ranking)
-                                </td>
-                                <td style="text-align:right">
-                                    @Html.DisplayFor(modelItem => item.Movies.RunTime)
-                                </td>
-                                <td style="text-align:center">
-                                    <a title="löschen" onclick="deleteMovie('@item.MoviesId', '@item.Movies.Name')">
-                                        <i class="fa-solid fa-trash fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody> *@
                 </table>
             </div>
             <div id="scenesTab" class="tab-pane">
@@ -317,22 +270,22 @@
                             }
                         }
                     },
-                    { 
+                    {
                         width: '7%',
                         data: 'OnWatch',
                         className: 'dt-body-center'
                     },
-                    { 
+                    {
                         width: '10%',
                         data: 'Bewertung',
                         className: 'dt-body-right'
                     },
-                    { 
+                    {
                         width: '8%',
                         data: 'Laufzeit',
                         className: 'dt-body-right'
                     },
-                    { 
+                    {
                         width: '7%',
                         data: 'Id',
                         render: function(data, type, full){
@@ -457,7 +410,8 @@
                 cancelButtonText: 'Nein'
             }).then(function (result) {
                 if (result.value) {
-                    var url = appRootPath + '/api/MoviesApi/DeleteMovie/' + id;
+                    let personId = '@Model.Id';
+                    var url = appRootPath + '/api/PersonApi/DeleteMoviePerson?movieId=' + id + '&personId=' + personId;
                     $.ajax({
                         url: url,
                         type: 'POST',

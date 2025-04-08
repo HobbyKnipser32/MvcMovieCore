@@ -546,6 +546,32 @@ namespace MvcMoviesCore.ApiController
             return Ok(jsonResult);
         }
 
+        [HttpPost("DeleteMoviePerson")]
+        public async Task<IActionResult> DeleteMoviePerson(Guid movieId, Guid personId)
+        {
+            try
+            {
+                var moviesPerson = await _context.MoviesPerson.Where(w => w.MoviesId.Equals(movieId) && w.PersonId.Equals(personId)).ToListAsync();
+                foreach (var moviePersonItem in moviesPerson)
+                {
+                    var scenes = await _context.Scenes.Where(w => w.MoviesPersonsId == moviePersonItem.Id).ToListAsync();
+                    if (scenes.Count != 0)
+                    {
+                        _context.Scenes.RemoveRange(scenes);
+                        await _context.SaveChangesAsync();
+                    }
+                    _context.MoviesPerson.Remove(moviePersonItem);
+                    await _context.SaveChangesAsync();
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
         #endregion
 
         #region private functions
