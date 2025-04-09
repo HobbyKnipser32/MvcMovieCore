@@ -287,12 +287,11 @@
                     },
                     {
                         width: '7%',
-                        data: 'Id',
+                        data: 'PersonMovieId',
                         render: function(data, type, full){
                             if (data && type === 'display'){
-                                let movieId = "'" + data + "'";
-                                let movie = "'" + full.Name + "'";
-                                return '<a title="löschen" onclick="deleteMovie(' + movieId + ', ' + movie + ')">' +
+                                let personMovieId = "'" + data + "'";
+                                return '<a title="löschen" onclick="deleteLink(' + personMovieId + ')">' +
                                         '<i class="fa-solid fa-trash fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>'
                             }
                             return '';
@@ -399,9 +398,10 @@
             setTimeout(carousel, 9000); // Change image every 9 seconds
         }
 
-        function deleteMovie(id, movie) {
+        function deleteLink(id) {
             Swal.fire({
-                html: 'Film: <b>' + movie + '</b> löschen?',
+                // html: 'Film: <b>' + movie + '</b> löschen?',
+                text: 'Verknüpfung löschen?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -410,8 +410,7 @@
                 cancelButtonText: 'Nein'
             }).then(function (result) {
                 if (result.value) {
-                    let personId = '@Model.Id';
-                    var url = appRootPath + '/api/PersonApi/DeleteMoviePerson?movieId=' + id + '&personId=' + personId;
+                    var url = appRootPath + '/api/PersonApi/DeleteMoviePerson?moviePersonId=' + id;
                     $.ajax({
                         url: url,
                         type: 'POST',
