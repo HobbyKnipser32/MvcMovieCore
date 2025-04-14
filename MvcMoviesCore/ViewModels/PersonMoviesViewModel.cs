@@ -6,6 +6,8 @@ namespace MvcMoviesCore.ViewModels
     {
         public Guid Id { get; set; }
 
+        public Guid PersonMovieId { get; set; }
+
         public string Name { get; set; }
 
         public string Erscheinungsjahr { get; set; }

@@ -114,7 +114,8 @@ namespace MvcMoviesCore.ApiController
                         Laufzeit = string.Format("{0:0.0}", personMovie.Movies.RunTime), //.ToString(),
                         Name = personMovie.Movies.Name,
                         OnWatch = personMovie.Movies.OnWatch,
-                        Role = personMovie.MovieRole?.Name != null ? personMovie.MovieRole.Name : string.Empty
+                        Role = personMovie.MovieRole?.Name != null ? personMovie.MovieRole.Name : string.Empty,
+                        PersonMovieId = personMovie.Id
                     };
                     if (!string.IsNullOrEmpty(personMovie.Practices)) { movie.Praxis = personMovie.Practices; }
                     if (personMovie.Movies.YearOfPublication != null) { movie.Erscheinungsjahr = personMovie.Movies.YearOfPublication.Value.Year.ToString(); }
@@ -547,11 +548,11 @@ namespace MvcMoviesCore.ApiController
         }
 
         [HttpPost("DeleteMoviePerson")]
-        public async Task<IActionResult> DeleteMoviePerson(Guid movieId, Guid personId)
+        public async Task<IActionResult> DeleteMoviePerson(Guid moviePersonId)
         {
             try
             {
-                var moviesPerson = await _context.MoviesPerson.Where(w => w.MoviesId.Equals(movieId) && w.PersonId.Equals(personId)).ToListAsync();
+                var moviesPerson = await _context.MoviesPerson.Where(w => w.Id.Equals(moviePersonId)).ToListAsync();
                 foreach (var moviePersonItem in moviesPerson)
                 {
                     var scenes = await _context.Scenes.Where(w => w.MoviesPersonsId == moviePersonItem.Id).ToListAsync();
