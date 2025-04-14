@@ -125,10 +125,7 @@
                                 return '<a href="' + url + '" title="Details ansehen">' + full.Name; /*  + '< /a>'; */
                             }
                             return '';
-                        },
-                        type: 'html',
-                        className: 'select-filter'
-                        // searchable: true
+                        }
                     },
                     {
                         data: 'YearOfPublication',
@@ -203,51 +200,11 @@
                         className: 'dt-body-center'
                     },
                 ],
-                // ordering: true,
-                // searchable: true,
-                // bSearchable: true,
-                // createdRow: function (row, data, dataIndex) {
-                //     if (data['adult'] === false) {
-                //         $(row).css("background-color", "green");
-                //     }
-                // },
+                searchable: true,
                 fixedHeader: {
                     header: true,
                     footer: false
                 },
-                // searchHighlight: true,
-            });
-
-            table.columns('.select-filter').every(function () {
-                var that = this;
-
-                // Create the select list and search operation
-                var select = $('<select />')
-                    .appendTo(this.footer())
-                    .on('change', function () {
-                        that.search($(this).val(), { exact: true }).draw();
-                    });
-
-                // Get the search data for the first column and add to the select list
-                this.cache('search')
-                    .sort()
-                    .unique()
-                    .each(function (d) {
-                        select.append($('<option value="' + d + '">' + d + '</option>'));
-                    });
-            });
-
-            $("#movieIndex tfoot th").each( function ( i ) {
-                var select = $('<select><option value=""></option></select>')
-                    .appendTo( $(this).empty() )
-                    .on( 'change', function () {
-                        table.column( i )
-                            .search( $(this).val() )
-                            .draw();
-                    });
-                table.column( i ).data().unique().sort().each( function ( d, j ) {
-                    select.append( '<option value="'+d+'">'+d+'</option>' )
-                });
             });
 
             $('#submitFilter').click(function () {
@@ -265,6 +222,11 @@
                 $('#marker').val(null);
                 table.ajax.reload();
             });
+
+            // $('#title').on('keyup', function(){
+            //     let search = $('#title').val();
+            //     table.columns(0).search(search).draw();
+            // });
         })
 
         function executeSearch(){
