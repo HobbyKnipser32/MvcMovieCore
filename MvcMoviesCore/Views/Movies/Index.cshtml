@@ -212,24 +212,25 @@
             });
 
             $('#deleteFilter').click(function(){
-                $('#title').val(null);
-                $('#yearOfPuplication').val(null);
-                $('#runTimeFrom').val(null);
-                $('#runTimeTo').val(null);
-                $('#genre').val(null);
-                $('#recordCarrier').val(null);
-                $('#ranking').val(null);
-                $('#marker').val(null);
-                table.ajax.reload();
+                deleteFilter();
             });
 
-            // $('#title').on('keyup', function(){
-            //     let search = $('#title').val();
-            //     table.columns(0).search(search).draw();
-            // });
+            deleteFilter();
         })
 
-        function executeSearch(){
+        function deleteFilter(){
+            $('#title').val(null);
+            $('#yearOfPuplication').val(null);
+            $('#runTimeFrom').val(null);
+            $('#runTimeTo').val(null);
+            $('#ranking').val(null);
+            $('#marker').val(null);
+            $('#genre').val(null);
+            $('#recordCarrier').val(null);
+            $('#movieIndex').DataTable().ajax.reload();
+        }
+
+        function executeSearch(){        
             let titleValue = $('#title').val();
             let yearOfPuplicationValue = $('#yearOfPuplication').val();
             let runTimeFromValue = $('#runTimeFrom').val();
