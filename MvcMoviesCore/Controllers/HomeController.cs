@@ -166,15 +166,15 @@ namespace MvcMoviesCore.Controllers
 
         private List<SearchResult> SearchGenre(string searchText)
         {
-            var model = new List<SearchResult>();
+            List<SearchResult> model = [];
             List<Genre> genres = [];
             if (_showAdult)
             {
-                genres = _context.Genre.Where(w => w.Name.Contains(searchText)).ToList();
+                genres = [.. _context.Genre.Where(w => w.Name.Contains(searchText))];
             }
             else
             {
-                genres = _context.Genre.Where(w => w.Name.Contains(searchText) && !w.IsAdult).ToList();
+                genres = [.. _context.Genre.Where(w => w.Name.Contains(searchText) && !w.IsAdult)];
             }
             foreach (var genre in genres)
             {
@@ -194,8 +194,8 @@ namespace MvcMoviesCore.Controllers
 
         private List<SearchResult> SearchRole(string searchText)
         {
-            List<SearchResult> model = new();
-            List<MovieRole> roles = _context.MovieRole.Where(w => w.Name.Contains(searchText)).ToList();
+            List<SearchResult> model = [];
+            List<MovieRole> roles = [.. _context.MovieRole.Where(w => w.Name.Contains(searchText))];
 
             foreach (var role in roles)
             {

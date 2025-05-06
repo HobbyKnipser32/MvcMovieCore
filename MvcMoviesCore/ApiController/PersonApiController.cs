@@ -458,6 +458,7 @@ namespace MvcMoviesCore.ApiController
                         var personImageNumber = await _context.PersonImage.Where(f => f.PersonId.Equals(personId) && f.IsDeleted == false).MinAsync(m => m.Number);
                         if (personImageNumber != 0)
                         {
+                            personImageNumber++;
                             var personImageMain = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(personId) && f.Number == personImageNumber);
                             personImageMain.IsMain = true;
                             _context.Update(personImageMain);
