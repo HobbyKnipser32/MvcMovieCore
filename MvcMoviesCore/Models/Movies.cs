@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MvcMoviesCore.Classes;
 using MvcMoviesCore.ViewModels;
 
 namespace MvcMoviesCore.Models
@@ -50,7 +51,7 @@ namespace MvcMoviesCore.Models
 
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:D}")]
         public DateTime? LastView { get; set; }
-        
+
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:d}")]
         public DateTime? CreateDate { get; set; }
 
@@ -70,11 +71,15 @@ namespace MvcMoviesCore.Models
 
         public string ShortDescription { get; set; }
 
+        public string OriginalTitle { get; set; }
+
+        public int? FSK { get; set; }
+
         [NotMapped]
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:N0}")]
         public long? FileSizeInKB
         {
-            get { return  FileSize / (long)Math.Pow(2,10); }
+            get { return FileSize / (long)Math.Pow(2, 10); }
         }
 
         [NotMapped]

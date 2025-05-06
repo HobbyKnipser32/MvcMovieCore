@@ -69,18 +69,15 @@
                         <label asp-for="Ranking" class="control-label">Wertung: </label>
                         @Html.DisplayFor(model => model.Ranking)
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-3">
                         <label asp-for="Remark" class="control-label">Bemerkung: </label>
                         @Html.DisplayFor(model => model.Remark)
                     </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label asp-for="ShortDescription" class="control-label">Kurzbescheibung:</label>
-                        @Html.DisplayFor(model => model.ShortDescription)
+                    <div class="form-group col-md-3">
+                        <label asp-for="OriginalTitle" class="control-label">Original Titel: </label>
+                        @Html.DisplayFor(model => model.OriginalTitle)
                     </div>
+
                 </div>
             </div>
             <div class="col-md-12">
@@ -94,10 +91,22 @@
                         <label asp-for="FileSize" class="control-label">Dateigröße [kb]: </label>
                         @Html.DisplayFor(model => model.FileSizeInKB)
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-3">
+                        <label asp-for="FSK" class="control-label">FSK: </label>
+                        @Html.DisplayFor(model => model.FSK)
+                    </div>
+                    <div class="form-group col-md-3">
                         <label asp-for="FilePath" class="control-label">Dateipfad: </label>
                         @Html.DisplayFor(model => model.FilePath)
 
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label asp-for="ShortDescription" class="control-label">Kurzbescheibung:</label>
+                        @Html.DisplayFor(model => model.ShortDescription)
                     </div>
                 </div>
             </div>

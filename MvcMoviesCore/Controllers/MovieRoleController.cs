@@ -15,6 +15,7 @@ namespace MvcMoviesCore.Controllers
         private readonly MvcMovieCoreContext _context = context;
 
         #endregion
+        
         #region constructor
 
         #endregion

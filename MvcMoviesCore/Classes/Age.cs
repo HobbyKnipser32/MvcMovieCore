@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MvcMoviesCore.Interfaces;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MvcMoviesCore.Models
+namespace MvcMoviesCore.Classes
 {
-    public abstract class Age
+    public class Age : IAge
     {
         /// <summary>
         /// The current Age of this Person
@@ -36,7 +37,7 @@ namespace MvcMoviesCore.Models
             var age = "(-)";
 
             if (birthDay != null)
-                return obit != null ? $"{GetAge(birthDay, obit )} (†)" : GetAge(birthDay, DateTime.Now);
+                return obit != null ? $"{GetAge(birthDay, obit)} (†)" : GetAge(birthDay, DateTime.Now);
 
             return age;
         }
@@ -47,7 +48,7 @@ namespace MvcMoviesCore.Models
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        private string GetAge(DateTime? startDate, DateTime? endDate)
+        private static string GetAge(DateTime? startDate, DateTime? endDate)
         {
             if (startDate == null || endDate == null)
                 return "(-)";
@@ -61,9 +62,9 @@ namespace MvcMoviesCore.Models
                 localEndDate = endDate.Value;
 
             return (localEndDate.Year - localStartDate.Year - 1 +
-                 (((localStartDate.Month < localEndDate.Month) ||
-                  ((localStartDate.Month == localEndDate.Month) &&
-                   (localStartDate.Day <= localEndDate.Day))) ? 1 : 0)).ToString();
+                 (localStartDate.Month < localEndDate.Month ||
+                  localStartDate.Month == localEndDate.Month &&
+                   localStartDate.Day <= localEndDate.Day ? 1 : 0)).ToString();
         }
     }
 }

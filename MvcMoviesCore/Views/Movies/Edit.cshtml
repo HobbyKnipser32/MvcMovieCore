@@ -4,6 +4,7 @@
     ViewData["Title"] = "Edit Movie";
     var actors = ViewData["Actors"] as IEnumerable<SelectListItem>;
     var roles = ViewData["Roles"] as IEnumerable<SelectListItem>;
+    var fsk = ViewData["FSK"] as IEnumerable<SelectListItem>;
 }
 <div class="container-fluid">
     <h2>Film</h2>
@@ -27,39 +28,6 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <select asp-for="GenreId" class="form-select" asp-items="ViewBag.GenreId" id="genreId"></select>
-                                    <label class="from-label" for="genreId">Genre</label>
-                                    <span asp-validation-for="GenreId" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <select asp-for="RecordCarrierId" class="form-select" asp-items="ViewBag.RecordCarrierId" id="recordCarrierId">
-                                        @if (Model.RecordCarrierId == null)
-                                        {
-                                            <option selected="selected" value=""></option>
-                                        }
-                                    </select>
-                                    <label class="form-label" for="recordCarrierId">Datenträger</label>
-                                    <span asp-validation-for="RecordCarrierId" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <select asp-for="StorageLocationId" class="form-select" asp-items="ViewBag.StorageLocationId" id="storageLocationId">
-                                        @if (Model.StorageLocationId == null)
-                                        {
-                                            <option selected="selected" value=""></option>
-                                        }
-                                    </select>
-                                    <label class="form-label" for="storageLocationId">Lagerort</label>
-                                    <span asp-validation-for="StorageLocationId" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-floating">
                                     <input asp-for="YearOfPublication" class="form-control" type="date" id="yearOfPublication" />
                                     <label asp-for="YearOfPublication" class="from-label" for="yearOfPublication">erschienen:</label>
                                     <span asp-validation-for="YearOfPublication" class="text-danger"></span>
@@ -79,11 +47,49 @@
                                     <span asp-validation-for="LastView" class="text-danger"></span>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <input asp-for="Owner" class="form-control" id="owner" />
-                                    <label class="from-label" for="owner">Besitzer:</label>
-                                    <span asp-validation-for="Owner" class="text-danger"></span>
+                                    <select asp-for="GenreId" class="form-select" asp-items="ViewBag.GenreId" id="genreId"></select>
+                                    <label class="from-label" for="genreId">Genre:</label>
+                                    <span asp-validation-for="GenreId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <select asp-for="RecordCarrierId" class="form-select" asp-items="ViewBag.RecordCarrierId" id="recordCarrierId">
+                                        @if (Model.RecordCarrierId == null)
+                                        {
+                                            <option selected="selected" value=""></option>
+                                        }
+                                    </select>
+                                    <label class="form-label" for="recordCarrierId">Datenträger:</label>
+                                    <span asp-validation-for="RecordCarrierId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <select asp-for="StorageLocationId" class="form-select" asp-items="ViewBag.StorageLocationId" id="storageLocationId">
+                                        @if (Model.StorageLocationId == null)
+                                        {
+                                            <option selected="selected" value=""></option>
+                                        }
+                                    </select>
+                                    <label class="form-label" for="storageLocationId">Lagerort:</label>
+                                    <span asp-validation-for="StorageLocationId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <select asp-for="FSK" class="form-select" asp-items="@fsk" id="fsk">
+                                        @if (Model.FSK == null)
+                                        {
+                                            <option selected="selected" value=""></option>
+                                        }
+                                    </select>
+                                    <label class="form-label" for="storageLocationId">FSK:</label>
+                                    <span asp-validation-for="StorageLocationId" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -91,7 +97,7 @@
                             <div class="col-md-3">
                                 <div class="form-floating">
                                     <input asp-for="OnWatch" class="form-control" id="onWatch" />
-                                    <label for="onWatch" class="from-label">auf dem Zettel:</label>
+                                    <label for="onWatch" class="from-label">Marker:</label>
                                     <span asp-validation-for="OnWatch" class="text-danger"></span>
                                 </div>
                             </div>
@@ -102,19 +108,18 @@
                                     <span asp-validation-for="Added" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-floating">
                                     <input asp-for="Remark" class="form-control" id="remark" />
                                     <label class="from-label" for="remark">Bemerkung:</label>
                                     <span asp-validation-for="Remark" class="text-danger"></span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-3">
                                 <div class="form-floating">
-                                    <textarea asp-for="ShortDescription" class="form-control" id="shortDescription"></textarea>
-                                    <label for="shortDescription" class="from-label">Kurzbeschreibung:</label>
+                                    <input asp-for="OriginalTitle" class="form-control" id="originalTitle" />
+                                    <label class="from-label" for="originalTitle">Original Titel:</label>
+                                    <span asp-validation-for="OriginalTitle" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -148,6 +153,12 @@
                         </div>
                         <div class="row">
                             <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input asp-for="Owner" class="form-control" id="owner" />
+                                    <label for="owner" class="from-label">Besitzer:</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div >
                                     <label class="from-label" style="vertical-align:top">vorhanden:&nbsp;</label>
                                     <input asp-for="InStock.HasValue" type="checkbox" class="form-checkbox" id="inStock" />
@@ -163,6 +174,14 @@
                                 <div>
                                     <label class="from-label" style="vertical-align:top">3D:&nbsp;</label>
                                     <input asp-for="ThreeD.HasValue" type="checkbox" class="form-checkbox" id="threeD" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-floating">
+                                    <textarea asp-for="ShortDescription" class="form-control" id="shortDescription"></textarea>
+                                    <label for="shortDescription" class="from-label">Kurzbeschreibung:</label>
                                 </div>
                             </div>
                         </div>

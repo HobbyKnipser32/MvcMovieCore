@@ -253,7 +253,7 @@ namespace MvcMoviesCore.Controllers
                 }
                 _context.Add(person);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(IndexAsync));
+                return RedirectToAction(nameof(Index));
             }
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypesId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", personViewModel.SexId);

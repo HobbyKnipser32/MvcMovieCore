@@ -138,6 +138,7 @@ namespace MvcMoviesCore.Controllers
             ViewData["StorageLocationId"] = new SelectList(_context.StorageLocation.OrderBy(o => o.Name), "Id", "Name", movies.StorageLocationId);
             ViewData["Actors"] = GetActors();
             ViewData["Roles"] = GetRoles();
+            ViewData["FSK"] = GetFSK();
 
             return View(movies);
         }
@@ -388,6 +389,17 @@ namespace MvcMoviesCore.Controllers
         private List<SelectListItem> GetActors()
         {
             return PrepareListWithNull([.. _context.Person.Distinct().OrderBy(o => o.Name).Select(s => new SelectListItem(s.Name, s.Id.ToString()))]);
+        }
+
+        private static List<SelectListItem> GetFSK()
+        {
+            List<SelectListItem> fskList = [];
+            fskList.Add(new SelectListItem("0", "0"));
+            fskList.Add(new SelectListItem("6", "6"));
+            fskList.Add(new SelectListItem("12", "12"));
+            fskList.Add(new SelectListItem("16", "16"));
+            fskList.Add(new SelectListItem("18", "18"));
+            return PrepareListWithNull(fskList);
         }
 
         private bool MoviesExists(Guid id)

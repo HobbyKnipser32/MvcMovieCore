@@ -125,11 +125,12 @@ namespace MvcMoviesCore.Controllers
         private List<SearchResult> SearchMovies(string searchText)
         {
             var model = new List<SearchResult>();
-            List<Movies> movies = new();
-            if (_showAdult)
-                movies = _context.Movies.Where(w => w.Name.Contains(searchText)).ToList();
-            else
-                movies = _context.Movies.Where(w => w.Name.Contains(searchText) && w.Adult == _showAdult).ToList();
+            List<Movies> movies = [.. _context.Movies.Where(w => w.Name.ToLower().Contains(searchText.ToLower())
+                    || w.OriginalTitle.ToLower().Contains(searchText.ToLower()))];
+
+            if (!_showAdult)
+                movies = [.. movies.Where(w => w.Adult == false)];
+
             foreach (var movie in movies)
             {
                 var name = movie.RunTime == null ? $"{movie.Name}" : $"{movie.Name} ({movie.RunTime?.ToString("N0")} min)";

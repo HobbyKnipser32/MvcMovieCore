@@ -109,6 +109,7 @@
                     <th>@Html.DisplayNameFor(model => model.Nationality)</th>   @*  5 *@
                     <th>@Html.DisplayNameFor(model => model.Height)</th>        @*  6 *@
                     <th>@Html.DisplayNameFor(model => model.Weight)</th>        @*  7 *@
+                    <th>BMI</th>                                                @*    *@
                     <th>&nbsp;</th>                                             @*  8 *@
                     <th>@Html.DisplayNameFor(model => model.PersonType)</th>    @*  9 *@
                     <th>@Html.DisplayNameFor(model => model.Sex)</th>           @* 10 *@
@@ -218,6 +219,11 @@
                             data: 'Weight',
                             type: 'html-num',
                             className: 'dt-body-right'
+                        },
+                        {
+                            data: 'Value',
+                            type: 'num',
+                            className: 'dt-body-center'
                         },
                         {
                             data: 'Classification',

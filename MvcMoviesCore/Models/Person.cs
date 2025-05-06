@@ -1,12 +1,14 @@
 namespace MvcMoviesCore.Models
 {
+    using MvcMoviesCore.Classes;
+    using MvcMoviesCore.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("Person")]
-    public partial class Person : Age
+    public partial class Person : IAge, IBMI
     {
         public Person()
         {
@@ -53,22 +55,22 @@ namespace MvcMoviesCore.Models
 
         public string? Image { get; set; }
 
-        [NotMapped]
-        public string BMI
-        {
-            get
-            {
-                if (Height == null || Weight == null)
-                    return string.Empty;
+//        [NotMapped]
+//        public string BMI
+//        {
+//            get
+//            {
+//                if (Height == null || Weight == null)
+//                    return string.Empty;
 
-                var bmi = Weight.GetValueOrDefault() / (Height.GetValueOrDefault() * Height.GetValueOrDefault());
-#if DEBUG
-                return Math.Round(bmi, 2).ToString();
-#else
-                return Math.Round(bmi, 0).ToString();
-#endif
-            }
-        }
+//                var bmi = Weight.GetValueOrDefault() / (Height.GetValueOrDefault() * Height.GetValueOrDefault());
+//#if DEBUG
+//                return Math.Round(bmi, 2).ToString();
+//#else
+//                return Math.Round(bmi, 0).ToString();
+//#endif
+//            }
+//        }
 
         public virtual ICollection<PersonImage> PersonImages { get; set; }
 
@@ -79,5 +81,39 @@ namespace MvcMoviesCore.Models
         public virtual Sex Sex { get; set; }
 
         public virtual Nationality Nationality { get; set; }
+
+        #region interface member
+
+        [NotMapped]
+        public string ActorsAge { get; set; }
+        
+        [NotMapped]
+        public int? Value { get; set; }
+
+        public string GetActorsAge(DateTime? birthDay, DateTime? obit)
+        {
+            var age = new Age();
+            return age.GetActorsAge(birthDay, obit);
+        }
+
+        public string GetActorsAgeInMovie(DateTime? birthDay, DateTime? yearOfPublication)
+        {
+            var age = new Age();
+            return age.GetActorsAgeInMovie(birthDay, yearOfPublication);
+        }
+
+        public int? GetBMI(decimal? height, decimal? weight)
+        {
+            var bmi = new BMI();
+            return bmi.GetBMI(height, weight);
+        }
+
+        public int? GetBMI(int? feet, int? inch, decimal? lbs)
+        {
+            var bmi = new BMI();
+            return bmi.GetBMI(feet, inch, lbs);
+        }
+
+        #endregion
     }
 }
