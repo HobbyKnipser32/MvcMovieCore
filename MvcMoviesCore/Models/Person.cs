@@ -45,7 +45,7 @@ namespace MvcMoviesCore.Models
 
         public string? CupSize { get; set; }
 
-        public bool? FakeBoobs { get; set; } = false;
+        public bool FakeBoobs { get; set; } = false;
 
         public Guid PersonTypesId { get; set; }
 

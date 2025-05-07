@@ -216,6 +216,7 @@
             </a>
         </p>
     </div>
+    <div class="loader"></div>
 </div>
 @section Scripts
 {
@@ -229,7 +230,9 @@
             $('#movieDetails').DataTable({
                 ajax: {
                     url: appRootPath + '/api/MoviesApi/' + movieId,
-                    dataSrc: ''
+                    dataSrc: '',
+                    beforeSend: function(){ $('.loader').show() },
+                    complete: function(){ $('.loader').hide() }
                 },
                 columns: [
                     {

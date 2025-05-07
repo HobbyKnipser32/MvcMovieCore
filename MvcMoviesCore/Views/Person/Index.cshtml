@@ -32,12 +32,12 @@
             </tr>
         </table>
     </div>
-    <div id="loader" style="display:none; position:fixed; z-index:100; padding-top:200px; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgb(0,0,0); background-color:rgba(0,0,0,0.4);">
-        <div style="background-color:#fefefe; margin:auto; padding:20px; border:1px solid #888; width:30%;">
+    @*< div id="loader" style="display:none; position:fixed; z-index:100; padding-top:200px; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgb(0,0,0); background-color:rgba(0,0,0,0.4);">
+        <div style="background-color:#fefefe; margin:auto; padding:20px; border:1px solid #888; width:30%;"> *@
             <div class="loader"></div>
-        </div>
+@*         </div>
     </div>
-
+ *@
     <div class="card shadow p-3 mb-5 bg-white rounded">
         <h4 class="card-title" style="color:blue; background-image: linear-gradient(to right, aliceblue, white); "><b>Filter</b></h4>
         <div class="row">
@@ -133,7 +133,9 @@
             let table = $('#personIndex').DataTable({
                 ajax: {
                     url: appRootPath + '/api/PersonApi',
-                    dataSrc: ''
+                    dataSrc: '',
+                    beforeSend: function(){ $('.loader').show() },
+                    complete: function(){ $('.loader').hide() }
                 },
                 columns:
                     [

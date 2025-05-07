@@ -208,6 +208,7 @@
             </a>
         </p>
     </div>
+    <div class="loader"></div>
 </div>
 
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -229,7 +230,9 @@
                 },
                 ajax: {
                     url: appRootPath + '/api/PersonApi/GetMovies/' + personId,
-                    dataSrc: ''
+                    dataSrc: '',
+                    beforeSend: function(){ $('.loader').show() },
+                    complete: function(){ $('.loader').hide() }
                 },
                 columns: [
                     {

@@ -1,22 +1,26 @@
 ﻿@{
     ViewData["Title"] = "Rollen";
 }
-<h2>Rollen</h2>
-<p>
-    <a asp-action="Create" title="Rolle hinzufügen">
-        <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
-    </a>
-</p>
-<table id="roleIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
-    <thead>
-        <tr>
-            <th>Rolle</th>
-            <th>Anzahl</th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-</table>
+<div class="container-fluid">
+
+    <h2>Rollen</h2>
+    <p>
+        <a asp-action="Create" title="Rolle hinzufügen">
+            <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
+        </a>
+    </p>
+    <table id="roleIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
+        <thead>
+            <tr>
+                <th>Rolle</th>
+                <th>Anzahl</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+    <div class="loader"></div>
+</div>
 
 @section Scripts
 {
@@ -27,10 +31,12 @@
             $('#roleIndex').DataTable({
                 ajax: {
                     url: appRootPath + '/api/RoleApi',
-                    dataSrc: ''
+                    dataSrc: '',
+                    beforeSend: function(){ $('.loader').show() },
+                    complete: function(){ $('.loader').hide() }
                 },
                 columns: [
-                    { 
+                    {
                         data: 'Name' ,
                          render: function (data, type, full) {
                             if (data && type === 'display') {
@@ -41,7 +47,7 @@
                             return '';
                         },
                     },
-                    { 
+                    {
                         data: 'Count',
                         type: 'num',
                         className: 'dt-body-right'

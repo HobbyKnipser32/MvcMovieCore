@@ -343,7 +343,7 @@ namespace MvcMoviesCore.Controllers
                 }
                 if (!string.IsNullOrEmpty(personViewModel.PreviousPage))
                     return Redirect(personViewModel.PreviousPage);
-                return RedirectToAction(nameof(IndexAsync));
+                return RedirectToAction(nameof(Index));
             }
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypesId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", personViewModel.SexId);

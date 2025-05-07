@@ -3,24 +3,28 @@
 @{
     ViewData["Title"] = "Typen";
 }
-<h2>Personentypen</h2>
-<p>
-    <a asp-action="Create" title="Typ hinzufügen">
-        <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
-    </a>
-</p>
+<div class="container-fluid">
 
-<table id="personTypesIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
-    <thead>
-        <tr>
-            <th>Typ</th>
-            <th>Beschreibung</th>
-            <th>Anzahl</th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-</table>
+    <h2>Personentypen</h2>
+    <p>
+        <a asp-action="Create" title="Typ hinzufügen">
+            <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
+        </a>
+    </p>
+
+    <table id="personTypesIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
+        <thead>
+            <tr>
+                <th>Typ</th>
+                <th>Beschreibung</th>
+                <th>Anzahl</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+    <div class="loader"></div>
+</div>
 
 @section Scripts
 {
@@ -31,7 +35,9 @@
             $('#personTypesIndex').DataTable({
                 ajax: {
                     url: appRootPath + '/api/PersonTypesApi',
-                    dataSrc: ''
+                    dataSrc: '',
+                    beforeSend: function(){ $('.loader').show() },
+                    complete: function(){ $('.loader').hide() }
                 },
                 columns: [
                     { data: 'Name' },

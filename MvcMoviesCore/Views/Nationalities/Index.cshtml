@@ -4,24 +4,28 @@
     ViewData["Title"] = "Nationalitäten";
     var originalFileDirectory = ViewData["OriginalFileDirectory"].ToString();
 }
-<h2>Nationalitäten</h2>
-<p>
-    <a asp-action="Create" title="Nationalität hinzufügen">
-        <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
-    </a>
-</p>
-<table id="nationalitiesIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
-    <thead>
-        <tr>
-            <th style="max-width: 50px"></th>
-            <th>Nationalität</th>
-            <th>Beschreibung</th>
-            <th>Anzahl</th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-</table>
+<div class="container-fluid">
+
+    <h2>Nationalitäten</h2>
+    <p>
+        <a asp-action="Create" title="Nationalität hinzufügen">
+            <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
+        </a>
+    </p>
+    <table id="nationalitiesIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
+        <thead>
+            <tr>
+                <th style="max-width: 50px"></th>
+                <th>Nationalität</th>
+                <th>Beschreibung</th>
+                <th>Anzahl</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+    <div class="loader"></div>
+</div>
 
 @section Scripts
 {
@@ -32,7 +36,9 @@
             $('#nationalitiesIndex').DataTable({
                 ajax: {
                     url: appRootPath + '/api/NationalityApi',
-                    dataSrc: ''
+                    dataSrc: '',
+                    beforeSend: function(){ $('.loader').show() },
+                    complete: function(){ $('.loader').hide() }
                 },
                 columns: [
                     {
@@ -66,7 +72,7 @@
                                     '<i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
-                        }, 
+                        },
                         class:'dt-body-center'
                     },
                     {
@@ -79,7 +85,7 @@
                                     '<i class="fa-regular fa-trash-can fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>';
                             }
                             return '';
-                        }, 
+                        },
                         class:'dt-body-center'
                     },
                 ],

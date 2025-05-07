@@ -102,6 +102,8 @@
             </thead>
         </table>
     </div>
+
+    <div class="loader"></div>
 </div>
 
 @section Scripts
@@ -114,7 +116,9 @@
                 retrieve: true,
                 ajax: {
                     url: appRootPath + '/api/MoviesApi/GetMovies',
-                    dataSrc: ''
+                    dataSrc: '',
+                    beforeSend: function(){ $('.loader').show() },
+                    complete: function(){ $('.loader').hide() }
                 },
                 columns: [
                     {
