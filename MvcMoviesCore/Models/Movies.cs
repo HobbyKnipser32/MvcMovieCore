@@ -1,13 +1,14 @@
+using MvcMoviesCore.Classes;
+using MvcMoviesCore.Interfaces;
+using MvcMoviesCore.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MvcMoviesCore.Classes;
-using MvcMoviesCore.ViewModels;
 
 namespace MvcMoviesCore.Models
 {
-    public partial class Movies : Age
+    public partial class Movies : IAge
     {
         public Movies()
         {
@@ -99,5 +100,24 @@ namespace MvcMoviesCore.Models
         public virtual StorageLocation StorageLocation { get; set; }
 
         public virtual ICollection<MoviesPerson> MoviesPerson { get; set; }
+
+        #region Interface member
+
+        [NotMapped]
+        public string ActorsAge { get; set; }
+
+        public string GetActorsAge(DateTime? birthDay, DateTime? obit)
+        {
+            var age = new Age();
+            return age.GetActorsAge(birthDay, obit);
+        }
+
+        public string GetActorsAgeInMovie(DateTime? birthDay, DateTime? yearOfPublication)
+        {
+            var age = new Age();
+            return age.GetActorsAgeInMovie(birthDay, yearOfPublication);
+        }
+
+        #endregion
     }
 }
