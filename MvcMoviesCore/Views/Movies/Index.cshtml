@@ -234,7 +234,7 @@
             $('#movieIndex').DataTable().ajax.reload();
         }
 
-        function executeSearch(){        
+        function executeSearch(){
             let titleValue = $('#title').val();
             let yearOfPuplicationValue = $('#yearOfPuplication').val();
             let runTimeFromValue = $('#runTimeFrom').val();
@@ -254,21 +254,44 @@
                     "Ranking" : ranking,
                     "Marker": marker
                 };
-                var url = appRootPath + '/api/MoviesApi/SetFilter';
-                $.post(url, filter, function (content) {
-                    let movieTable = $('#movieIndex').DataTable();
-                    movieTable.clear().draw();
-                    movieTable.rows.add(JSON.parse(content));
-                    movieTable.draw(false);
-                })
-                .fail(function (response) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Daten konnten nicht gefiltert werden!',
-                        footer: response.responseText
-                    })
+
+                $.ajax({
+                    url: appRootPath + '/api/MoviesApi/SetFilter',
+                    type: 'post',
+                    data: { filter: filter },
+                    beforeSend: function(){ $('.loader').show() },
+                    success: function (content) {
+                        let movieTable = $('#movieIndex').DataTable();
+                        movieTable.clear().draw();
+                        movieTable.rows.add(JSON.parse(content));
+                        movieTable.draw(false);
+                    },
+                    fail: function (response) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Daten konnten nicht gefiltert werden!',
+                            footer: response.responseText
+                        })
+                    },
+                    complete: function(){ $('.loader').hide() }
                 });
+
+                // var jqxhr = $.post( url, filter, function (content) {
+                //     let movieTable = $('#movieIndex').DataTable();
+                //     movieTable.clear().draw();
+                //     movieTable.rows.add(JSON.parse(content));
+                //     movieTable.draw(false);
+                // })
+                // .fail(function (response) {
+                //     Swal.fire({
+                //         icon: 'error',
+                //         title: 'Oops...',
+                //         text: 'Daten konnten nicht gefiltert werden!',
+                //         footer: response.responseText
+                //     })
+                // });
+                // jqxhr.complete(function(){ $('.loader').hide() });
             }
         }
 

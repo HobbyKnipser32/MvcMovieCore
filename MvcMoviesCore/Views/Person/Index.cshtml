@@ -32,12 +32,7 @@
             </tr>
         </table>
     </div>
-    @*< div id="loader" style="display:none; position:fixed; z-index:100; padding-top:200px; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgb(0,0,0); background-color:rgba(0,0,0,0.4);">
-        <div style="background-color:#fefefe; margin:auto; padding:20px; border:1px solid #888; width:30%;"> *@
-            <div class="loader"></div>
-@*         </div>
-    </div>
- *@
+    <div class="loader"></div>
     <div class="card shadow p-3 mb-5 bg-white rounded">
         <h4 class="card-title" style="color:blue; background-image: linear-gradient(to right, aliceblue, white); "><b>Filter</b></h4>
         <div class="row">
@@ -344,23 +339,28 @@
                     "PersonType": personTypeValue,
                     "Sex" : sexValue
                 };
-                var url = appRootPath + '/api/PersonApi/Filter';
-                $.post(url, filter, function (content) {
-                    let movieTable = $('#personIndex').DataTable();
-                    movieTable.clear().draw();
-                    movieTable.rows.add(JSON.parse(content));
-                    movieTable.draw(false);
-                })
-                .fail(function (response) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Daten konnten nicht gefiltert werden!',
-                        footer: response.responseText
-                    })
+                $.ajax({
+                    url: appRootPath + '/api/PersonApi/Filter',
+                    type: 'post',
+                    data: { filter: filter},
+                    beforeSend: function(){ $('.loader').show() },
+                    success: function (content) {
+                        let movieTable = $('#personIndex').DataTable();
+                        movieTable.clear().draw();
+                        movieTable.rows.add(JSON.parse(content));
+                        movieTable.draw(false);
+                    },
+                    fail: function (response) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Daten konnten nicht gefiltert werden!',
+                            footer: response.responseText
+                        })
+                    },
+                    complete: function(){ $('.loader').hide() }
                 });
             }
-            $('#loader').hide();
         }
 
         function deletePerson(id, actor) {
