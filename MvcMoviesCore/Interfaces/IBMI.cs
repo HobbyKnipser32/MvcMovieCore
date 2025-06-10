@@ -2,8 +2,8 @@
 {
     public interface IBMI
     {
-        public int? Value { get; set; }
-        public int? GetBMI(decimal? height, decimal? weight);
-        public int? GetBMI(int? feet, int? inch, decimal? lbs);
+        public decimal? Value { get; set; }
+        public decimal? GetBMI(decimal? height, decimal? weight);
+        public decimal? GetBMI(int? feet, int? inch, decimal? lbs);
     }
 }

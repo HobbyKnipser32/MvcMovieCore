@@ -55,22 +55,19 @@ namespace MvcMoviesCore.Models
 
         public string? Image { get; set; }
 
-//        [NotMapped]
-//        public string BMI
-//        {
-//            get
-//            {
-//                if (Height == null || Weight == null)
-//                    return string.Empty;
-
-//                var bmi = Weight.GetValueOrDefault() / (Height.GetValueOrDefault() * Height.GetValueOrDefault());
-//#if DEBUG
-//                return Math.Round(bmi, 2).ToString();
-//#else
-//                return Math.Round(bmi, 0).ToString();
-//#endif
-//            }
-//        }
+        [NotMapped]
+        public string BMI
+        {
+            get
+            {
+                var bmi = GetBMI(Height, Weight).GetValueOrDefault();
+#if DEBUG
+                    return Math.Round(bmi, 2).ToString();
+#else
+                return Math.Round(bmi, 0).ToString();
+#endif
+            }
+        }
 
         public virtual ICollection<PersonImage> PersonImages { get; set; }
 
@@ -88,7 +85,7 @@ namespace MvcMoviesCore.Models
         public string ActorsAge { get; set; }
         
         [NotMapped]
-        public int? Value { get; set; }
+        public decimal? Value { get; set; }
 
         public string GetActorsAge(DateTime? birthDay, DateTime? obit)
         {
@@ -102,13 +99,13 @@ namespace MvcMoviesCore.Models
             return age.GetActorsAgeInMovie(birthDay, yearOfPublication);
         }
 
-        public int? GetBMI(decimal? height, decimal? weight)
+        public decimal? GetBMI(decimal? height, decimal? weight)
         {
             var bmi = new BMI();
             return bmi.GetBMI(height, weight);
         }
 
-        public int? GetBMI(int? feet, int? inch, decimal? lbs)
+        public decimal? GetBMI(int? feet, int? inch, decimal? lbs)
         {
             var bmi = new BMI();
             return bmi.GetBMI(feet, inch, lbs);
