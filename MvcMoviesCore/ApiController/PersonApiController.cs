@@ -593,11 +593,11 @@ namespace MvcMoviesCore.ApiController
             {
                 var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
                 if (personType != null)
-                    persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id)).ToList();
+                    persons = [.. persons.Where(w => !w.PersonTypesId.Equals(personType.Id))];
             }
 
             persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
-            persons.ToList().ForEach(f => f.Value = (int)f.GetBMI(f.Height, f.Weight));
+            persons.ToList().ForEach(f => f.Value = f.GetBMI(f.Height, f.Weight));
             foreach (var person in persons)
             {
                 person.MoviesPerson.ToList().ForEach(f => f.Person = null);
