@@ -35,6 +35,7 @@ namespace MvcMoviesCore.ApiController
                     moviePerson.Person.ActorsAge = moviePerson.Person.GetActorsAge(moviePerson.Person.Birthday, moviePerson.Person.Obit);
                 else
                     moviePerson.Person.ActorsAge = moviePerson.Person.GetActorsAgeInMovie(moviePerson.Person.Birthday, movie.YearOfPublication);
+                moviePerson.Person.MoviesPerson = null;
             }
 
             moviePersons = [.. moviePersons.OrderBy(o => o.Person.Classification).ThenBy(t => t.Person.ActorsAge).ThenBy(t => t.Person.Name)];

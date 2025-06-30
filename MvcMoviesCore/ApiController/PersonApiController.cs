@@ -460,8 +460,11 @@ namespace MvcMoviesCore.ApiController
                         {
                             personImageNumber++;
                             var personImageMain = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(personId) && f.Number == personImageNumber);
-                            personImageMain.IsMain = true;
-                            _context.Update(personImageMain);
+                            if (personImage != null)
+                            {
+                                personImageMain.IsMain = true;
+                                _context.Update(personImageMain);
+                            }
                         }
                     }
                     _context.Update(personImage);
