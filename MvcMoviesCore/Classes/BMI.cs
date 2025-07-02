@@ -1,4 +1,5 @@
 ﻿using MvcMoviesCore.Interfaces;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcMoviesCore.Classes
@@ -17,15 +18,15 @@ namespace MvcMoviesCore.Classes
         /// <param name="height">The height in meter. </param>
         /// <param name="weight">The weight in kg.</param>
         /// <returns>The bmi.</returns>
-        public decimal? GetBMI(decimal? height, decimal? weight)
+        public decimal? GetBMI(decimal? height, decimal? weight, int decimals = 0)
         {
             if (height == null || height == 0 || weight == null || weight == 0)
                 return null;
 
-            return weight / (height * height);
+            return Math.Round((weight / (height * height)).GetValueOrDefault(), decimals);
         }
 
-        public decimal? GetBMI(int? feet, int? inch, decimal? lbs)
+        public decimal? GetBMI(int? feet, int? inch, decimal? lbs, int decimals = 0)
         {
             if (feet == null || feet == 0 || lbs == null || lbs == 0)
                 return null;
@@ -34,7 +35,7 @@ namespace MvcMoviesCore.Classes
             var height = feet.GetValueOrDefault() * 0.3048m;
             if (inch.HasValue) height += inch.GetValueOrDefault() * 0.0254m;
 
-            return GetBMI(height, weight);
+            return GetBMI(height, weight, decimals);
         }
     }
 }

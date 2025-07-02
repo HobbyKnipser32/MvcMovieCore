@@ -61,7 +61,10 @@ namespace MvcMoviesCore.Models
             get
             {
                 var bmi = GetBMI(Height, Weight).GetValueOrDefault();
-                return Math.Round(bmi, 0).ToString();
+                if (bmi == 0)
+                    return string.Empty;
+                else
+                    return bmi.ToString();
             }
         }
 
