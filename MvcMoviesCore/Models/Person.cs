@@ -18,7 +18,7 @@ namespace MvcMoviesCore.Models
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Der Name ist erforderlich!")]
-        public string  Name { get; set; }
+        public string Name { get; set; }
 
         public Guid SexId { get; set; }
 
@@ -95,16 +95,16 @@ namespace MvcMoviesCore.Models
             return age.GetActorsAgeInMovie(birthDay, yearOfPublication);
         }
 
-        public decimal? GetBMI(decimal? height, decimal? weight)
+        public decimal? GetBMI(decimal? height, decimal? weight, int decimals = 0)
         {
             var bmi = new BMI();
-            return bmi.GetBMI(height, weight);
+            return Math.Round(bmi.GetBMI(height, weight).GetValueOrDefault(), decimals);
         }
 
-        public decimal? GetBMI(int? feet, int? inch, decimal? lbs)
+        public decimal? GetBMI(int? feet, int? inch, decimal? lbs, int decimals = 0)
         {
             var bmi = new BMI();
-            return bmi.GetBMI(feet, inch, lbs);
+            return Math.Round(bmi.GetBMI(feet, inch, lbs).GetValueOrDefault(), decimals);
         }
 
         #endregion
