@@ -31,7 +31,7 @@
                         @if (Model.Images == null || Model.Images.Count == 0)
                         {
                             <div class="image-container">
-                                <img src="~/images/noimageexists.png" class="image-small" style="display:block; margin-left:auto; margin-right:auto; max-height:183px; max-width:auto" />
+                                <img src="~/images/noimageexists.png" class="image-small" style="display:block; margin-left:auto; margin-right:auto; width:90%" />
                             </div>
                         }
                         else
@@ -41,7 +41,7 @@
                                 var images = Model.Images.ToList();
                                 var singleImgSrc = $"{imagePath}/{images[0].PersonId}/{images[0].Name}";
                                 <div class="image-container" >
-                                    <img class="image-small" src="@singleImgSrc" style="display:block; margin-left:auto; margin-right:auto; max-height:245px" />
+                                    <img class="image-small" src="@singleImgSrc" style="display:block; margin-left:auto; margin-right:auto; max-height:185px; max-width:90%" />
                                     <img class="image-large" src="@singleImgSrc" />
                                 </div>
                             }
@@ -51,7 +51,7 @@
                                     @foreach (var image in Model.Images)
                                     {
                                         var src = $"{imagePath}/{image.PersonId}/{image.Name}";
-                                        <img class="mySlides w3-animate-fading image-small" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:245px; max-width:90%" />
+                                        <img class="mySlides w3-animate-fading image-small" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" />
                                         <img class="image-large" src="@src" />
                                     }
                                 </div>
@@ -65,71 +65,80 @@
                     <div class="card-body">
                         <div class="col-sm-12">
                             <div class="row">
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="name" class="form-label">Name:</label>
                                         <input type="text" asp-for="Name" id="name" class="form-control" />
                                         <span asp-validation-for="Name" class="text-danger" id="name"></span>
                                     </div>
                                 </div>
-                                <div class="col-sm-2">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="sexId" class="form-label">Geschlecht:</label>
                                         <select asp-for="SexId" class="form-select" asp-items="@sexId" id="sexId"></select>
                                         <span asp-validation-for="SexId" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="birthday" class="form-label">Geburtstag:</label>
                                         <input type="date" asp-for="Birthday" class="form-control" id="birthday" />
                                         <span asp-validation-for="Birthday" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="obit" class="form-label">Todestag:</label>
                                         <input type="date" asp-for="Obit" class="form-control" id="obit" />
                                         <span asp-validation-for="Obit" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="personTypeId" class="form-label">Rolle:</label>
-                                        <select asp-for="PersonTypesId" class="form-select" asp-items="@personTypesId" id="personTypeId"></select>
-                                        <span asp-validation-for="PersonTypesId" class="text-danger"></span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="row">
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="personTypeId" class="form-label">Type:</label>
+                                        <select asp-for="PersonTypesId" class="form-select" asp-items="@personTypesId" id="personTypeId"></select>
+                                        <span asp-validation-for="PersonTypesId" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="nationalityId" class="form-label">Nationalität:</label>
                                         <select asp-for="NationalityId" class="form-select" asp-items="@nationalityId" id="nationalityId"></select>
                                         <span asp-validation-for="NationalityId" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="classification" class="form-label">Klassifizierung:</label>
+                                        <input type="number" asp-for="Classification" class="form-control" min="1" max="12" id="classification" />
+                                        <span asp-validation-for="Classification" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="height" class="form-label">Größe:</label>
                                         <input asp-for="Height" class="form-control" id="height" />
                                         <span asp-validation-for="Height" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="weight" class="form-label">Gewicht:</label>
                                         <input type="number" asp-for="Weight" class="form-control" id="weight" />
                                         <span asp-validation-for="Weight" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="classification" class="form-label">Klassifizierung:</label>
-                                        <input type="number" asp-for="Classification" class="form-control" min="1" max="12" id="classification" />
-                                        <span asp-validation-for="Classification" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>

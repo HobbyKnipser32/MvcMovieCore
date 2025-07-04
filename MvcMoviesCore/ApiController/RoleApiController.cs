@@ -54,10 +54,10 @@ namespace MvcMoviesCore.ApiController
             var role = await _context.MovieRole.FirstOrDefaultAsync(f => f.Id.Equals(id));
 
             if (role == null)
-                return BadRequest("Konnte Genre nicht finden!");
+                return BadRequest("Konnte Rolle nicht finden!");
 
             if (IsRoleUsed(id))
-                return BadRequest("Genre wird verwendet und kann daher nicht gelöscht werden!");
+                return BadRequest("Rolle wird verwendet und kann daher nicht gelöscht werden!");
 
             _context.MovieRole.Remove(role);
             await _context.SaveChangesAsync();

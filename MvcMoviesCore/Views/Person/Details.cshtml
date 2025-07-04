@@ -60,14 +60,14 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label asp-for="ActorsAge" class="control-label">aktuelles Alter: </label>
-                                    @Html.DisplayFor(model => model.ActorsAge)
+                                    <label asp-for="Birthday" class="control-label">Geburtstag: </label>
+                                    @Html.DisplayFor(model => model.Birthday)
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label asp-for="Birthday" class="control-label">Geburtstag: </label>
-                                    @Html.DisplayFor(model => model.Birthday)
+                                    <label asp-for="Obit" class="control-label">Todestag: </label>
+                                    @Html.DisplayFor(model => model.Obit)
                                 </div>
                             </div>
                         </div>
@@ -93,33 +93,26 @@
                                     @Html.DisplayFor(model => model.Classification)
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label asp-for="Height" class="control-label">Größe [m]: </label>
                                     @Html.DisplayFor(model => model.Height)
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label asp-for="Weight" class="control-label">Gewicht [kg]: </label>
                                     @Html.DisplayFor(model => model.Weight)
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label asp-for="BMI" class="control-label">BMI: </label>
                                     @Html.DisplayFor(model => model.BMI)
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label asp-for="Obit" class="control-label">Todestag: </label>
-                                    @Html.DisplayFor(model => model.Obit)
                                 </div>
                             </div>
                         </div>
