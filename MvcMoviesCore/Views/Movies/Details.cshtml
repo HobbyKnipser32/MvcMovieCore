@@ -178,13 +178,12 @@
                                             if (t.Classification < 8)
                                             {
                                                 <b>
-                                                    @Html.DisplayTextFor(model => t.Name)
+                                                    @Html.ActionLink(t.Name, actionName: "Details", controllerName: "Person", routeValues: new { id = t.PersonId })
                                                 </b>
                                             }
                                             else
                                             {
-                                                @Html.DisplayTextFor(model => t.Name)
-
+                                                @Html.ActionLink(t.Name, actionName: "Details", controllerName: "Person", routeValues: new { id = t.PersonId })
                                             }
                                             j++;
                                             if (j < count)

@@ -429,6 +429,7 @@ namespace MvcMoviesCore.Controllers
                     {
                         scenes.Add(new ScenesViewModel
                         {
+                            PersonId = moviePerson.Person.Id,
                             Nr = scene.Scene,
                             Name = moviePerson.Person.Name,
                             Sex = moviePerson.Person.Sex.Name,

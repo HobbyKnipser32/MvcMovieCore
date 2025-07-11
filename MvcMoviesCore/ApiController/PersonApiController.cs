@@ -239,6 +239,34 @@ namespace MvcMoviesCore.ApiController
             return Ok(jsonResult);
         }
 
+        [HttpGet("GetFilterElements/{personId}")]
+        public async Task<IActionResult> GetFilterElements(Guid personId)
+        {
+            string jsonResult;
+            List<string> filters = [];
+            var personMovies = await _context.MoviesPerson.Where(w => w.PersonId.Equals(personId)).ToListAsync();
+            foreach (var personMovie in personMovies)
+            {
+                var practices = personMovie.Practices.Split(',');
+                foreach (var practice in practices) 
+                { 
+                    if (!filters.Contains(practice.Trim()))
+                        filters.Add(practice.Trim());
+                } 
+            }
+            try
+            {
+                filters = [.. filters.OrderBy(o => o)];
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                jsonResult = JsonConvert.SerializeObject(filters, Formatting.Indented, jsonSerializerSettings);
+            }
+            catch
+            {
+                jsonResult = string.Empty;
+            }
+            return Ok(jsonResult);
+        }
+
         [HttpGet("TodaysBirtdays")]
         public async Task<IActionResult> TodaysBirtdays()
         {
