@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Person-Details";
-    var adultPersonType = ViewData["AdultPersonType"];
+    var adultPersonType = ViewData["AdultPersonType"].ToString();
     var imgSrc = ViewData["ImageSource"].ToString();
     var person = Model.Name;
     var natImgSrc = ViewData["OriginalFileDirectory"].ToString() + "/flags/" + Model.Nationality.Name + ".png";
@@ -50,140 +50,220 @@
         <div class="col-sm-9">
             <div class="card">
                 <div class="card-body">
-                    <ul class="nav nav-tabs">
-                        <li>
-                            <a data-toggle="tab" href="#statsTab" class="nav-link nav-link-teal active" style="border: 2px solid #00677f">Stats</a>
-                        </li>
-                        <li>
-                            <a data-toggle="tab" href="#filterTab" class="nav-link nav-link-violett" style="border: 2px solid rgb(108, 27, 123)">Filter</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="statsTab" class="tab-pane active" style="border: 1px solid #00677f">
-                            <div class="col-sm-12">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
-                                            @Html.DisplayFor(model => model.Sex.Name)
-                                        </div>
+                    @if (!Model.PersonTypesId.ToString().Equals(adultPersonType))
+                    {
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
+                                        @Html.DisplayFor(model => model.Sex.Name)
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label asp-for="Birthday" class="control-label">Geburtstag: </label>
-                                            @Html.DisplayFor(model => model.Birthday)
-                                        </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Birthday" class="control-label">Geburtstag: </label>
+                                        @Html.DisplayFor(model => model.Birthday)
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label asp-for="Obit" class="control-label">Todestag: </label>
-                                            @Html.DisplayFor(model => model.Obit)
-                                        </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Obit" class="control-label">Todestag: </label>
+                                        @Html.DisplayFor(model => model.Obit)
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label asp-for="PersonType.Name" class="control-label">Type: </label>
-                                            @Html.DisplayFor(model => model.PersonType.Name)
-                                        </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="PersonType.Name" class="control-label">Type: </label>
+                                        @Html.DisplayFor(model => model.PersonType.Name)
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
-                                            @if (Model.Nationality != null && Model.Nationality.Name != null && Model.Nationality.Name != "-")
-                                            {
-                                                <img src="@natImgSrc" style="max-width: 100%; max-height: 16px" title="@Model.Nationality.Description" />
-                                                @Html.DisplayFor(model => model.Nationality.Name)
-                                            }
-                                            else
-                                            {
-                                                <i class="fa-solid fa-question" style="color: #74C0FC"></i>
-                                            }
-                                        </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
+                                        @if (Model.Nationality != null && Model.Nationality.Name != null && Model.Nationality.Name != "-")
+                                        {
+                                            <img src="@natImgSrc" style="max-width: 100%; max-height: 16px" title="@Model.Nationality.Description" />
+                                            @Html.DisplayFor(model => model.Nationality.Name)
+                                        }
+                                        else
+                                        {
+                                            <i class="fa-solid fa-question" style="color: #74C0FC"></i>
+                                        }
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label asp-for="Classification" class="control-label">Klassifizierung: </label>
-                                            @Html.DisplayFor(model => model.Classification)
-                                        </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Classification" class="control-label">Klassifizierung: </label>
+                                        @Html.DisplayFor(model => model.Classification)
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label asp-for="Height" class="control-label">Größe [m]: </label>
-                                            @Html.DisplayFor(model => model.Height)
-                                        </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Height" class="control-label">Größe [m]: </label>
+                                        @Html.DisplayFor(model => model.Height)
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label asp-for="Weight" class="control-label">Gewicht [kg]: </label>
-                                            @Html.DisplayFor(model => model.Weight)
-                                        </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Weight" class="control-label">Gewicht [kg]: </label>
+                                        @Html.DisplayFor(model => model.Weight)
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label asp-for="BMI" class="control-label">BMI: </label>
-                                            @Html.DisplayFor(model => model.BMI)
-                                        </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="BMI" class="control-label">BMI: </label>
+                                        @Html.DisplayFor(model => model.BMI)
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12" style="display:none" id="adultStuff">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="cupSize" class="form-label">Cupsize:</label>
-                                            @Html.DisplayFor(model => model.CupSize)
+                        </div>
+                    }
+                    else
+                    {
+                        <ul class="nav nav-tabs">
+                            <li>
+                                <a data-toggle="tab" href="#statsTab" class="nav-link nav-link-teal active" style="border: 2px solid #00677f">Stats</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#filterTab" class="nav-link nav-link-violett" style="border: 2px solid rgb(108, 27, 123)">Filter</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="statsTab" class="tab-pane active" style="border: 1px solid #00677f">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
+                                                @Html.DisplayFor(model => model.Sex.Name)
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label asp-for="Birthday" class="control-label">Geburtstag: </label>
+                                                @Html.DisplayFor(model => model.Birthday)
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label asp-for="Obit" class="control-label">Todestag: </label>
+                                                @Html.DisplayFor(model => model.Obit)
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="fakeBoobs" class="form-label">Fakeboobs:</label>
-                                            @if (string.IsNullOrEmpty(Model.CupSize))
-                                            {
-                                                <i class="fa-solid fa-question" style="color: #74C0FC"></i>
-                                            }
-                                            else
-                                            {
-                                                if (Model.FakeBoobs)
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label asp-for="PersonType.Name" class="control-label">Type: </label>
+                                                @Html.DisplayFor(model => model.PersonType.Name)
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
+                                                @if (Model.Nationality != null && Model.Nationality.Name != null && Model.Nationality.Name != "-")
                                                 {
-                                                    <i class="fa-solid fa-check" style="color: #ff0000;"></i>
-
+                                                    <img src="@natImgSrc" style="max-width: 100%; max-height: 16px" title="@Model.Nationality.Description" />
+                                                    @Html.DisplayFor(model => model.Nationality.Name)
                                                 }
                                                 else
                                                 {
-                                                    <i class="fa-solid fa-xmark" style="color: green"></i>
-
+                                                    <i class="fa-solid fa-question" style="color: #74C0FC"></i>
                                                 }
-                                            }
-                                            @* @Html.DisplayFor(model => model.FakeBoobs) *@
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label asp-for="Classification" class="control-label">Klassifizierung: </label>
+                                                @Html.DisplayFor(model => model.Classification)
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="startOfBusiness" class="form-label">Start of Business:</label>
-                                            @Html.DisplayFor(model => model.StartOfBusiness)
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label asp-for="Height" class="control-label">Größe [m]: </label>
+                                                @Html.DisplayFor(model => model.Height)
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label asp-for="Weight" class="control-label">Gewicht [kg]: </label>
+                                                @Html.DisplayFor(model => model.Weight)
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label asp-for="BMI" class="control-label">BMI: </label>
+                                                @Html.DisplayFor(model => model.BMI)
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="endOfBusiness" class="form-label">End of Business:</label>
-                                            @Html.DisplayFor(model => model.EndOfBusiness)
+                                </div>
+                                <div class="col-sm-12" style="display:none" id="adultStuff">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="cupSize" class="form-label">Cupsize:</label>
+                                                @Html.DisplayFor(model => model.CupSize)
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="fakeBoobs" class="form-label">Fakeboobs:</label>
+                                                @if (string.IsNullOrEmpty(Model.CupSize))
+                                                {
+                                                    <i class="fa-solid fa-question" style="color: #74C0FC"></i>
+                                                }
+                                                else
+                                                {
+                                                    if (Model.FakeBoobs)
+                                                    {
+                                                        <i class="fa-solid fa-check" style="color: #ff0000;"></i>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="fa-solid fa-xmark" style="color: green"></i>
+
+                                                    }
+                                                }
+                                                @* @Html.DisplayFor(model => model.FakeBoobs) *@
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="startOfBusiness" class="form-label">Start of Business:</label>
+                                                @Html.DisplayFor(model => model.StartOfBusiness)
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="endOfBusiness" class="form-label">End of Business:</label>
+                                                @Html.DisplayFor(model => model.EndOfBusiness)
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div id="filterTab" class="tab-pane">
+                            </div>
                         </div>
-                        <div id="filterTab" class="tab-pane">
+                    }
 
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

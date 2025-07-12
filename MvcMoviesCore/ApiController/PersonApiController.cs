@@ -245,17 +245,19 @@ namespace MvcMoviesCore.ApiController
             string jsonResult;
             List<string> filters = [];
             var personMovies = await _context.MoviesPerson.Where(w => w.PersonId.Equals(personId)).ToListAsync();
-            foreach (var personMovie in personMovies)
-            {
-                var practices = personMovie.Practices.Split(',');
-                foreach (var practice in practices) 
-                { 
-                    if (!filters.Contains(practice.Trim()))
-                        filters.Add(practice.Trim());
-                } 
-            }
             try
             {
+                foreach (var personMovie in personMovies)
+                {
+                    if (personMovie.Practices == null)
+                        continue;
+                    var practices = personMovie.Practices.Split(',');
+                    foreach (var practice in practices)
+                    {
+                        if (!filters.Contains(practice.Trim()))
+                            filters.Add(practice.Trim());
+                    }
+                }
                 filters = [.. filters.OrderBy(o => o)];
                 var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
                 jsonResult = JsonConvert.SerializeObject(filters, Formatting.Indented, jsonSerializerSettings);
