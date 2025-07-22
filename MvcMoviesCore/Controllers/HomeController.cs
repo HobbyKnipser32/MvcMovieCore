@@ -41,26 +41,26 @@ namespace MvcMoviesCore.Controllers
         {
             IQueryable<Movies> movies;
 
-            if (_showAdult)
-                movies = _context.Movies
-                    .Include(m => m.Genre)
-                    .Include(m => m.RecordCarrier)
-                    .Include(m => m.StorageLocation)
-                    .Where(w => w.LastView == null)
-                    .OrderByDescending(o => o.CreateDate)
-                    .ThenBy(t => t.Name)
-                    .Take(20)
-                    .AsQueryable();
-            else
-                movies = _context.Movies
-                    .Include(i => i.RecordCarrier)
-                    .Include(i => i.StorageLocation)
-                    .Include(i => i.Genre)
-                    .Where(w => w.Adult == false && w.LastView == null)
-                    .OrderByDescending(o => o.CreateDate)
-                    .ThenBy(t => t.Name)
-                    .Take(20)
-                    .AsQueryable();
+            //if (_showAdult)w
+            //    movies = _context.Movies
+            //        .Include(m => m.Genre)
+            //        .Include(m => m.RecordCarrier)
+            //        .Include(m => m.StorageLocation)
+            //        .Where(w => w.LastView == null)
+            //        .OrderByDescending(o => o.CreateDate)
+            //        .ThenBy(t => t.Name)
+            //        .Take(20)
+            //        .AsQueryable();
+            //else
+            movies = _context.Movies
+                .Include(i => i.RecordCarrier)
+                .Include(i => i.StorageLocation)
+                .Include(i => i.Genre)
+                .Where(w => w.Adult == false && w.LastView == null)
+                .OrderByDescending(o => o.CreateDate)
+                .ThenBy(t => t.Name)
+                .Take(20)
+                .AsQueryable();
 
             ViewData["ImageSource"] = _originalFileDirectory;
             return View(movies);
