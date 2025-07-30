@@ -63,6 +63,7 @@ namespace MvcMoviesCore.Controllers
                 .AsQueryable();
 
             ViewData["ImageSource"] = _originalFileDirectory;
+            ViewData["showAdult"] = _showAdult;
             return View(movies);
         }
 

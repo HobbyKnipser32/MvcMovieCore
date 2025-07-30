@@ -112,7 +112,7 @@
 
     <script>
         $(document).ready(function () {
-            let table = $('#movieIndex').DataTable({
+            $('#movieIndex').DataTable({
                 retrieve: true,
                 ajax: {
                     url: appRootPath + '/api/MoviesApi/GetMovies',

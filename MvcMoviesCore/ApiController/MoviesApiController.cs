@@ -143,6 +143,72 @@ namespace MvcMoviesCore.ApiController
             }
         }
 
+        [HttpGet("GetNewMovies")]
+        public async Task<IActionResult> GetNewMovies()
+        {
+            string jsonResult;
+            var movies = await _context.Movies
+                .Include(i => i.RecordCarrier)
+                .Include(i => i.StorageLocation)
+                .Include(i => i.Genre)
+                .Where(w => w.Adult == false && w.LastView == null)
+                .OrderByDescending(o => o.CreateDate)
+                .ThenBy(t => t.Name)
+                .Take(20)
+                .ToListAsync();
+
+            foreach (var movie in movies)
+            {
+                movie.Genre.Movies.Clear();
+                movie.RecordCarrier?.Movies.Clear();
+                movie.StorageLocation?.Movies.Clear();
+            }
+
+            try
+            {
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                jsonResult = JsonConvert.SerializeObject(movies, Formatting.Indented, jsonSerializerSettings);
+                return Ok(jsonResult);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet("GetAllNewMovies")]
+        public async Task<IActionResult> GetAllNewMovies()
+        {
+            string jsonResult;
+            var movies = await _context.Movies
+                .Include(i => i.RecordCarrier)
+                .Include(i => i.StorageLocation)
+                .Include(i => i.Genre)
+                .Where(w => w.LastView == null)
+                .OrderByDescending(o => o.CreateDate)
+                .ThenBy(t => t.Name)
+                .Take(20)
+                .ToListAsync();
+
+            foreach (var movie in movies)
+            {
+                movie.Genre.Movies.Clear();
+                movie.RecordCarrier?.Movies.Clear();
+                movie.StorageLocation?.Movies.Clear();
+            }
+
+            try
+            {
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                jsonResult = JsonConvert.SerializeObject(movies, Formatting.Indented, jsonSerializerSettings);
+                return Ok(jsonResult);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
         [HttpPost("DeleteMovie/{id}")]
         public async Task<IActionResult> DeleteMovie(Guid id)
         {
@@ -172,8 +238,6 @@ namespace MvcMoviesCore.ApiController
                 return BadRequest(ex.Message.ToString());
             }
         }
-
-        
 
         [HttpPost("AddMovieActorRole")]
         public async Task<IActionResult> AddMovieActorRole([FromForm] MoviePersonsViewModel moviesPerson)

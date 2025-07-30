@@ -224,21 +224,24 @@
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="fakeBoobs" class="form-label">Fakeboobs:</label>
-                                                @if (string.IsNullOrEmpty(Model.CupSize))
+                                                @if (!Model.Sex.Name.ToLower().Equals("m"))
                                                 {
-                                                    <i class="fa-solid fa-question" style="color: #74C0FC"></i>
-                                                }
-                                                else
-                                                {
-                                                    if (Model.FakeBoobs)
+                                                    @if (string.IsNullOrEmpty(Model.CupSize))
                                                     {
-                                                        <i class="fa-solid fa-check" style="color: #ff0000;"></i>
-
+                                                        <i class="fa-solid fa-question" style="color: #74C0FC"></i>
                                                     }
                                                     else
                                                     {
-                                                        <i class="fa-solid fa-xmark" style="color: green"></i>
+                                                        if (Model.FakeBoobs)
+                                                        {
+                                                            <i class="fa-solid fa-check" style="color: #ff0000;"></i>
 
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="fa-solid fa-xmark" style="color: green"></i>
+
+                                                        }
                                                     }
                                                 }
                                                 @* @Html.DisplayFor(model => model.FakeBoobs) *@

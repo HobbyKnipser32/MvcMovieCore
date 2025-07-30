@@ -3,8 +3,73 @@
 @{
     ViewData["Title"] = "Home Page";
     var imageSource = ViewData["ImageSource"];
+    var showAdult = false;
+    if (ViewData["showAdult"] is bool)
+    {
+        showAdult = (bool)ViewData["showAdult"];
+    }
 }
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 30px;
+        height: 17px;
+    }
 
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 13px;
+            width: 13px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(13px);
+        -ms-transform: translateX(13px);
+        transform: translateX(13px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 17px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
 <div class="container-fluid">
     <h2>Willkommen</h2>
     <hr />
@@ -13,6 +78,13 @@
             <div class="card shadow p-3 mb-5 bg-white rounded">
                 <div class="card-body">
                     <h5 class="card-title" style="color:blue; background-image: linear-gradient(to right, aliceblue, white); "><b>Neu</b></h5>
+                    @if (showAdult)
+                    {
+                        <label class="switch" id="showAll">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    }
                     <div>
                         <table class="table table-striped" id="homeIndex">
                             <thead>
@@ -23,25 +95,6 @@
                                     <th>Lager-<br />ort</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @{
-                                    var i = 0;
-                                }
-                                @foreach (var item in Model)
-                                {
-                                    <tr style="background-color:@(i % 2 == 0 ? "lightblue" : "lightgray")">
-                                        <td>
-                                            <a asp-area="" asp-controller="Movies" asp-action="Details" asp-route-id="@item.Id">
-                                                @Html.DisplayFor(modelItem => item.Name)
-                                            </a>
-                                        </td>
-                                        <td>@Html.DisplayFor(modelItem => item.Genre.Name)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.RecordCarrier.Name)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.StorageLocation.Name)</td>
-                                    </tr>
-                                    i++;
-                                }
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -92,9 +145,28 @@
 
     <script>
         $(document).ready(function () {
-            $('#homeIndex').DataTable({
+             $('#homeIndex').DataTable({
                 ordering: false,
-                ajax: false,
+                ajax: {
+                    url: appRootPath + '/api/MoviesApi/GetNewMovies',
+                    dataSrc: ''
+                },
+                columns: [
+                    {
+                        data: 'Name',
+                         render: function (data, type, full) {
+                            if (data && type === 'display') {
+                                var url = '@Url.Action("Details", "Movies")' + '/' + full["Id"];
+                                return '<a href="' + url + '" title="ansehen">' + full["Name"];
+                            }
+                            return '';
+                        },
+                        type: 'html'
+                    },
+                    { data: 'Genre.Name'},
+                    { data: 'RecordCarrier.Name'},
+                    { data: 'StorageLocation.Name'},
+                ],
                 paging: false,
                 searching: false,
                 fixedHeader: {
@@ -135,19 +207,19 @@
                         },
                         type: 'html'
                     },
-                    { 
+                    {
                         data: 'ActorsAge',
                         type: 'num'
                     },
-                    { 
+                    {
                         data: 'Nationality.Name',
                         type: 'html'
                     },
-                    { 
+                    {
                         data: 'PersonType.Name',
                         type: 'html'
                     },
-                    {   
+                    {
                         data: 'Sex.Name',
                         type: 'html'
                     },
@@ -259,6 +331,45 @@
             $('#obitTable tbody').on('mouseleave', '.image-container', function () {
                 onMouseLeave(this);
             });
+
+            $('#showAll').click(function(){
+                executeShowAll();
+                
+            });
         })
+
+        function executeShowAll(){
+            var checkBox = $('input[type="checkbox"]');
+            if (checkBox.prop('checked')) {
+                var url = appRootPath + '/api/MoviesApi/GetAllNewMovies';
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: false,
+                    statusCode: {
+                        404: function () {
+                            alert("function not found");
+                        }
+                    },
+                    success: function (content) {
+                        $('#homeIndex').DataTable().clear().draw();
+                        // $('#homeIndex').DataTable().rows.add(JSON.parse(content)).draw();
+                        // $('#homeIndex').DataTable().draw();
+                    },
+                    error: function (response) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Beim laden der Daten ist ein Fehler aufgetreten!',
+                            footer: response.responseText
+                        })
+                    }
+                })
+            }
+            else
+            {
+                $('#homeIndex').DataTable().ajax.reload();
+            }
+        }
     </script>
 }
