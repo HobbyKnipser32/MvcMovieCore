@@ -16,13 +16,11 @@
         width: 30px;
         height: 17px;
     }
-
         .switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
-
     .slider {
         position: absolute;
         cursor: pointer;
@@ -34,7 +32,6 @@
         -webkit-transition: .4s;
         transition: .4s;
     }
-
         .slider:before {
             position: absolute;
             content: "";
@@ -46,26 +43,21 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
     input:checked + .slider {
         background-color: #2196F3;
     }
-
     input:focus + .slider {
         box-shadow: 0 0 1px #2196F3;
     }
-
     input:checked + .slider:before {
         -webkit-transform: translateX(13px);
         -ms-transform: translateX(13px);
         transform: translateX(13px);
     }
-
     /* Rounded sliders */
     .slider.round {
         border-radius: 17px;
     }
-
         .slider.round:before {
             border-radius: 50%;
         }
@@ -344,23 +336,24 @@
                 var url = appRootPath + '/api/MoviesApi/GetAllNewMovies';
                 $.ajax({
                     url: url,
-                    type: 'GET',
-                    async: false,
+                    // type: 'get',
+                    // async: false,
                     statusCode: {
                         404: function () {
                             alert("function not found");
                         }
                     },
                     success: function (content) {
-                        $('#homeIndex').DataTable().clear().draw();
-                        // $('#homeIndex').DataTable().rows.add(JSON.parse(content)).draw();
-                        // $('#homeIndex').DataTable().draw();
+                        var homeIndexTable = $('#homeIndex').DataTable();
+                        homeIndexTable.clear();
+                        homeIndexTable.rows.add(JSON.parse(content)); //.draw();
+                        homeIndexTable.draw();
                     },
                     error: function (response) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
-                            text: 'Beim laden der Daten ist ein Fehler aufgetreten!',
+                            text: 'Beim Laden der Daten ist ein Fehler aufgetreten!',
                             footer: response.responseText
                         })
                     }
@@ -368,7 +361,29 @@
             }
             else
             {
-                $('#homeIndex').DataTable().ajax.reload();
+               var url = appRootPath + '/api/MoviesApi/GetNewMovies';
+                $.ajax({
+                    url: url,
+                    statusCode: {
+                        404: function () {
+                            alert("function not found");
+                        }
+                    },
+                    success: function (content) {
+                        var homeIndexTable = $('#homeIndex').DataTable();
+                        homeIndexTable.clear();
+                        homeIndexTable.rows.add(JSON.parse(content)); //.draw();
+                        homeIndexTable.draw();
+                    },
+                    error: function (response) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Beim Laden der Daten ist ein Fehler aufgetreten!',
+                            footer: response.responseText
+                        })
+                    }
+                })
             }
         }
     </script>
