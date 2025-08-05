@@ -485,12 +485,12 @@ namespace MvcMoviesCore.ApiController
                     if (personImage.IsMain)
                     {
                         personImage.IsMain = false;
-                        var personImageNumber = await _context.PersonImage.Where(f => f.PersonId.Equals(personId) && f.IsDeleted == false).MinAsync(m => m.Number);
+                        var personImageNumber = await _context.PersonImage.Where(f => f.PersonId.Equals(personId) && !f.IsDeleted && !f.IsMain).MinAsync(m => m.Number);
                         if (personImageNumber != 0)
                         {
-                            personImageNumber++;
+                            //personImageNumber++;
                             var personImageMain = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(personId) && f.Number == personImageNumber);
-                            if (personImage != null)
+                            if (personImageMain != null)
                             {
                                 personImageMain.IsMain = true;
                                 _context.Update(personImageMain);
