@@ -7,6 +7,7 @@
     var person = Model.Name;
     var natImgSrc = ViewData["OriginalFileDirectory"].ToString() + "/flags/" + Model.Nationality.Name + ".png";
     var originalFileDirectory = ViewData["OriginalFileDirectory"].ToString();
+    var filter = ViewData["Filter"] as List<string>;
 }
 <div class="container-fluid">
     <h2>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.ActorsAge))</h2>
@@ -133,9 +134,12 @@
                             <li>
                                 <a data-toggle="tab" href="#statsTab" class="nav-link nav-link-teal active" style="border: 2px solid #00677f">Stats</a>
                             </li>
-                            <li>
-                                <a data-toggle="tab" href="#filterTab" class="nav-link nav-link-violett" style="border: 2px solid rgb(108, 27, 123)">Filter</a>
-                            </li>
+                            @if (filter.Count() > 0)
+                            {
+                                <li>
+                                    <a data-toggle="tab" href="#filterTab" class="nav-link nav-link-violett" style="border: 2px solid rgb(108, 27, 123)">Filter</a>
+                                </li>
+                            }
                         </ul>
                         <div class="tab-content">
                             <div id="statsTab" class="tab-pane active" style="border: 1px solid #00677f">
@@ -262,7 +266,44 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="filterTab" class="tab-pane">
+                            <div id="filterTab" class="tab-pane" style="border: 1px solid rgb(108, 27, 123)">
+                                @if (filter.Count() > 0)
+                                {
+                                    int i = 0;
+                                    int rows = filter.Count() / 6 + 1;
+                                    for (int row = 1; row <= rows; row++)
+                                    {
+                                        <div class="col-sm-12">
+                                            <div class="row">
+                                                @for (int j = 0; j < 6; j++)
+                                                {
+                                                    if (i >= filter.Count())
+                                                    {
+                                                        break;
+                                                    }
+                                                    var id = "filter" + i;
+                                                    var name = "filter" + i;
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <input type="checkbox" id="@id" name="@name" value="@filter[i]" onclick="setFilter('@Model.Id')" class="filter" />
+                                                            <label for="@id">@filter[i]</label>
+                                                        </div>
+                                                    </div>
+                                                    i++;
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="form-group" align="right">
+                                            <button class="btn btn-rose btn-fab" type="button" id="deleteFilter" title="Filter löschen" onclick="clearFilter()">
+                                                <i class="fa-regular fa-trash-can fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     }
@@ -524,7 +565,6 @@
 
         function deleteLink(id) {
             Swal.fire({
-                // html: 'Film: <b>' + movie + '</b> löschen?',
                 text: 'Verknüpfung löschen?',
                 icon: 'question',
                 showCancelButton: true,
@@ -557,5 +597,40 @@
                 };
             });
         };
+
+        function setFilter(id){
+            var checkedValues = $('input:checkbox:checked').map((i, el) => el.value).get();
+
+            let filter = {
+                "PersonId": id,
+                "CheckedValues": checkedValues
+            };
+                $.ajax({
+                    url: appRootPath + '/api/PersonApi/PracticeFilter',
+                    type: 'post',
+                    data: { filter: filter},
+                    beforeSend: function(){ $('.loader').show() },
+                    success: function (content) {
+                        let movieTable = $('#personMovies').DataTable();
+                        movieTable.clear().draw();
+                        movieTable.rows.add(JSON.parse(content));
+                        movieTable.draw(false);
+                    },
+                    fail: function (response) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Daten konnten nicht gefiltert werden!',
+                            footer: response.responseText
+                        })
+                    },
+                    complete: function(){ $('.loader').hide() }
+                });
+        }
+
+        function clearFilter(){
+            $("#filterTab").find('input:checkbox').prop('checked', false);
+            $('#personMovies').DataTable().ajax.reload();
+        }
     </script>
 }

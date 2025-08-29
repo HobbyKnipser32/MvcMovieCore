@@ -535,6 +535,70 @@ namespace MvcMoviesCore.ApiController
             return Ok();
         }
 
+        [HttpPost("PracticeFilter")]
+        public async Task<IActionResult> PracticeFilter([FromForm] PracticeFilterViewModel filter)
+        {
+            if (filter.PersonId == Guid.Empty)
+            { 
+                return BadRequest(); 
+            }
+            if (filter.CheckedValues == null || filter.CheckedValues.Length == 0)
+            {
+                return await GetMovies(filter.PersonId);
+            }
+            string jsonResult;
+            var personMovies = await _context.MoviesPerson
+                .Include(i => i.Person)
+                .Include(i => i.Movies)
+                .Include(i => i.MovieRole)
+                .Where(w => w.PersonId.Equals(filter.PersonId) && w.Practices != null)
+                .ToListAsync();
+            List<PersonMoviesViewModel> movies = [];
+            try
+            {
+                foreach (var personMovie in personMovies)
+                {
+                    var movie = new PersonMoviesViewModel()
+                    {
+                        Alter = personMovie.Movies.GetActorsAgeInMovie(personMovie.Person.Birthday, personMovie.Movies.YearOfPublication),
+                        Bewertung = string.Format("{0:0.#}", personMovie.Movies.Ranking), //.ToString(),
+                        Id = personMovie.MoviesId,
+                        Laufzeit = string.Format("{0:0.0}", personMovie.Movies.RunTime), //.ToString(),
+                        Name = personMovie.Movies.Name,
+                        OnWatch = personMovie.Movies.OnWatch,
+                        Role = personMovie.MovieRole?.Name != null ? personMovie.MovieRole.Name : string.Empty,
+                        PersonMovieId = personMovie.Id,
+                        Praxis = personMovie.Practices
+                    };
+                    if (personMovie.Movies.YearOfPublication != null) { movie.Erscheinungsjahr = personMovie.Movies.YearOfPublication.Value.Year.ToString(); }
+                    else { movie.Erscheinungsjahr = string.Empty; }
+                    movies.Add(movie);
+                }
+                List<PersonMoviesViewModel> filteredMovies = [];
+                foreach(var checkedValue in filter.CheckedValues)
+                {
+                    var selectMovies = movies.Where(w => w.Praxis.Contains(checkedValue)).ToList();
+                    if (selectMovies.Count > 0)
+                        foreach(var selectMovie in selectMovies)
+                        {
+                            var currentMovie = filteredMovies.FirstOrDefault(w => w.Id.Equals(selectMovie.Id));
+                            if (currentMovie == null)
+                                filteredMovies.Add(selectMovie);
+                        }
+                }
+
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                jsonResult = JsonConvert.SerializeObject(filteredMovies.OrderBy(o => o.Name).ThenBy(t => t.Alter), Formatting.Indented, jsonSerializerSettings);
+            }
+            catch
+            {
+                jsonResult = string.Empty;
+            }
+
+            return Ok(jsonResult);
+        }
+
+
         [HttpPost("Filter")]
         public async Task<IActionResult> Filter([FromForm] FilterPersonViewModel filter)
         {

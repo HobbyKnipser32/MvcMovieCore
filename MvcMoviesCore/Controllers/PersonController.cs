@@ -216,6 +216,7 @@ namespace MvcMoviesCore.Controllers
 
             person.MoviesPerson = [.. person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication)];
 
+            ViewData["Filter"] = await GetFilters(id.Value);
             ViewData["AdultPersonType"] = await GetAdultPersonTypeId();
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
             ViewData["ImageSource"] = "";
@@ -502,6 +503,29 @@ namespace MvcMoviesCore.Controllers
         private bool PersonExists(Guid id)
         {
             return _context.Person.Any(e => e.Id.Equals(id));
+        }
+
+        private async Task<List<string>> GetFilters(Guid personId)
+        {
+            List<string> filters = [];
+            var moviePerson = await _context.MoviesPerson.Where(w => w.PersonId.Equals(personId) && w.Practices != null).Select(s => s.Practices).ToListAsync();
+            if (moviePerson.Count != 0)
+            {
+                foreach (var item in moviePerson)
+                {
+                    var practices = item.Split(",");
+                    if (practices.Length > 0)
+                    {
+                        foreach(var practice in practices)
+                        {
+                            filters.Add(practice.Trim());
+                        }
+                    }
+                }
+            }
+            filters = [.. filters.Distinct()];
+            filters.Sort();
+            return filters;
         }
 
         private async Task<string> GetAdultPersonTypeId()
