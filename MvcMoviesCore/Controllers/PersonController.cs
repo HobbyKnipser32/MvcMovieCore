@@ -216,7 +216,10 @@ namespace MvcMoviesCore.Controllers
 
             person.MoviesPerson = [.. person.MoviesPerson.OrderBy(o => o.Movies.Name).ThenBy(t => t.Movies.YearOfPublication)];
 
-            ViewData["Filter"] = await GetFilters(id.Value);
+            var adultPersonTypeId = await GetAdultPersonTypeId();
+            var isPracticeFilter = adultPersonTypeId.Equals(person.PersonType.Id.ToString());
+
+            ViewData["Filter"] = isPracticeFilter ?  await GetPracticeFilters(id.Value) : await GetRoleFilters(id.Value);
             ViewData["AdultPersonType"] = await GetAdultPersonTypeId();
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
             ViewData["ImageSource"] = "";
@@ -505,7 +508,7 @@ namespace MvcMoviesCore.Controllers
             return _context.Person.Any(e => e.Id.Equals(id));
         }
 
-        private async Task<List<string>> GetFilters(Guid personId)
+        private async Task<List<string>> GetPracticeFilters(Guid personId)
         {
             List<string> filters = [];
             var moviePerson = await _context.MoviesPerson.Where(w => w.PersonId.Equals(personId) && w.Practices != null).Select(s => s.Practices).ToListAsync();
@@ -516,12 +519,30 @@ namespace MvcMoviesCore.Controllers
                     var practices = item.Split(",");
                     if (practices.Length > 0)
                     {
-                        foreach(var practice in practices)
+                        foreach (var practice in practices)
                         {
                             filters.Add(practice.Trim());
                         }
                     }
                 }
+            }
+            filters = [.. filters.Distinct()];
+            filters.Sort();
+            return filters;
+        }
+
+        private async Task<List<string>> GetRoleFilters(Guid personId)
+        {
+            List<string> filters = [];
+            var roles = await _context
+                .MoviesPerson
+                .Include(i => i.MovieRole)
+                .Where(w => w.PersonId.Equals(personId) && w.MovieRoleId != null)
+                .Select(s => s.MovieRole.Name)
+                .ToListAsync();
+            if (roles.Count != 0)
+            {
+                filters.AddRange(roles);
             }
             filters = [.. filters.Distinct()];
             filters.Sort();

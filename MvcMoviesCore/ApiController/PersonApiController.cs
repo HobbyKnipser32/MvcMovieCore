@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace MvcMoviesCore.ApiController
 {
@@ -239,8 +240,8 @@ namespace MvcMoviesCore.ApiController
             return Ok(jsonResult);
         }
 
-        [HttpGet("GetFilterElements/{personId}")]
-        public async Task<IActionResult> GetFilterElements(Guid personId)
+        [HttpGet("GetPracticeFilterElements/{personId}")]
+        public async Task<IActionResult> GetPracticeFilterElements(Guid personId)
         {
             string jsonResult;
             List<string> filters = [];
@@ -539,65 +540,23 @@ namespace MvcMoviesCore.ApiController
         public async Task<IActionResult> PracticeFilter([FromForm] PracticeFilterViewModel filter)
         {
             if (filter.PersonId == Guid.Empty)
-            { 
-                return BadRequest(); 
+            {
+                return BadRequest();
             }
             if (filter.CheckedValues == null || filter.CheckedValues.Length == 0)
             {
                 return await GetMovies(filter.PersonId);
             }
-            string jsonResult;
-            var personMovies = await _context.MoviesPerson
-                .Include(i => i.Person)
-                .Include(i => i.Movies)
-                .Include(i => i.MovieRole)
-                .Where(w => w.PersonId.Equals(filter.PersonId) && w.Practices != null)
-                .ToListAsync();
-            List<PersonMoviesViewModel> movies = [];
-            try
-            {
-                foreach (var personMovie in personMovies)
-                {
-                    var movie = new PersonMoviesViewModel()
-                    {
-                        Alter = personMovie.Movies.GetActorsAgeInMovie(personMovie.Person.Birthday, personMovie.Movies.YearOfPublication),
-                        Bewertung = string.Format("{0:0.#}", personMovie.Movies.Ranking), //.ToString(),
-                        Id = personMovie.MoviesId,
-                        Laufzeit = string.Format("{0:0.0}", personMovie.Movies.RunTime), //.ToString(),
-                        Name = personMovie.Movies.Name,
-                        OnWatch = personMovie.Movies.OnWatch,
-                        Role = personMovie.MovieRole?.Name != null ? personMovie.MovieRole.Name : string.Empty,
-                        PersonMovieId = personMovie.Id,
-                        Praxis = personMovie.Practices
-                    };
-                    if (personMovie.Movies.YearOfPublication != null) { movie.Erscheinungsjahr = personMovie.Movies.YearOfPublication.Value.Year.ToString(); }
-                    else { movie.Erscheinungsjahr = string.Empty; }
-                    movies.Add(movie);
-                }
-                List<PersonMoviesViewModel> filteredMovies = [];
-                foreach(var checkedValue in filter.CheckedValues)
-                {
-                    var selectMovies = movies.Where(w => w.Praxis.Contains(checkedValue)).ToList();
-                    if (selectMovies.Count > 0)
-                        foreach(var selectMovie in selectMovies)
-                        {
-                            var currentMovie = filteredMovies.FirstOrDefault(w => w.Id.Equals(selectMovie.Id));
-                            if (currentMovie == null)
-                                filteredMovies.Add(selectMovie);
-                        }
-                }
 
-                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-                jsonResult = JsonConvert.SerializeObject(filteredMovies.OrderBy(o => o.Name).ThenBy(t => t.Alter), Formatting.Indented, jsonSerializerSettings);
-            }
-            catch
-            {
-                jsonResult = string.Empty;
-            }
+            string jsonResult;
+            var isAdultFilter = await IsPersonAdult(filter.PersonId);
+            if (isAdultFilter)
+                jsonResult = await GetPracticeFilter(filter);
+            else
+                jsonResult = await GetRoleFilter(filter);
 
             return Ok(jsonResult);
         }
-
 
         [HttpPost("Filter")]
         public async Task<IActionResult> Filter([FromForm] FilterPersonViewModel filter)
@@ -704,6 +663,129 @@ namespace MvcMoviesCore.ApiController
             persons.ForEach(f => f.Sex.Person = null);
 
             return persons;
+        }
+
+        private async Task<bool> IsPersonAdult(Guid personId)
+        {
+            var personType = await _context
+                .PersonType
+                .FirstOrDefaultAsync(f => f.Name.ToLower().Contains("adult"));
+            if (personType != null)
+            {
+                var person = await _context
+                    .Person
+                    .FirstOrDefaultAsync(f => f.Id.Equals(personId) && f.PersonTypesId.Equals(personType.Id));
+                if (person != null)
+                    return true;
+            }
+            return false;
+        }
+
+        private async Task<string> GetPracticeFilter(PracticeFilterViewModel filter)
+        {
+            string jsonResult;
+            var personMovies = await _context.MoviesPerson
+                .Include(i => i.Person)
+                .Include(i => i.Movies)
+                .Include(i => i.MovieRole)
+                .Where(w => w.PersonId.Equals(filter.PersonId) && w.Practices != null)
+                .ToListAsync();
+            List<PersonMoviesViewModel> movies = [];
+            try
+            {
+                foreach (var personMovie in personMovies)
+                {
+                    var movie = new PersonMoviesViewModel()
+                    {
+                        Alter = personMovie.Movies.GetActorsAgeInMovie(personMovie.Person.Birthday, personMovie.Movies.YearOfPublication),
+                        Bewertung = string.Format("{0:0.#}", personMovie.Movies.Ranking),
+                        Id = personMovie.MoviesId,
+                        Laufzeit = string.Format("{0:0.0}", personMovie.Movies.RunTime),
+                        Name = personMovie.Movies.Name,
+                        OnWatch = personMovie.Movies.OnWatch,
+                        Role = personMovie.MovieRole?.Name != null ? personMovie.MovieRole.Name : string.Empty,
+                        PersonMovieId = personMovie.Id,
+                        Praxis = personMovie.Practices
+                    };
+                    if (personMovie.Movies.YearOfPublication != null) { movie.Erscheinungsjahr = personMovie.Movies.YearOfPublication.Value.Year.ToString(); }
+                    else { movie.Erscheinungsjahr = string.Empty; }
+                    movies.Add(movie);
+                }
+                List<PersonMoviesViewModel> filteredMovies = [];
+                foreach (var checkedValue in filter.CheckedValues)
+                {
+                    var selectMovies = movies.Where(w => w.Praxis.Contains(checkedValue)).ToList();
+                    if (selectMovies.Count > 0)
+                        foreach (var selectMovie in selectMovies)
+                        {
+                            var currentMovie = filteredMovies.FirstOrDefault(w => w.Id.Equals(selectMovie.Id));
+                            if (currentMovie == null)
+                                filteredMovies.Add(selectMovie);
+                        }
+                }
+
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                jsonResult = JsonConvert.SerializeObject(filteredMovies.OrderBy(o => o.Name).ThenBy(t => t.Alter), Formatting.Indented, jsonSerializerSettings);
+            }
+            catch
+            {
+                jsonResult = string.Empty;
+            }
+            return jsonResult;
+        }
+
+        private async Task<string> GetRoleFilter(PracticeFilterViewModel filter)
+        {
+
+            string jsonResult;
+            var personMovies = await _context.MoviesPerson
+                .Include(i => i.Person)
+                .Include(i => i.Movies)
+                .Include(i => i.MovieRole)
+                .Where(w => w.PersonId.Equals(filter.PersonId) && w.MovieRoleId != null)
+                .ToListAsync();
+            List<PersonMoviesViewModel> movies = [];
+            try
+            {
+                foreach (var personMovie in personMovies)
+                {
+                    var movie = new PersonMoviesViewModel()
+                    {
+                        Alter = personMovie.Movies.GetActorsAgeInMovie(personMovie.Person.Birthday, personMovie.Movies.YearOfPublication),
+                        Bewertung = string.Format("{0:0.#}", personMovie.Movies.Ranking), //.ToString(),
+                        Id = personMovie.MoviesId,
+                        Laufzeit = string.Format("{0:0.0}", personMovie.Movies.RunTime), //.ToString(),
+                        Name = personMovie.Movies.Name,
+                        OnWatch = personMovie.Movies.OnWatch,
+                        Role = personMovie.MovieRole?.Name != null ? personMovie.MovieRole.Name : string.Empty,
+                        PersonMovieId = personMovie.Id
+                    };
+                    if (personMovie.Movies.YearOfPublication != null) { movie.Erscheinungsjahr = personMovie.Movies.YearOfPublication.Value.Year.ToString(); }
+                    else { movie.Erscheinungsjahr = string.Empty; }
+                    movies.Add(movie);
+                }
+                List<PersonMoviesViewModel> filteredMovies = [];
+                foreach (var checkedValue in filter.CheckedValues)
+                {
+                    var selectMovies = movies.Where(w => w.Role.Contains(checkedValue)).ToList();
+                    if (selectMovies.Count > 0)
+                        foreach (var selectMovie in selectMovies)
+                        {
+                            var currentMovie = filteredMovies.FirstOrDefault(w => w.Id.Equals(selectMovie.Id));
+                            if (currentMovie == null)
+                                filteredMovies.Add(selectMovie);
+                        }
+                }
+
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                jsonResult = JsonConvert.SerializeObject(filteredMovies.OrderBy(o => o.Name).ThenBy(t => t.Alter), Formatting.Indented, jsonSerializerSettings);
+            }
+            catch
+            {
+                jsonResult = string.Empty;
+            }
+
+            return jsonResult;
         }
 
         private bool RenameImage(Person person, out string newFileName)

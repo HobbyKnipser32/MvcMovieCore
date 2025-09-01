@@ -51,172 +51,95 @@
         <div class="col-sm-9">
             <div class="card">
                 <div class="card-body">
-                    @if (!Model.PersonTypesId.ToString().Equals(adultPersonType))
-                    {
-                        <div class="col-sm-12">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
-                                        @Html.DisplayFor(model => model.Sex.Name)
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label asp-for="Birthday" class="control-label">Geburtstag: </label>
-                                        @Html.DisplayFor(model => model.Birthday)
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label asp-for="Obit" class="control-label">Todestag: </label>
-                                        @Html.DisplayFor(model => model.Obit)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label asp-for="PersonType.Name" class="control-label">Type: </label>
-                                        @Html.DisplayFor(model => model.PersonType.Name)
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
-                                        @if (Model.Nationality != null && Model.Nationality.Name != null && Model.Nationality.Name != "-")
-                                        {
-                                            <img src="@natImgSrc" style="max-width: 100%; max-height: 16px" title="@Model.Nationality.Description" />
-                                            @Html.DisplayFor(model => model.Nationality.Name)
-                                        }
-                                        else
-                                        {
-                                            <i class="fa-solid fa-question" style="color: #74C0FC"></i>
-                                        }
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label asp-for="Classification" class="control-label">Klassifizierung: </label>
-                                        @Html.DisplayFor(model => model.Classification)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label asp-for="Height" class="control-label">Größe [m]: </label>
-                                        @Html.DisplayFor(model => model.Height)
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label asp-for="Weight" class="control-label">Gewicht [kg]: </label>
-                                        @Html.DisplayFor(model => model.Weight)
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label asp-for="BMI" class="control-label">BMI: </label>
-                                        @Html.DisplayFor(model => model.BMI)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs">
+                        <li>
+                            <a data-toggle="tab" href="#statsTab" class="nav-link nav-link-teal active" style="border: 2px solid #00677f">Stats</a>
+                        </li>
+                        @if (filter.Count() > 0)
+                        {
                             <li>
-                                <a data-toggle="tab" href="#statsTab" class="nav-link nav-link-teal active" style="border: 2px solid #00677f">Stats</a>
+                                <a data-toggle="tab" href="#filterTab" class="nav-link nav-link-violett" style="border: 2px solid rgb(108, 27, 123)">Filter</a>
                             </li>
-                            @if (filter.Count() > 0)
+                        }
+                    </ul>
+                    <div class="tab-content">
+                        <div id="statsTab" class="tab-pane active" style="border: 1px solid #00677f">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
+                                            @Html.DisplayFor(model => model.Sex.Name)
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="Birthday" class="control-label">Geburtstag: </label>
+                                            @Html.DisplayFor(model => model.Birthday)
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="Obit" class="control-label">Todestag: </label>
+                                            @Html.DisplayFor(model => model.Obit)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="PersonType.Name" class="control-label">Type: </label>
+                                            @Html.DisplayFor(model => model.PersonType.Name)
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
+                                            @if (Model.Nationality != null && Model.Nationality.Name != null && Model.Nationality.Name != "-")
+                                            {
+                                                <img src="@natImgSrc" style="max-width: 100%; max-height: 16px" title="@Model.Nationality.Description" />
+                                                @Html.DisplayFor(model => model.Nationality.Name)
+                                            }
+                                            else
+                                            {
+                                                <i class="fa-solid fa-question" style="color: #74C0FC"></i>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="Classification" class="control-label">Klassifizierung: </label>
+                                            @Html.DisplayFor(model => model.Classification)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="Height" class="control-label">Größe [m]: </label>
+                                            @Html.DisplayFor(model => model.Height)
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="Weight" class="control-label">Gewicht [kg]: </label>
+                                            @Html.DisplayFor(model => model.Weight)
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="BMI" class="control-label">BMI: </label>
+                                            @Html.DisplayFor(model => model.BMI)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (!Model.PersonTypesId.ToString().Equals(adultPersonType))
                             {
-                                <li>
-                                    <a data-toggle="tab" href="#filterTab" class="nav-link nav-link-violett" style="border: 2px solid rgb(108, 27, 123)">Filter</a>
-                                </li>
-                            }
-                        </ul>
-                        <div class="tab-content">
-                            <div id="statsTab" class="tab-pane active" style="border: 1px solid #00677f">
-                                <div class="col-sm-12">
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
-                                                @Html.DisplayFor(model => model.Sex.Name)
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label asp-for="Birthday" class="control-label">Geburtstag: </label>
-                                                @Html.DisplayFor(model => model.Birthday)
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label asp-for="Obit" class="control-label">Todestag: </label>
-                                                @Html.DisplayFor(model => model.Obit)
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label asp-for="PersonType.Name" class="control-label">Type: </label>
-                                                @Html.DisplayFor(model => model.PersonType.Name)
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
-                                                @if (Model.Nationality != null && Model.Nationality.Name != null && Model.Nationality.Name != "-")
-                                                {
-                                                    <img src="@natImgSrc" style="max-width: 100%; max-height: 16px" title="@Model.Nationality.Description" />
-                                                    @Html.DisplayFor(model => model.Nationality.Name)
-                                                }
-                                                else
-                                                {
-                                                    <i class="fa-solid fa-question" style="color: #74C0FC"></i>
-                                                }
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label asp-for="Classification" class="control-label">Klassifizierung: </label>
-                                                @Html.DisplayFor(model => model.Classification)
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label asp-for="Height" class="control-label">Größe [m]: </label>
-                                                @Html.DisplayFor(model => model.Height)
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label asp-for="Weight" class="control-label">Gewicht [kg]: </label>
-                                                @Html.DisplayFor(model => model.Weight)
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label asp-for="BMI" class="control-label">BMI: </label>
-                                                @Html.DisplayFor(model => model.BMI)
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="col-sm-12" style="display:none" id="adultStuff">
                                     <div class="row">
                                         <div class="col-sm-3">
@@ -265,49 +188,48 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="filterTab" class="tab-pane" style="border: 1px solid rgb(108, 27, 123)">
-                                @if (filter.Count() > 0)
+                            }
+                        </div>
+                        <div id="filterTab" class="tab-pane" style="border: 1px solid rgb(108, 27, 123)">
+                            @if (filter.Count() > 0)
+                            {
+                                int i = 0;
+                                int rows = filter.Count() / 6 + 1;
+                                for (int row = 1; row <= rows; row++)
                                 {
-                                    int i = 0;
-                                    int rows = filter.Count() / 6 + 1;
-                                    for (int row = 1; row <= rows; row++)
-                                    {
-                                        <div class="col-sm-12">
-                                            <div class="row">
-                                                @for (int j = 0; j < 6; j++)
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            @for (int j = 0; j < 6; j++)
+                                            {
+                                                if (i >= filter.Count())
                                                 {
-                                                    if (i >= filter.Count())
-                                                    {
-                                                        break;
-                                                    }
-                                                    var id = "filter" + i;
-                                                    var name = "filter" + i;
-                                                    <div class="col-sm-2">
-                                                        <div class="form-group">
-                                                            <input type="checkbox" id="@id" name="@name" value="@filter[i]" onclick="setFilter('@Model.Id')" class="filter" />
-                                                            <label for="@id">@filter[i]</label>
-                                                        </div>
-                                                    </div>
-                                                    i++;
+                                                    break;
                                                 }
-                                            </div>
+                                                var id = "filter" + i;
+                                                var name = "filter" + i;
+                                                <div class="col-sm-2">
+                                                    <div class="form-group">
+                                                        <input type="checkbox" id="@id" name="@name" value="@filter[i]" onclick="setFilter('@Model.Id')" class="filter" />
+                                                        <label for="@id">@filter[i]</label>
+                                                    </div>
+                                                </div>
+                                                i++;
+                                            }
                                         </div>
-                                    }
+                                    </div>
                                 }
-                                <div class="col-sm-12">
-                                    <div class="row">
-                                        <div class="form-group" align="right">
-                                            <button class="btn btn-rose btn-fab" type="button" id="deleteFilter" title="Filter löschen" onclick="clearFilter()">
-                                                <i class="fa-regular fa-trash-can fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
-                                            </button>
-                                        </div>
+                            }
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="form-group" align="right">
+                                        <button class="btn btn-rose btn-fab" type="button" id="deleteFilter" title="Filter löschen" onclick="clearFilter()">
+                                            <i class="fa-regular fa-trash-can fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    }
-
+                    </div>
                 </div>
             </div>
         </div>
@@ -605,27 +527,27 @@
                 "PersonId": id,
                 "CheckedValues": checkedValues
             };
-                $.ajax({
-                    url: appRootPath + '/api/PersonApi/PracticeFilter',
-                    type: 'post',
-                    data: { filter: filter},
-                    beforeSend: function(){ $('.loader').show() },
-                    success: function (content) {
-                        let movieTable = $('#personMovies').DataTable();
-                        movieTable.clear().draw();
-                        movieTable.rows.add(JSON.parse(content));
-                        movieTable.draw(false);
-                    },
-                    fail: function (response) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Daten konnten nicht gefiltert werden!',
-                            footer: response.responseText
-                        })
-                    },
-                    complete: function(){ $('.loader').hide() }
-                });
+            $.ajax({
+                url: appRootPath + '/api/PersonApi/PracticeFilter',
+                type: 'post',
+                data: { filter: filter},
+                beforeSend: function(){ $('.loader').show() },
+                success: function (content) {
+                    let movieTable = $('#personMovies').DataTable();
+                    movieTable.clear().draw();
+                    movieTable.rows.add(JSON.parse(content));
+                    movieTable.draw(false);
+                },
+                fail: function (response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Daten konnten nicht gefiltert werden!',
+                        footer: response.responseText
+                    })
+                },
+                complete: function(){ $('.loader').hide() }
+            });
         }
 
         function clearFilter(){
