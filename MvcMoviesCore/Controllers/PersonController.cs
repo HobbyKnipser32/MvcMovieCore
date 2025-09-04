@@ -219,7 +219,7 @@ namespace MvcMoviesCore.Controllers
             var adultPersonTypeId = await GetAdultPersonTypeId();
             var isPracticeFilter = adultPersonTypeId.Equals(person.PersonType.Id.ToString());
 
-            ViewData["Filter"] = isPracticeFilter ?  await GetPracticeFilters(id.Value) : await GetRoleFilters(id.Value);
+            ViewData["Filter"] = isPracticeFilter ? await GetPracticeFilters(id.Value) : await GetRoleFilters(id.Value);
             ViewData["AdultPersonType"] = await GetAdultPersonTypeId();
             ViewData["OriginalFileDirectory"] = _originalFileDirectory;
             ViewData["ImageSource"] = "";

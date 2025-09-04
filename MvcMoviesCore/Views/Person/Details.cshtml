@@ -138,9 +138,9 @@
                                     </div>
                                 </div>
                             </div>
-                            @if (!Model.PersonTypesId.ToString().Equals(adultPersonType))
+                            @if (Model.PersonTypesId.ToString().Equals(adultPersonType))
                             {
-                                <div class="col-sm-12" style="display:none" id="adultStuff">
+                                <div class="col-sm-12" id="adultStuff">
                                     <div class="row">
                                         <div class="col-sm-3">
                                             <div class="form-group">
