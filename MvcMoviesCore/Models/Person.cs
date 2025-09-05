@@ -34,7 +34,7 @@ namespace MvcMoviesCore.Models
 
         public Guid? NationalityId { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:n}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:F}")]
         [RegularExpression(@"^\d{1}\,?\d{0,2}$", ErrorMessage = "Valid Decimal number with maximum  decimal places.")]
         public decimal? Height { get; set; }
 

@@ -209,11 +209,29 @@
                         },
                         {
                             data: 'Height',
+                            render: function (data, type) {
+                                if (type === 'sort'){
+                                    return data;
+                                }
+                                if (type === 'display' && data) {
+                                    return data.toFixed(2);
+                                }
+                                return '';
+                            },
                             type: 'html-num',
                             className: 'dt-body-right'
                         },
                         {
                             data: 'Weight',
+                            render: function (data, type) {
+                                if (type === 'sort'){
+                                    return data;
+                                }
+                                if (type === 'display' && data) {
+                                    return data.toFixed(0);
+                                }
+                                return '';
+                            },
                             type: 'html-num',
                             className: 'dt-body-right'
                         },

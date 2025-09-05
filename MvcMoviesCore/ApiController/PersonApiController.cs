@@ -101,6 +101,7 @@ namespace MvcMoviesCore.ApiController
                 .Include(i => i.Person)
                 .Include(i => i.Movies)
                 .Include(i => i.MovieRole)
+                .Include(i => i.Movies.RecordCarrier)
                 .Where(w => w.PersonId.Equals(personId)).ToListAsync();
             List<PersonMoviesViewModel> movies = [];
             try
@@ -116,7 +117,8 @@ namespace MvcMoviesCore.ApiController
                         Name = personMovie.Movies.Name,
                         OnWatch = personMovie.Movies.OnWatch,
                         Role = personMovie.MovieRole?.Name != null ? personMovie.MovieRole.Name : string.Empty,
-                        PersonMovieId = personMovie.Id
+                        PersonMovieId = personMovie.Id,
+                        Datenträger = personMovie.Movies.RecordCarrier.Name
                     };
                     if (!string.IsNullOrEmpty(personMovie.Practices)) { movie.Praxis = personMovie.Practices; }
                     if (personMovie.Movies.YearOfPublication != null) { movie.Erscheinungsjahr = personMovie.Movies.YearOfPublication.Value.Year.ToString(); }

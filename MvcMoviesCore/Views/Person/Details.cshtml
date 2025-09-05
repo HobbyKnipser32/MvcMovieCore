@@ -255,7 +255,7 @@
                     <thead>
                         <tr>
                             <th>Film</th>
-                            <th>Erscheinungsjahr</th>
+                            <th style="text-align:center">Erscheinungsjahr</th>
                             <th>Alter</th>
                             @if (Model.PersonType.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase))
                             {
@@ -265,10 +265,11 @@
                             {
                                 <th>Rolle</th>
                             }
-                            <th>OnWatch</th>
-                            <th>Bewertung</th>
-                            <th>Laufzeit</th>
-                            <th>&nbsp;</th>
+                            <th style="text-align:center">Datenträger</th>
+                            <th style="text-align:center">OnWatch</th>
+                            <th style="text-align:center">Bewertung</th>
+                            <th style="text-align:center">Laufzeit</th>
+                            <th style="text-align:right">&nbsp;</th>
                         </tr>
                     </thead>
                 </table>
@@ -331,7 +332,7 @@
                         }
                     },
                     {
-                        width: '13%',
+                        width: '10%',
                         data: 'Erscheinungsjahr',
                         className: 'dt-body-right'
                     },
@@ -359,16 +360,21 @@
                     },
                     {
                         width: '7%',
+                        data: 'Datenträger',
+                        className: 'dt-body-center'
+                    },
+                    {
+                        width: '7%',
                         data: 'OnWatch',
                         className: 'dt-body-center'
                     },
                     {
-                        width: '10%',
+                        width: '7%',
                         data: 'Bewertung',
                         className: 'dt-body-right'
                     },
                     {
-                        width: '8%',
+                        width: '7%',
                         data: 'Laufzeit',
                         className: 'dt-body-right'
                     },

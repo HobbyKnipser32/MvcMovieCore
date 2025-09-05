@@ -23,5 +23,7 @@ namespace MvcMoviesCore.ViewModels
         public string Bewertung { get; set; }
 
         public string Laufzeit { get; set; }
+
+        public string Datenträger { get; set; }
     }
 }
