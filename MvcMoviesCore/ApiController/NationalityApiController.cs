@@ -27,7 +27,7 @@ namespace MvcMoviesCore.ApiController
 
         public async Task<IActionResult> Get()
         {
-            var nationalities = await _context.Nationalities.ToListAsync();
+            var nationalities = await _context.Nationalities.OrderBy(o => o.Description).ToListAsync();
             if (nationalities.Count != 0)
             {
                 var persons = _context.Person.GroupBy(g => g.NationalityId).ToList();
@@ -46,7 +46,7 @@ namespace MvcMoviesCore.ApiController
         [HttpPost("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var nationality = await _context.Nationalities.FirstOrDefaultAsync(f=>f.Id.Equals(id));
+            var nationality = await _context.Nationalities.FirstOrDefaultAsync(f => f.Id.Equals(id));
 
             if (nationality == null)
                 return BadRequest("Kann Nationalität nicht finden!");

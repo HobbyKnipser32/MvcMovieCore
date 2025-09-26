@@ -55,7 +55,7 @@
                         <li>
                             <a data-toggle="tab" href="#statsTab" class="nav-link nav-link-teal active" style="border: 2px solid #00677f">Stats</a>
                         </li>
-                        @if (filter.Count() > 0)
+                        @if (filter.Count() > 1)
                         {
                             <li>
                                 <a data-toggle="tab" href="#filterTab" class="nav-link nav-link-violett" style="border: 2px solid rgb(108, 27, 123)">Filter</a>
@@ -177,13 +177,13 @@
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="startOfBusiness" class="form-label">Start of Business:</label>
-                                                @Html.DisplayFor(model => model.StartOfBusiness)
+                                                @Html.DisplayFor(model => model.StartOfBusinessWithAge)
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="endOfBusiness" class="form-label">End of Business:</label>
-                                                @Html.DisplayFor(model => model.EndOfBusiness)
+                                                @Html.DisplayFor(model => model.EndOfBusinessWithAge)
                                             </div>
                                         </div>
                                     </div>

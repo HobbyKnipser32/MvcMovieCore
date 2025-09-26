@@ -56,6 +56,38 @@ namespace MvcMoviesCore.Models
         public string? Image { get; set; }
 
         [NotMapped]
+        public string StartOfBusinessWithAge
+        {
+            get
+            {
+                if (StartOfBusiness != null)
+                {
+                    if (Birthday != null)
+                        return $"{StartOfBusiness} ({StartOfBusiness - Birthday.Value.Year})";
+                    else
+                        return StartOfBusiness.GetValueOrDefault().ToString();
+                }
+                return string.Empty;
+            }
+        }
+
+        [NotMapped]
+        public string EndOfBusinessWithAge
+        {
+            get
+            {
+                if (EndOfBusiness != null)
+                {
+                    if (Birthday != null)
+                        return $"{EndOfBusiness} ({EndOfBusiness - Birthday.Value.Year})";
+                    else
+                        return EndOfBusiness.GetValueOrDefault().ToString();
+                }
+                return string.Empty;
+            }
+        }
+
+        [NotMapped]
         public string BMI
         {
             get
