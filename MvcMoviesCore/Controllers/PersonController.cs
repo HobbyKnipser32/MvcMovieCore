@@ -225,7 +225,7 @@ namespace MvcMoviesCore.Controllers
             ViewData["ImageSource"] = "";
             if (person.PersonImages != null && person.PersonImages.Count != 0)
             {
-                var personImage = person.PersonImages.FirstOrDefault(f => f.IsMain == true);
+                var personImage = person.PersonImages.FirstOrDefault(f => f.IsMain == true && f.IsDeleted == false);
                 if (personImage != null)
                     ViewData["ImageSource"] = $"{_originalFileDirectory}/{personImage.PersonId}/{personImage.Name}";
             }
