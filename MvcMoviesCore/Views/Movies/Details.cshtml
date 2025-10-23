@@ -234,7 +234,7 @@
                 columns: [
                     {
                         data: 'Person.PersonImages',
-                        render: function (data, type, full) {
+                        render: function (data, type) {
                             if (type === 'display') {
                                 if (data && data.length > 0) {
                                     var src = '@imageSource/' + data[0].PersonId + '/' + data[0].Name
@@ -257,7 +257,7 @@
                     },
                     {
                         data: 'Person',
-                        render: function (data, type, full, meta) {
+                        render: function (data, type) {
                             if (data && type === 'display') {
                                 var url = '@Url.Action("Details", "Person")' + '/' + data.Id;
                                 return '<a href="' + url + '">' + data.Name;
