@@ -454,6 +454,12 @@ namespace MvcMoviesCore.ApiController
                 bool isMain = false;
                 if (imageNumber == 1)
                     isMain = true;
+                else
+                {
+                    var isImageMain = await _context.PersonImage.FirstOrDefaultAsync(f => f.Id.Equals(personId) && !f.IsDeleted && f.IsMain);
+                    if (isImageMain == null)
+                        isMain = true;
+                }
                 var personImage = new PersonImage()
                 {
                     ChangedAt = DateTime.Now,
@@ -488,10 +494,11 @@ namespace MvcMoviesCore.ApiController
                     if (personImage.IsMain)
                     {
                         personImage.IsMain = false;
-                        var personImageNumber = await _context.PersonImage.Where(f => f.PersonId.Equals(personId) && !f.IsDeleted && !f.IsMain).MinAsync(m => m.Number);
-                        if (personImageNumber != 0)
+                        var personImageNumbers = await _context.PersonImage.Where(f => f.PersonId.Equals(personId) && !f.IsDeleted && !f.IsMain).ToListAsync();//.MinAsync(m => m.Number);
+                        if (personImageNumbers.Count > 0)
                         {
                             //personImageNumber++;
+                            var personImageNumber = personImageNumbers.Min(m => m.Number);
                             var personImageMain = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(personId) && f.Number == personImageNumber);
                             if (personImageMain != null)
                             {
@@ -506,6 +513,10 @@ namespace MvcMoviesCore.ApiController
                 }
                 var filePath = Path.Combine(_webHostEnvironment.WebRootPath, _originalFilePath, personImage.PersonId.ToString(), personImage.Name);
                 System.IO.File.Delete(filePath);
+                return Ok();
+            }
+            catch (DirectoryNotFoundException)
+            {
                 return Ok();
             }
             catch (Exception ex)
