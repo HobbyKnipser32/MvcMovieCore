@@ -13,7 +13,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace MvcMoviesCore.ApiController
 {
@@ -47,7 +46,7 @@ namespace MvcMoviesCore.ApiController
         #endregion
 
         #region public functions
-
+        
         [HttpGet("GetPersonsWithoutImage")]
         public async Task<IActionResult> GetPersonsWithoutImage()
         {
@@ -66,7 +65,7 @@ namespace MvcMoviesCore.ApiController
             {
                 var personType = await _context.PersonType.FirstOrDefaultAsync(f => f.Name.ToLower().Contains("adult"));
                 if (personType != null)
-                    persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id)).ToList();
+                    persons = [.. persons.Where(w => !w.PersonTypesId.Equals(personType.Id))];
             }
 
             persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
@@ -82,6 +81,7 @@ namespace MvcMoviesCore.ApiController
             var jsonResult = JsonConvert.SerializeObject(persons.Where(w => w.MoviesPerson.Count > 0), Formatting.Indented, jsonSerializerSettings);
             return Ok(jsonResult);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -151,7 +151,7 @@ namespace MvcMoviesCore.ApiController
                 {
                     _scenes ??= await _context.Scenes.ToListAsync();
 
-                    scenes = _scenes.Where(w => w.MoviesPersonsId.Equals(personMovie.Id)).Select(s => s.Scene).ToList();
+                    scenes = [.. _scenes.Where(w => w.MoviesPersonsId.Equals(personMovie.Id)).Select(s => s.Scene)];
                     if (scenes.Count != 0)
                     {
                         foreach (var scene in scenes)
@@ -299,7 +299,7 @@ namespace MvcMoviesCore.ApiController
                 }
 
                 if (!_showAdult)
-                    persons = persons.Where(w => !w.PersonType.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase)).ToList();
+                    persons = [.. persons.Where(w => !w.PersonType.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase))];
 
                 var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
                 var jsonResult = JsonConvert.SerializeObject(persons, Formatting.Indented, jsonSerializerSettings);
@@ -339,7 +339,7 @@ namespace MvcMoviesCore.ApiController
                 }
 
                 if (!_showAdult)
-                    persons = persons.Where(w => !w.PersonType.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase)).ToList();
+                    persons = [.. persons.Where(w => !w.PersonType.Name.Contains("adult", StringComparison.CurrentCultureIgnoreCase))];
 
                 var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
                 var jsonResult = JsonConvert.SerializeObject(persons, Formatting.Indented, jsonSerializerSettings);
