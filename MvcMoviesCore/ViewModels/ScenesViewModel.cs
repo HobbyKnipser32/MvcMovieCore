@@ -9,5 +9,7 @@ namespace MvcMoviesCore.ViewModels
         public string Sex { get; set; }
         public string Name { get; set; }
         public int? Classification { get; set; }
+        public string ActorsAge { get; set; }
+        public string Practice { get; set; }
     }
 }

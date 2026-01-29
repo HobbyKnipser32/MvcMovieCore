@@ -456,7 +456,7 @@ namespace MvcMoviesCore.ApiController
                     isMain = true;
                 else
                 {
-                    var isImageMain = await _context.PersonImage.FirstOrDefaultAsync(f => f.Id.Equals(personId) && !f.IsDeleted && f.IsMain);
+                    var isImageMain = await _context.PersonImage.FirstOrDefaultAsync(f => f.PersonId.Equals(personId) && !f.IsDeleted && f.IsMain);
                     if (isImageMain == null)
                         isMain = true;
                 }

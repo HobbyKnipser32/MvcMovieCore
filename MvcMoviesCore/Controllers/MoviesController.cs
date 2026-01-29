@@ -433,7 +433,9 @@ namespace MvcMoviesCore.Controllers
                             Nr = scene.Scene,
                             Name = moviePerson.Person.Name,
                             Sex = moviePerson.Person.Sex.Name,
-                            Classification = moviePerson.Person.Classification
+                            Classification = moviePerson.Person.Classification,
+                            ActorsAge = moviePerson.Person.GetActorsAge(moviePerson.Person.Birthday, moviePerson.Person.Obit),
+                            Practice = moviePerson.Practices,
                         });
                     }
                 }

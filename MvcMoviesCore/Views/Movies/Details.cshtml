@@ -179,11 +179,27 @@
                                             {
                                                 <b>
                                                     @Html.ActionLink(t.Name, actionName: "Details", controllerName: "Person", routeValues: new { id = t.PersonId })
+                                                    <text>
+                                                        &nbsp;
+                                                        [@t.ActorsAge]
+                                                        &nbsp;
+                                                        <i>
+                                                            [@t.Practice]
+                                                        </i>
+                                                    </text>
                                                 </b>
                                             }
                                             else
                                             {
                                                 @Html.ActionLink(t.Name, actionName: "Details", controllerName: "Person", routeValues: new { id = t.PersonId })
+                                                <text>
+                                                    &nbsp;
+                                                    [@t.ActorsAge]
+                                                    &nbsp;
+                                                    <i>
+                                                        [@t.Practice]
+                                                    </i>
+                                                </text>
                                             }
                                             j++;
                                             if (j < count)
