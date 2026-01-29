@@ -427,7 +427,7 @@ namespace MvcMoviesCore.Controllers
                 {
                     foreach (var scene in scenen)
                     {
-                        scenes.Add(new ScenesViewModel
+                        var currentScene = new ScenesViewModel
                         {
                             PersonId = moviePerson.Person.Id,
                             Nr = scene.Scene,
@@ -435,8 +435,19 @@ namespace MvcMoviesCore.Controllers
                             Sex = moviePerson.Person.Sex.Name,
                             Classification = moviePerson.Person.Classification,
                             ActorsAge = moviePerson.Person.GetActorsAge(moviePerson.Person.Birthday, moviePerson.Person.Obit),
-                            Practice = moviePerson.Practices,
-                        });
+                        };
+                        if (string.IsNullOrEmpty(moviePerson.Practices))
+                        {
+                            currentScene.Practice = "N/A";
+                        }
+                        else
+                        {
+                            if (moviePerson.Practices.Length > 50)
+                                currentScene.Practice = moviePerson.Practices[..50] + "...";
+                            else
+                                currentScene.Practice = moviePerson.Practices;
+                        }
+                        scenes.Add(currentScene);
                     }
                 }
             }
