@@ -434,7 +434,7 @@ namespace MvcMoviesCore.Controllers
                             Name = moviePerson.Person.Name,
                             Sex = moviePerson.Person.Sex.Name,
                             Classification = moviePerson.Person.Classification,
-                            ActorsAge = moviePerson.Person.GetActorsAge(moviePerson.Person.Birthday, moviePerson.Person.Obit),
+                            ActorsAge = moviePerson.Person.GetActorsAgeInMovie(moviePerson.Person.Birthday, moviePerson.Movies.YearOfPublication),
                         };
                         if (string.IsNullOrEmpty(moviePerson.Practices))
                         {
@@ -442,10 +442,7 @@ namespace MvcMoviesCore.Controllers
                         }
                         else
                         {
-                            if (moviePerson.Practices.Length > 50)
-                                currentScene.Practice = moviePerson.Practices[..50] + "...";
-                            else
-                                currentScene.Practice = moviePerson.Practices;
+                            currentScene.Practice = moviePerson.Practices;
                         }
                         scenes.Add(currentScene);
                     }

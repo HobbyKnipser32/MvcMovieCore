@@ -175,6 +175,9 @@
                                         }
                                         @foreach (var t in s)
                                         {
+                                            var practiceText = t.Practice;
+                                            if (!string.IsNullOrEmpty(t.Practice) && t.Practice.Length > 25)
+                                                practiceText = $"{t.Practice[..25]} ...";
                                             if (t.Classification < 8)
                                             {
                                                 <b>
@@ -184,7 +187,7 @@
                                                         [@t.ActorsAge]
                                                         &nbsp;
                                                         <i>
-                                                            [@t.Practice]
+                                                            <text title="@t.Practice">[@practiceText]</text>
                                                         </i>
                                                     </text>
                                                 </b>
@@ -197,7 +200,7 @@
                                                     [@t.ActorsAge]
                                                     &nbsp;
                                                     <i>
-                                                        [@t.Practice]
+                                                        <text title="@t.Practice">[@practiceText]</text>
                                                     </i>
                                                 </text>
                                             }
