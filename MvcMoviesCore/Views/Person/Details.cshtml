@@ -39,7 +39,10 @@
                                 @foreach (var image in Model.PersonImages)
                                 {
                                     var src = $"{originalFileDirectory}/{image.PersonId}/{image.Name}";
-                                    <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" />
+                                    <div class="image-container">
+                                        <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" />
+                                        <img class="image-large" src="@src" />
+                                    </div>
                                 }
                             </div>
                         }
@@ -304,7 +307,7 @@
     <partial name="_ShowImageModalScripts" />
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             const personId = '@Model.Id';
             $('#personMovies').DataTable({
                 ordering: true,
@@ -316,19 +319,19 @@
                 ajax: {
                     url: appRootPath + '/api/PersonApi/GetMovies/' + personId,
                     dataSrc: '',
-                    beforeSend: function(){ $('.loader').show() },
-                    complete: function(){ $('.loader').hide() }
+                    beforeSend: function() { $('.loader').show() },
+                    complete: function() { $('.loader').hide() }
                 },
                 columns: [
                     {
                         width: '30%',
                         data: 'Name',
-                        render: function(data, type, full){
-                            if (data && type === 'display'){
+                        render: function(data, type, full) {
+                            if (data && type === 'display') {
                                 var url = '@Url.Action("Details", "Movies")' + '/' + full.Id;
                                 return '<a href="' + url + '">' + data;
                             }
-                             return '';
+                            return '';
                         }
                     },
                     {
@@ -344,16 +347,16 @@
                     {
                         width: '25%',
                         data: 'Role',
-                        render: function(data, type, full){
-                            if (data){
-                                if (full.Praxis === null){
+                        render: function(data, type, full) {
+                            if (data) {
+                                if (full.Praxis === null) {
                                     return data;
                                 }
-                                else{
+                                else {
                                     return full.Praxis;
                                 }
                             }
-                            else{
+                            else {
                                 return '';
                             }
                         }
@@ -381,11 +384,11 @@
                     {
                         width: '7%',
                         data: 'PersonMovieId',
-                        render: function(data, type, full){
-                            if (data && type === 'display'){
+                        render: function(data, type, full) {
+                            if (data && type === 'display') {
                                 let personMovieId = "'" + data + "'";
                                 return '<a title="löschen" onclick="deleteLink(' + personMovieId + ')">' +
-                                        '<i class="fa-solid fa-trash fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>'
+                                    '<i class="fa-solid fa-trash fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>'
                             }
                             return '';
                         },
@@ -406,7 +409,7 @@
                     { data: 'Person' },
                     {
                         data: 'Film',
-                        render: function (data, type) {
+                        render: function(data, type) {
                             if (data && type === 'display') {
                                 var url = '@Url.Action("Details", "Movies")' + '/' + data.Id;
                                 return '<a href="' + url + '">' + data.Name; /*  + '< /a>'; */
@@ -423,14 +426,14 @@
                     header: true,
                 },
                 searchHighlight: true,
-                drawCallback: function (settings) {
+                drawCallback: function(settings) {
                     var api = this.api();
                     var rows = api.rows({ page: 'current' }).nodes();
                     var last = null;
 
                     api.column(groupColumn, { page: 'current' })
                         .data()
-                        .each(function (group, i) {
+                        .each(function(group, i) {
                             if (last !== group) {
                                 $(rows)
                                     .eq(i)
@@ -446,7 +449,7 @@
                 }
             });
 
-            $('#personDetails tbody').on('click', 'tr.group', function () {
+            $('#personDetails tbody').on('click', 'tr.group', function() {
                 var currentOrder = table.order()[0];
                 if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
                     table.order([groupColumn, 'desc']).draw();
@@ -466,10 +469,10 @@
                 $('#adultStuff').hide();
             };
 
-            $('.image-container').on('mouseenter', function () {
+            $('.image-container').on('mouseenter', function() {
                 onMouseEnter(this);
             });
-            $('.image-container').on('mouseleave', function () {
+            $('.image-container').on('mouseleave', function() {
                 onMouseLeave(this);
             });
         })
@@ -500,7 +503,7 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Ja',
                 cancelButtonText: 'Nein'
-            }).then(function (result) {
+            }).then(function(result) {
                 if (result.value) {
                     var url = appRootPath + '/api/PersonApi/DeleteMoviePerson?moviePersonId=' + id;
                     $.ajax({
@@ -508,11 +511,11 @@
                         type: 'POST',
                         async: false,
                         statusCode: {
-                            404: function () {
+                            404: function() {
                                 alert("function not found");
                             }
                         },
-                        success: function () {
+                        success: function() {
                             $('#personMovies').DataTable().ajax.reload();
                             Swal.fire({
                                 icon: 'success',
@@ -526,7 +529,7 @@
             });
         };
 
-        function setFilter(id){
+        function setFilter(id) {
             var checkedValues = $('input:checkbox:checked').map((i, el) => el.value).get();
 
             let filter = {
@@ -536,15 +539,15 @@
             $.ajax({
                 url: appRootPath + '/api/PersonApi/PracticeFilter',
                 type: 'post',
-                data: { filter: filter},
-                beforeSend: function(){ $('.loader').show() },
-                success: function (content) {
+                data: { filter: filter },
+                beforeSend: function() { $('.loader').show() },
+                success: function(content) {
                     let movieTable = $('#personMovies').DataTable();
                     movieTable.clear().draw();
                     movieTable.rows.add(JSON.parse(content));
                     movieTable.draw(false);
                 },
-                fail: function (response) {
+                fail: function(response) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -552,11 +555,11 @@
                         footer: response.responseText
                     })
                 },
-                complete: function(){ $('.loader').hide() }
+                complete: function() { $('.loader').hide() }
             });
         }
 
-        function clearFilter(){
+        function clearFilter() {
             $("#filterTab").find('input:checkbox').prop('checked', false);
             $('#personMovies').DataTable().ajax.reload();
         }
