@@ -69,35 +69,35 @@
                         <div id="statsTab" class="tab-pane active" style="border: 1px solid #00677f">
                             <div class="col-sm-12">
                                 <div class="row">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label asp-for="Sex.Name" class="control-label">Geschlecht: </label>
                                             @Html.DisplayFor(model => model.Sex.Name)
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label asp-for="Birthday" class="control-label">Geburtstag: </label>
                                             @Html.DisplayFor(model => model.Birthday)
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label asp-for="Obit" class="control-label">Todestag: </label>
                                             @Html.DisplayFor(model => model.Obit)
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label asp-for="PersonType.Name" class="control-label">Type: </label>
+                                            @Html.DisplayFor(model => model.PersonType.Name)
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label asp-for="PersonType.Name" class="control-label">Type: </label>
-                                            @Html.DisplayFor(model => model.PersonType.Name)
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label asp-for="Nationality.Name" class="control-label">Nationalität: </label>
                                             @if (Model.Nationality != null && Model.Nationality.Name != null && Model.Nationality.Name != "-")
@@ -111,29 +111,41 @@
                                             }
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label asp-for="Classification" class="control-label">Klassifizierung: </label>
                                             @Html.DisplayFor(model => model.Classification)
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label asp-for="EyeColors.Color" class="control-label">Augenfarbe: </label>
+                                            @Html.DisplayFor(model => model.EyeColors.Color)
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label asp-for="HairColors.Color" class="control-label">Haarfarbe: </label>
+                                            @Html.DisplayFor(model => model.HairColors.Color)
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="row">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label asp-for="Height" class="control-label">Größe [m]: </label>
                                             @Html.DisplayFor(model => model.Height)
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label asp-for="Weight" class="control-label">Gewicht [kg]: </label>
                                             @Html.DisplayFor(model => model.Weight)
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label asp-for="BMI" class="control-label">BMI: </label>
                                             @Html.DisplayFor(model => model.BMI)
@@ -141,7 +153,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if (Model.PersonTypesId.ToString().Equals(adultPersonType))
+                            @if (Model.PersonTypeId.ToString().Equals(adultPersonType))
                             {
                                 <div class="col-sm-12" id="adultStuff">
                                     <div class="row">
@@ -460,7 +472,7 @@
             });
 
             var adultPersonType = '@adultPersonType';
-            var modelPersonType = '@Model.PersonTypesId.ToString()';
+            var modelPersonType = '@Model.PersonTypeId.ToString()';
 
             if (modelPersonType === adultPersonType) {
                 $('#adultStuff').show();

@@ -164,6 +164,8 @@ namespace MvcMoviesCore.Controllers
                                   .Include(i => i.PersonType)
                                   .Include(i => i.Sex)
                                   .Include(i => i.Nationality)
+                                  .Include(i => i.EyeColors)
+                                  .Include(i => i.HairColors)
                                   .Include(i => i.MoviesPerson)
                                   .Include(i => i.PersonImages)
                                   .Where(w => w.NationalityId.Equals(id))
@@ -174,7 +176,7 @@ namespace MvcMoviesCore.Controllers
             {
                 var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
                 if (personType != null)
-                    persons = persons.Where(w => !w.PersonTypesId.Equals(personType.Id));
+                    persons = persons.Where(w => !w.PersonTypeId.Equals(personType.Id));
             }
 
             persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
@@ -197,6 +199,8 @@ namespace MvcMoviesCore.Controllers
                 .Include(i => i.PersonType)
                 .Include(i => i.Sex)
                 .Include(i => i.Nationality)
+                .Include(i => i.EyeColors)
+                .Include(i => i.HairColors)
                 .Include(i => i.PersonImages.Where(w => !w.IsDeleted).OrderBy(o => o.Number))
                 .Include(i => i.MoviesPerson)
                 .ThenInclude(t => t.MovieRole)
@@ -259,7 +263,7 @@ namespace MvcMoviesCore.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypesId);
+            ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypeId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", personViewModel.SexId);
             //ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", personViewModel.NationalityId);
             ViewData["NationalityId"] = await GetNationalities(personViewModel.NationalityId);
@@ -281,8 +285,10 @@ namespace MvcMoviesCore.Controllers
                 return NotFound();
             }
             person.ActorsAge = person.GetActorsAge(person.Birthday, person.Obit);
-            ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", person.PersonTypesId);
+            ViewData["PersonTypesId"] = new SelectList(_context.PersonType.OrderBy(o => o.Name), "Id", "Name", person.PersonTypeId);
             ViewData["SexId"] = new SelectList(_context.Sex.OrderBy(o => o.Name), "Id", "Name", person.SexId);
+            ViewData["EyeColorIds"] = new SelectList(_context.EyeColors.OrderBy(o => o.Color), "Id", "Color", person.EyeColorId);
+            ViewData["HairColorIds"] = new SelectList(_context.HairColors.OrderBy(o => o.Color), "Id", "Color", person.HairColorId);
             //ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
             ViewData["NationalityId"] = await GetNationalities(person.NationalityId);
             ViewData["AdultPersonType"] = await GetAdultPersonTypeId();
@@ -305,7 +311,7 @@ namespace MvcMoviesCore.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id,
-            [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypesId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness,PreviousPage,Image")] PersonViewModel personViewModel)
+            [Bind("Id,Name,SexId,Birthday,Obit,NationalityId,Height,Weight,PersonTypeId,Classification,CupSize,FakeBoobs,StartOfBusiness,EndOfBusiness,PreviousPage,Image,EyeColorId,HairColorId")] PersonViewModel personViewModel)
         {
             if (id != personViewModel.Id)
             {
@@ -349,7 +355,7 @@ namespace MvcMoviesCore.Controllers
                     return Redirect(personViewModel.PreviousPage);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypesId);
+            ViewData["PersonTypesId"] = new SelectList(_context.PersonType, "Id", "Name", personViewModel.PersonTypeId);
             ViewData["SexId"] = new SelectList(_context.Sex, "Id", "Name", personViewModel.SexId);
             ViewData["NationalityId"] = await GetNationalities(personViewModel.NationalityId);
             ViewData["AdultPersonType"] = await GetAdultPersonTypeId();
@@ -585,11 +591,16 @@ namespace MvcMoviesCore.Controllers
                 existsPerson.Name = personViewModel.Name;
                 existsPerson.NationalityId = personViewModel.NationalityId;
                 existsPerson.Obit = personViewModel.Obit;
-                existsPerson.PersonTypesId = personViewModel.PersonTypesId;
+                existsPerson.PersonTypeId = personViewModel.PersonTypeId;
+                existsPerson.PersonType = null;
                 existsPerson.SexId = personViewModel.SexId;
                 existsPerson.StartOfBusiness = personViewModel.StartOfBusiness;
                 existsPerson.Weight = personViewModel.Weight;
                 existsPerson.Image = personViewModel.Image;
+                existsPerson.EyeColorId = personViewModel.EyeColorId;
+                existsPerson.HairColorId = personViewModel.HairColorId;
+                existsPerson.EyeColors = null;
+                existsPerson.HairColors = null;
             }
             else
             {
@@ -605,11 +616,16 @@ namespace MvcMoviesCore.Controllers
                     Name = personViewModel.Name,
                     NationalityId = personViewModel.NationalityId,
                     Obit = personViewModel.Obit,
-                    PersonTypesId = personViewModel.PersonTypesId,
+                    PersonTypeId = personViewModel.PersonTypeId,
+                    PersonType = null,
                     SexId = personViewModel.SexId,
                     StartOfBusiness = personViewModel.StartOfBusiness,
                     Weight = personViewModel.Weight,
                     Image = personViewModel.Image,
+                    EyeColorId = personViewModel.EyeColorId,
+                    HairColorId = personViewModel.HairColorId,
+                    EyeColors = null,
+                    HairColors = null
                 };
             }
             return existsPerson;

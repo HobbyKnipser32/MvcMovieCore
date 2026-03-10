@@ -65,7 +65,7 @@ namespace MvcMoviesCore.ApiController
             {
                 var personType = await _context.PersonType.FirstOrDefaultAsync(f => f.Name.ToLower().Contains("adult"));
                 if (personType != null)
-                    persons = [.. persons.Where(w => !w.PersonTypesId.Equals(personType.Id))];
+                    persons = [.. persons.Where(w => !w.PersonTypeId.Equals(personType.Id))];
             }
 
             persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
@@ -608,7 +608,7 @@ namespace MvcMoviesCore.ApiController
             else if (weightFrom > 0 && weightTo > 0)
                 persons = [.. persons.Where(w => w.Weight >= weightFrom && w.Weight <= weightTo)];
             if (filter.PersonType != null && filter.PersonType != Guid.Empty)
-                persons = [.. persons.Where(w => w.PersonTypesId.Equals(filter.PersonType))];
+                persons = [.. persons.Where(w => w.PersonTypeId.Equals(filter.PersonType))];
             if (filter.Sex != null && filter.Sex != Guid.Empty)
                 persons = [.. persons.Where(w => w.SexId.Equals(filter.Sex))];
 
@@ -662,7 +662,7 @@ namespace MvcMoviesCore.ApiController
             {
                 var personType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
                 if (personType != null)
-                    persons = [.. persons.Where(w => !w.PersonTypesId.Equals(personType.Id))];
+                    persons = [.. persons.Where(w => !w.PersonTypeId.Equals(personType.Id))];
             }
 
             persons.ToList().ForEach(f => f.ActorsAge = f.GetActorsAge(f.Birthday, f.Obit));
@@ -687,7 +687,7 @@ namespace MvcMoviesCore.ApiController
             {
                 var person = await _context
                     .Person
-                    .FirstOrDefaultAsync(f => f.Id.Equals(personId) && f.PersonTypesId.Equals(personType.Id));
+                    .FirstOrDefaultAsync(f => f.Id.Equals(personId) && f.PersonTypeId.Equals(personType.Id));
                 if (person != null)
                     return true;
             }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace MvcMoviesCore.Models
 {
@@ -10,7 +9,5 @@ namespace MvcMoviesCore.Models
         public int Scene { get; set; }
 
         public Guid MoviesPersonsId { get; set; }
-
-        //public virtual ICollection<MoviesPerson> MoviePersons { get; set; }
     }
 }

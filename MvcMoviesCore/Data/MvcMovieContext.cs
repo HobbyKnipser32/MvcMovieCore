@@ -36,5 +36,9 @@ namespace MvcMoviesCore.Models
         public DbSet<MovieRole> MovieRole { get; set; }
 
         public DbSet<PersonImage> PersonImage { get; set; }
+        
+        public DbSet<EyeColor> EyeColors { get; set; }
+        
+        public DbSet<HairColor> HairColors { get; set; }
     }
 }

@@ -21,12 +21,14 @@ namespace MvcMoviesCore.ViewModels
             Classification = person.Classification;
             CupSize = person.CupSize;
             FakeBoobs = person.FakeBoobs;
-            PersonTypesId = person.PersonTypesId;
+            PersonTypeId = person.PersonTypeId;
             StartOfBusiness = person.StartOfBusiness;
             EndOfBusiness = person.EndOfBusiness;
             Image = person.Image;
             ActorsAge = person.ActorsAge;
             Images = person.PersonImages;
+            EyeColorId = person.EyeColorId;
+            HairColorId = person.HairColorId;
         }
 
         public IFormFile SelectedFile { get; set; }

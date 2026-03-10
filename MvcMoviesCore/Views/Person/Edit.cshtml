@@ -5,6 +5,8 @@
     var personTypesId = ViewData["PersonTypesId"] as IEnumerable<SelectListItem>;
     var sexId = ViewData["SexId"] as IEnumerable<SelectListItem>;
     var nationalityId = ViewData["NationalityId"] as IEnumerable<SelectListItem>;
+    var eyeColorIds = ViewData["EyeColorIds"] as IEnumerable<SelectListItem>;
+    var hairColorIds = ViewData["HairColorIds"] as IEnumerable<SelectListItem>;
     var adultPersonType = ViewData["AdultPersonType"].ToString();
     var imgSrc = ViewData["ImageSource"].ToString();
     var imagePath = ViewData["ImagePath"].ToString();
@@ -76,71 +78,85 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="row">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="sexId" class="form-label">Geschlecht:</label>
                                             <select asp-for="SexId" class="form-select" asp-items="@sexId" id="sexId"></select>
                                             <span asp-validation-for="SexId" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="birthday" class="form-label">Geburtstag:</label>
                                             <input type="date" asp-for="Birthday" class="form-control" id="birthday" />
                                             <span asp-validation-for="Birthday" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="obit" class="form-label">Todestag:</label>
                                             <input type="date" asp-for="Obit" class="form-control" id="obit" />
                                             <span asp-validation-for="Obit" class="text-danger"></span>
                                         </div>
                                     </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="personTypeId" class="form-label">Type:</label>
+                                            <select asp-for="PersonTypeId" class="form-select" asp-items="@personTypesId" id="personTypeId"></select>
+                                            <span asp-validation-for="PersonTypeId" class="text-danger"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label for="personTypeId" class="form-label">Type:</label>
-                                            <select asp-for="PersonTypesId" class="form-select" asp-items="@personTypesId" id="personTypeId"></select>
-                                            <span asp-validation-for="PersonTypesId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="nationalityId" class="form-label">Nationalität:</label>
                                             <select asp-for="NationalityId" class="form-select" asp-items="@nationalityId" id="nationalityId"></select>
                                             <span asp-validation-for="NationalityId" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="classification" class="form-label">Klassifizierung:</label>
                                             <input type="number" asp-for="Classification" class="form-control" min="1" max="12" id="classification" />
                                             <span asp-validation-for="Classification" class="text-danger"></span>
                                         </div>
                                     </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="eyeColorId" class="form-label">Augenfarbe:</label>
+                                            <select asp-for="EyeColorId" class="form-select" asp-items="@eyeColorIds" id="eyeColorId"></select>
+                                            <span asp-validation-for="EyeColorId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="hairColorId" class="form-label">Haarfarbe:</label>
+                                            <select asp-for="HairColorId" class="form-select" asp-items="@hairColorIds" id="hairColorId"></select>
+                                            <span asp-validation-for="HairColorId" class="text-danger"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="row">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="height" class="form-label">Größe:</label>
                                             <input asp-for="Height" class="form-control" id="height" />
                                             <span asp-validation-for="Height" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="weight" class="form-label">Gewicht:</label>
                                             <input type="number" asp-for="Weight" class="form-control" id="weight" />
                                             <span asp-validation-for="Weight" class="text-danger"></span>
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                             <div class="col-sm-12" style="display:none" id="adultStuff">
@@ -273,7 +289,7 @@
             dropifyImage.DrawImage(imageAttributes, customMessages);
 
             var adultPersonType = '@adultPersonType';
-            var modelPersonType = '@Model.PersonTypesId.ToString()';
+            var modelPersonType = '@Model.PersonTypeId.ToString()';
 
             if (modelPersonType === adultPersonType) {
                 $('#adultStuff').show();

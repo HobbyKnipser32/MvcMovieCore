@@ -35,7 +35,7 @@ namespace MvcMoviesCore.ApiController
             var personTypes = await _context.PersonType.ToListAsync();
             if (personTypes.Count != 0)
             {
-                var persons = await _context.Person.GroupBy(g => g.PersonTypesId).ToListAsync();
+                var persons = await _context.Person.GroupBy(g => g.PersonTypeId).ToListAsync();
                 foreach (var person in persons)
                 {
                     var personType = personTypes.FirstOrDefault(f => f.Id.Equals(person.Key));
@@ -73,7 +73,7 @@ namespace MvcMoviesCore.ApiController
 
         private bool IsPersonTypeUsed(Guid id)
         {
-            return _context.Person.Any(a => a.PersonTypesId.Equals(id));
+            return _context.Person.Any(a => a.PersonTypeId.Equals(id));
         }
 
         #endregion

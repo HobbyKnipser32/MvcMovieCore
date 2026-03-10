@@ -154,7 +154,7 @@ namespace MvcMoviesCore.Controllers
                 var adultPersonType = _context.PersonType.FirstOrDefault(f => f.Name.ToLower().Contains("adult"));
                 if (adultPersonType != null)
                 {
-                    persons = _context.Person.Where(w => w.Name.Contains(searchText) && !w.PersonTypesId.Equals(adultPersonType.Id)).ToList();
+                    persons = _context.Person.Where(w => w.Name.Contains(searchText) && !w.PersonTypeId.Equals(adultPersonType.Id)).ToList();
                 }
             }
             foreach (var person in persons)

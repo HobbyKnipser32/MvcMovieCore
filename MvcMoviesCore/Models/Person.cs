@@ -35,7 +35,7 @@ namespace MvcMoviesCore.Models
         public Guid? NationalityId { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:F}")]
-        [RegularExpression(@"^\d{1}\,?\d{0,2}$", ErrorMessage = "Valid Decimal number with maximum  decimal places.")]
+        [RegularExpression(@"^\d{1}\,?\d{0,2}$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
         public decimal? Height { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:0}")]
@@ -47,13 +47,17 @@ namespace MvcMoviesCore.Models
 
         public bool FakeBoobs { get; set; } = false;
 
-        public Guid PersonTypesId { get; set; }
+        public Guid PersonTypeId { get; set; }
 
         public int? StartOfBusiness { get; set; }
 
         public int? EndOfBusiness { get; set; }
 
         public string? Image { get; set; }
+
+        public Guid? EyeColorId {  get; set; }
+
+        public Guid? HairColorId { get; set; }
 
         [NotMapped]
         public string StartOfBusinessWithAge
@@ -109,6 +113,10 @@ namespace MvcMoviesCore.Models
         public virtual Sex Sex { get; set; }
 
         public virtual Nationality Nationality { get; set; }
+
+        public virtual EyeColor EyeColors { get; set; }
+
+        public virtual HairColor HairColors { get; set; }   
 
         #region interface member
 
