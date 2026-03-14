@@ -35,12 +35,12 @@
                         }
                         else
                         {
-                            <div class="w3-content w3-section">
+                            <div class="w3-content w3-section" >
                                 @foreach (var image in Model.PersonImages)
                                 {
                                     var src = $"{originalFileDirectory}/{image.PersonId}/{image.Name}";
                                     <div class="image-container">
-                                        <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" />
+                                        <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" onclick="showImages()" />
                                         <img class="image-large" src="@src" />
                                     </div>
                                 }
@@ -309,6 +309,27 @@
         </p>
     </div>
     <div class="loader"></div>
+    <div class="col-sm-12 col-xl-12" role="dialog" tabindex="-1">
+        <input type="hidden" id="copyId" />
+        <div id="showImagesModal" style="display:none; position:fixed; z-index:100; padding-top:200px; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgb(0,0,0); background-color:rgba(0,0,0,0.4);">
+            <div style="background-color:#fefefe; margin:auto; padding:20px; border:1px solid #888; width:30%;">
+                <p id="closeCopyTippModal" title="schließen" class="closebtn" data-dismiss="modal">&times;</p>
+            </div>
+            <div>
+                <ul class="gallery">
+                    @foreach (var image in Model.PersonImages)
+                    {
+                        var src = $"{originalFileDirectory}/{image.PersonId}/{image.Name}";
+                        <li><img src="@src" /></li>
+                        @* <div class="image-container">
+                            <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" />
+                            <img class="image-large" src="@src" />
+                        </div> *@
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -574,6 +595,10 @@
         function clearFilter() {
             $("#filterTab").find('input:checkbox').prop('checked', false);
             $('#personMovies').DataTable().ajax.reload();
+        }
+
+        function showImages(){
+            $('#showImagesModal').show();
         }
     </script>
 }

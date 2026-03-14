@@ -287,8 +287,10 @@ namespace MvcMoviesCore.Controllers
             person.ActorsAge = person.GetActorsAge(person.Birthday, person.Obit);
             ViewData["PersonTypesId"] = new SelectList(_context.PersonType.OrderBy(o => o.Name), "Id", "Name", person.PersonTypeId);
             ViewData["SexId"] = new SelectList(_context.Sex.OrderBy(o => o.Name), "Id", "Name", person.SexId);
-            ViewData["EyeColorIds"] = new SelectList(_context.EyeColors.OrderBy(o => o.Color), "Id", "Color", person.EyeColorId);
-            ViewData["HairColorIds"] = new SelectList(_context.HairColors.OrderBy(o => o.Color), "Id", "Color", person.HairColorId);
+            var eyeColors = await _context.EyeColors.OrderBy(o => o.Color).ToListAsync();
+            ViewData["EyeColorIds"] = PrepareListWithNull([.. eyeColors.Select(s => new SelectListItem(s.Color, s.Id.ToString()))]);
+            var hairColors = await _context.HairColors.OrderBy(o => o.Color).ToListAsync();
+            ViewData["HairColorIds"] = PrepareListWithNull([.. hairColors.Select(s => new SelectListItem(s.Color, s.Id.ToString()))]);
             //ViewData["NationalityId"] = new SelectList(_context.Nationalities.OrderBy(o => o.Name), "Id", "Name", person.NationalityId);
             ViewData["NationalityId"] = await GetNationalities(person.NationalityId);
             ViewData["AdultPersonType"] = await GetAdultPersonTypeId();

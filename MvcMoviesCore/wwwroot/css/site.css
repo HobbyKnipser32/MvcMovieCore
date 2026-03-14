@@ -35,6 +35,7 @@ body {
         display: none;
     }
 }
+
 .select2-results__option:hover,
 .select2-results__option--highlighted {
     color: #fff !important;
@@ -101,7 +102,7 @@ body {
     max-width: auto;
     display: block;
     margin-left: auto;
-    margin-right:auto;
+    margin-right: auto;
 }
 
 .image-large {
@@ -158,6 +159,16 @@ body {
     animation-name: animatebottom;
     animation-duration: 1s
 }
+
+.gallery {
+    display: flex;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+}
+
+.gallery img {
+        scroll-snap-align: center;
+    }
 
 @-webkit-keyframes animatebottom {
     from {
