@@ -8,6 +8,7 @@
     var natImgSrc = ViewData["OriginalFileDirectory"].ToString() + "/flags/" + Model.Nationality.Name + ".png";
     var originalFileDirectory = ViewData["OriginalFileDirectory"].ToString();
     var filter = ViewData["Filter"] as List<string>;
+    int imageIndex = 1;
 }
 <div class="container-fluid">
     <h2>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.ActorsAge))</h2>
@@ -35,12 +36,12 @@
                         }
                         else
                         {
-                            <div class="w3-content w3-section" >
+                            <div class="w3-content w3-section">
                                 @foreach (var image in Model.PersonImages)
                                 {
                                     var src = $"{originalFileDirectory}/{image.PersonId}/{image.Name}";
                                     <div class="image-container">
-                                        <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" onclick="showImages()" />
+                                        <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:185px; max-width:90%" onclick="showImages()" />
                                         <img class="image-large" src="@src" />
                                     </div>
                                 }
@@ -186,7 +187,6 @@
                                                         }
                                                     }
                                                 }
-                                                @* @Html.DisplayFor(model => model.FakeBoobs) *@
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
@@ -254,7 +254,40 @@
                 <i class="fa-solid fa-pen fa-bounce" style="color: #74C0FC;  --fa-animation-duration: 2s;"></i>
             </a>
         </p>
-        <hr />
+    </div>
+
+    <hr />
+    <div class="row" id="showImagesModal" style="display:none">
+        <div class="col-sm-12 col-xl-12">
+            <div class="slideshow-container">
+                @foreach (var image in Model.PersonImages)
+                {
+                    var src = $"{originalFileDirectory}/{image.PersonId}/{image.Name}";
+                    @* <div class="myImageSlides fade"> *@
+                        <div class="myImageSlides" style="text-align:center">
+                        <div class="numbertext">@imageIndex / @Model.PersonImages.Count</div>
+                        <img src="@src" style="max-width:100%; height:600px;">
+                        <div class="text">Bild @imageIndex</div>
+                    </div>
+                    imageIndex++;
+                }
+                <!-- Next and previous buttons -->
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+            <br>
+            <!-- The dots/circles -->
+            <div style="text-align:center">
+                @for (int i = 1; i <= Model.PersonImages.Count; i++)
+                {
+                    <span class="dot" onclick="currentSlide(@i)"></span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <div class="row">
         <ul class="nav nav-tabs">
             <li>
                 <a data-toggle="tab" href="#moviesTab" class="nav-link nav-link-teal active" style="border: 1px solid #00677f">Filme</a>
@@ -309,27 +342,6 @@
         </p>
     </div>
     <div class="loader"></div>
-    <div class="col-sm-12 col-xl-12" role="dialog" tabindex="-1">
-        <input type="hidden" id="copyId" />
-        <div id="showImagesModal" style="display:none; position:fixed; z-index:100; padding-top:200px; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgb(0,0,0); background-color:rgba(0,0,0,0.4);">
-            <div style="background-color:#fefefe; margin:auto; padding:20px; border:1px solid #888; width:30%;">
-                <p id="closeCopyTippModal" title="schließen" class="closebtn" data-dismiss="modal">&times;</p>
-            </div>
-            <div>
-                <ul class="gallery">
-                    @foreach (var image in Model.PersonImages)
-                    {
-                        var src = $"{originalFileDirectory}/{image.PersonId}/{image.Name}";
-                        <li><img src="@src" /></li>
-                        @* <div class="image-container">
-                            <img class="mySlides w3-animate-fading" src="@src" style="display:block; margin-left:auto; margin-right:auto; max-height:90%; max-width:90%" />
-                            <img class="image-large" src="@src" />
-                        </div> *@
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
 </div>
 
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -346,9 +358,7 @@
                 ordering: true,
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 iDisplayLength: 25,
-                fixedHeader: {
-                    header: true,
-                },
+                fixedHeader: { header: true, },
                 ajax: {
                     url: appRootPath + '/api/PersonApi/GetMovies/' + personId,
                     dataSrc: '',
@@ -510,23 +520,6 @@
             });
         })
 
-        var myIndex = 0;
-        carousel();
-
-        function carousel() {
-            var i;
-            var x = document.getElementsByClassName("mySlides");
-            if (x.length <= 0)
-                return;
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            myIndex++;
-            if (myIndex > x.length) { myIndex = 1 }
-            x[myIndex - 1].style.display = "block";
-            setTimeout(carousel, 9000); // Change image every 9 seconds
-        }
-
         function deleteLink(id) {
             Swal.fire({
                 text: 'Verknüpfung löschen?',
@@ -597,8 +590,60 @@
             $('#personMovies').DataTable().ajax.reload();
         }
 
-        function showImages(){
-            $('#showImagesModal').show();
+        function showImages() {
+            if ($('#showImagesModal').is(':visible')) {
+                $('#showImagesModal').hide();
+            }
+            else {
+                $('#showImagesModal').show();
+            }
+                
+        }
+
+        var myIndex = 0;
+        carousel();
+
+        function carousel() {
+            var i;
+            var x = $('.mySlides');
+            if (x.length <= 0)
+                return;
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            myIndex++;
+            if (myIndex > x.length) { myIndex = 1 }
+            x[myIndex - 1].style.display = "block";
+            setTimeout(carousel, 9000); // Change image every 9 seconds
+        }
+
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        // Next/previous controls
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        // Thumbnail image controls
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = $('.myImageSlides');
+            let dots = $('.dot');
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" activeImage", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " activeImage";
         }
     </script>
 }
