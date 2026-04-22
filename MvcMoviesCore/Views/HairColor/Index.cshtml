@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <p>
         <a asp-action="Create" title="Haarfarbe hinzufügen">
-            <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE;  --fa-animation-duration: 2s;"></i>
+            <i class="fa-regular fa-square-plus fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s;"></i>
         </a>
     </p>
     <table id="hairColorIndex" class="table table-striped cell-border table-hover compact" cellspacing="0" style="width: 100%; word-wrap:break-word; table-layout: auto;">
@@ -12,11 +12,17 @@
             <tr>
                 <th>Haarfarbe</th>
                 <th>Beschreibung</th>
+                <th>Anzahl</th>
                 <th></th>
                 <th></th>
             </tr>
         </thead>
     </table>
+    <div class="col-md-6" style="margin: 0 auto;" >
+        <div>
+            <canvas id="diagram"></canvas>
+        </div>
+    </div>
     <div class="loader"></div>
 </div>
 
@@ -66,7 +72,24 @@
                     header: true,
                 },
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                iDisplayLength: 10,
+                iDisplayLength: 25,
+            });
+
+            $.ajax({
+                url: appRootPath + '/api/HairColorApi/GetDiagramData',
+                type: 'get',
+                data: '',
+                beforeSend: function(){ $('.loader').show() },
+                success: onSuccess,
+                fail: function (response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Fehler beim laden der Daten.',
+                        footer: response.responseText
+                    })
+                },
+                complete: function(){ $('.loader').hide() }
             });
         })
 
@@ -112,5 +135,35 @@
                 };
             });
         };
+
+        function onSuccess(data){
+            let datas = JSON.parse(data)
+            let chart = $('#diagram');
+            let dataChart = {
+                labels: datas.Labels,
+                backgroundColor: datas.BackgroundColor,
+                datasets:[]
+            }
+            for (let i = 0; i < datas.DataSets.length; i++){
+                let dataset = { label: datas.DataSets[i].Label, data: datas.DataSets[i].Data, type: datas.DataSets[i].Type, backgroundColor: datas.DataSets[i].BackgroundColor };
+                dataChart.datasets.push(dataset);
+            }
+
+            new Chart(chart, {
+                data: {
+                    datasets:dataChart.datasets,
+                    labels: dataChart.labels,
+                    backgroundColor: dataChart.backgroundColor
+                },
+                // options: {
+                //     scales: {
+                //         y: {
+                //             beginAtZero: true,
+                //             type: 'logarithmic',
+                //         }
+                //     }
+                // }
+            });
+        }
     </script>
 }

@@ -18,6 +18,11 @@
             </tr>
         </thead>
     </table>
+    <div class="col-md-6" style="margin: 0 auto;">
+        <div>
+            <canvas id="diagram"></canvas>
+        </div>
+    </div>
     <div class="loader"></div>
 </div>
 
@@ -69,6 +74,23 @@
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 iDisplayLength: 10,
             });
+
+             $.ajax({
+                url: appRootPath + '/api/EyeColorApi/GetDiagramData',
+                type: 'get',
+                data: '',
+                beforeSend: function(){ $('.loader').show() },
+                success: onSuccess,
+                fail: function (response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Fehler beim laden der Daten.',
+                        footer: response.responseText
+                    })
+                },
+                complete: function(){ $('.loader').hide() }
+            });
         })
 
         function deleteLink(id) {
@@ -113,5 +135,27 @@
                 };
             });
         };
+
+        function onSuccess(data){
+            let datas = JSON.parse(data)
+            let chart = $('#diagram');
+            let dataChart = {
+                labels: datas.Labels,
+                backgroundColor: datas.BackgroundColor,
+                datasets:[]
+            }
+            for (let i = 0; i < datas.DataSets.length; i++){
+                let dataset = { label: datas.DataSets[i].Label, data: datas.DataSets[i].Data, type: datas.DataSets[i].Type, backgroundColor: datas.DataSets[i].BackgroundColor };
+                dataChart.datasets.push(dataset);
+            }
+
+            new Chart(chart, {
+                data: {
+                    datasets:dataChart.datasets,
+                    labels: dataChart.labels,
+                    backgroundColor: dataChart.backgroundColor
+                }
+            });
+        }
     </script>
 }

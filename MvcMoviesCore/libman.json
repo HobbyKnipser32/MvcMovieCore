@@ -25,6 +25,10 @@
     {
       "library": "Dropify@0.2.2",
       "destination": "wwwroot/lib/Dropify/"
+    },
+    {
+      "library": "Chart.js@4.5.0",
+      "destination": "wwwroot/lib/Chart.js/"
     }
   ]
 }
