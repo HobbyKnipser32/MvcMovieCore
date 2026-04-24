@@ -310,6 +310,19 @@ namespace MvcMoviesCore.ApiController
             }
         }
 
+        [HttpPost("GenreFilter")]
+        public async Task<IActionResult> GenreFilter([FromForm] PracticeFilterViewModel filter)
+        {
+            if (filter.CheckedValues == null || filter.CheckedValues.Length == 0)
+            {
+                return await GetMovies();
+            }
+
+            var jsonResult = await GetGenreFilter(filter);
+
+            return Ok(jsonResult);
+        }
+
         #region private functions
 
         private async Task<Guid> GetMovieRoleId(string roleName)
@@ -323,6 +336,65 @@ namespace MvcMoviesCore.ApiController
             await _context.SaveChangesAsync();
 
             return movieRole.Id;
+        }
+
+        private async Task<string> GetGenreFilter(PracticeFilterViewModel filter)
+        {
+            string jsonResult;
+            var showAdult = _configuration.GetValue<bool>("AppSettings:ShowAdult");
+            var movies = await _context.Movies
+                .Include(m => m.Genre)
+                .Include(m => m.RecordCarrier)
+                .Include(m => m.StorageLocation)
+                .Include(m => m.MoviesPerson)
+                .Where(w => !string.IsNullOrEmpty(w.Genre.Name))
+                .OrderBy(o => o.Name)
+                .ToListAsync();
+
+            foreach (var movie in movies)
+            {
+                movie.Genre.Movies.Clear();
+                movie.RecordCarrier?.Movies.Clear();
+                movie.StorageLocation?.Movies.Clear();
+                movie.MoviesPerson?.Clear();
+            }
+
+            var moviesPersons = await _context.MoviesPerson
+                .Include(i => i.Person)
+                .Include(i => i.Movies)
+                .Include(i => i.MovieRole)
+                .Where(w => w.Practices != null)
+                .ToListAsync();
+            List<Movies> filteredMovies = [];
+            try
+            {
+                foreach (var checkedValue in filter.CheckedValues)
+                {
+                    var selectedMoviesPersons = moviesPersons.Where(w => w.Practices.Contains(checkedValue)).ToList();
+                    if (selectedMoviesPersons.Count > 0)
+                    {
+                        foreach (var selectMoviePerson in selectedMoviesPersons)
+                        {
+                            var currentMovie = movies.FirstOrDefault(w => w.Id.Equals(selectMoviePerson.MoviesId));
+                            if (currentMovie != null && !filteredMovies.Contains(currentMovie))
+                                filteredMovies.Add(currentMovie);
+                        }
+                    }
+                    var selectedMovies = movies.Where(w => w.Genre.Name.Contains(checkedValue) && w.Genre.IsAdult == false).ToList();
+                    if (selectedMovies.Count > 0)
+                    {
+                        filteredMovies.AddRange(selectedMovies);
+                    }
+                }
+
+                var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                jsonResult = JsonConvert.SerializeObject(filteredMovies.OrderBy(o => o.Name), Formatting.Indented, jsonSerializerSettings);
+            }
+            catch
+            {
+                jsonResult = string.Empty;
+            }
+            return jsonResult;
         }
 
         #endregion

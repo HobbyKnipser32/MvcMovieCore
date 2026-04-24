@@ -9,6 +9,7 @@
     var maxYearOfPublication = ViewData["MaxYearOfPublication"];
     var minRunTime = ViewData["MinRunTime"];
     var maxRunTime = ViewData["MaxRunTime"];
+    var filter = ViewData["Filter"] as List<string>;
 }
 <div class="container-fluid">
     <div class="row">
@@ -27,55 +28,115 @@
     </div>
     <div class="card shadow p-3 mb-5 bg-white rounded">
         <h4 class="card-title" style="color:blue; background-image: linear-gradient(to right, aliceblue, white); "><b>Filter</b></h4>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="form-group col-md-2">
-                        <label class="col-form-label">Film:</label>
-                        <input id="title" class="form-control" type="text" />
-                    </div>
-                    <div class="form-group col-md-1">
-                        <label class="col-form-label">Erscheinungsjahr:</label>
-                        <input id="yearOfPuplication" class="form-control" type="number" min="@minYearOfPublication" max="@maxYearOfPublication" />
-                    </div>
-                    <div class="form-group col-md-1">
-                        <label class="col-form-label">Laufzeit von:</label>
-                        <input id="runTimeFrom" class="form-control" type="number" min="@minRunTime" max="@maxRunTime" />
-                    </div>
-                    <div class="form-group col-md-1">
-                        <label class="col-form-label">Laufzeit bis:</label>
-                        <input id="runTimeTo" class="form-control" type="number" min="@minRunTime" max="@maxRunTime" />
-                    </div>
-                    <div class="form-group col-md-1">
-                        <label class="col-form-label">Bewertung:</label>
-                        <input id="ranking" class="form-control" type="number" min="1" max="10" />
-                    </div>
-                    <div class="form-group col-md-1">
-                        <label class="col-form-label">Marker</label>
-                        @Html.DropDownList("marker", markers, new { @class = "form-select" })
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label class="col-form-label">Genre</label>
-                        @Html.DropDownList("genre", genres, new { @class = "form-select" })
-                    </div>
-                    <div class="form-group col-md-1">
-                        <label class="col-form-label">Datenträger:</label>
-                        @Html.DropDownList("recordCarrier", recordCarriers, new { @class = "form-select" })
-                    </div>
-                    <div class="form-group col-md-1">
-                        <div class="form-group">
-                            <button style="vertical-align:central" class="btn btn-rose btn-fab" type="button" id="submitFilter" title="Daten filtern">
-                                <i class="fas fa-search fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
-                            </button>
+        <div class="card-body">
+            <ul class="nav nav-tabs">
+                <li>
+                    <a data-toggle="tab" href="#miscTab" class="nav-link nav-link-teal active" style="border: 2px solid #00677f">Allgemein</a>
+                </li>
+                @if (filter.Count() > 1)
+                {
+                    <li>
+                        <a data-toggle="tab" href="#genreTab" class="nav-link nav-link-violett" style="border: 2px solid rgb(108, 27, 123)">Genre</a>
+                    </li>
+                }
+            </ul>
+            <div class="tab-content">
+                <div id="miscTab" class="tab-pane active" style="border: 1px solid #00677f">
+                    <div class="container-fluid row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group col-md-2">
+                                    <label class="col-form-label">Film:</label>
+                                    <input id="title" class="form-control" type="text" />
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="col-form-label">Erscheinungsjahr:</label>
+                                    <input id="yearOfPuplication" class="form-control" type="number" min="@minYearOfPublication" max="@maxYearOfPublication" />
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="col-form-label">Laufzeit von:</label>
+                                    <input id="runTimeFrom" class="form-control" type="number" min="@minRunTime" max="@maxRunTime" />
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="col-form-label">Laufzeit bis:</label>
+                                    <input id="runTimeTo" class="form-control" type="number" min="@minRunTime" max="@maxRunTime" />
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="col-form-label">Bewertung:</label>
+                                    <input id="ranking" class="form-control" type="number" min="1" max="10" />
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="col-form-label">Marker</label>
+                                    @Html.DropDownList("marker", markers, new { @class = "form-select" })
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="col-form-label">Genre</label>
+                                    @Html.DropDownList("genre", genres, new { @class = "form-select" })
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="col-form-label">Datenträger:</label>
+                                    @Html.DropDownList("recordCarrier", recordCarriers, new { @class = "form-select" })
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <div class="form-group">
+                                        <button style="vertical-align:central" class="btn btn-rose btn-fab" type="button" id="submitFilter" title="Daten filtern">
+                                            <i class="fas fa-search fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <div class="form-group">
+                                        <button style="vertical-align:central" class="btn btn-rose btn-fab" type="button" id="deleteFilter" title="Filter löschen">
+                                            <i class="fa-regular fa-trash-can fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-1">
-                        <div class="form-group">
-                            <button style="vertical-align:central" class="btn btn-rose btn-fab" type="button" id="deleteFilter" title="Filter löschen">
-                                <i class="fa-regular fa-trash-can fa-shake" style="color: #74C0FC; --fa-animation-duration: 2s;"></i>
-                            </button>
-                        </div>
-                    </div>
+                </div>
+                <div id="genreTab" class="tab-pane" style="border: 1px solid rgb(108, 27, 123)">
+                    @if (filter.Count() > 0)
+                    {
+                        int i = 0;
+                        int rows = filter.Count() / 12 + 1;
+                        for (int row = 1; row <= rows; row++)
+                        {
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    @for (int j = 0; j < 12; j++)
+                                    {
+                                        if (i >= filter.Count())
+                                        {
+                                            break;
+                                        }
+                                        var id = "filter" + i;
+                                        var name = "filter" + i;
+                                        if (filter[i].Length >= 15)
+                                        {
+                                            var lable = $"{filter[i][..11]}...";
+                                            <div class="col-sm-1">
+                                                <div class="form-group">
+                                                    <input type="checkbox" id="@id" name="@name" value="@filter[i]" onclick="setFilter()" class="filter" title="@filter[i]" />
+                                                    <label for="@id" title="@filter[i]">@lable</label>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-sm-1">
+                                                <div class="form-group">
+                                                    <input type="checkbox" id="@id" name="@name" value="@filter[i]" onclick="setFilter()" class="filter" />
+                                                    <label for="@id">@filter[i]</label>
+                                                </div>
+                                            </div>
+                                        }
+                                        i++;
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -339,5 +400,40 @@
                 };
             });
         };
+
+        function setFilter() {
+            var checkedValues = $('input:checkbox:checked').map((i, el) => el.value).get();
+
+            let filter = {
+                "PersonId": 'F7B2D793-5F7D-47B5-8BFD-E80F5FB276D1',
+                "CheckedValues": checkedValues
+            };
+            $.ajax({
+                url: appRootPath + '/api/MoviesApi/GenreFilter',
+                type: 'post',
+                data: { filter: filter },
+                beforeSend: function() { $('.loader').show() },
+                success: function(content) {
+                    let movieTable = $('#movieIndex').DataTable();
+                    movieTable.clear().draw();
+                    movieTable.rows.add(JSON.parse(content));
+                    movieTable.draw(false);
+                },
+                fail: function(response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Daten konnten nicht gefiltert werden!',
+                        footer: response.responseText
+                    })
+                },
+                complete: function() { $('.loader').hide() }
+            });
+        }
+
+        function clearFilter() {
+            $("#genreTab").find('input:checkbox').prop('checked', false);
+            $('#movieIndex').DataTable().ajax.reload();
+        }
     </script>
-    }
+}

@@ -46,6 +46,7 @@ namespace MvcMoviesCore.Controllers
             //var practices = GetPractices();
 
             ViewData["ShowAdult"] = _showAdult;
+            ViewData["Filter"] = await GetGenreFilters();
             await LoadDropdowns();
             await LoadLimits();
             return View();
@@ -465,34 +466,39 @@ namespace MvcMoviesCore.Controllers
             return scenes;
         }
 
-        private List<string> GetPractices()
+        private async Task<List<string>> GetGenreFilters()
         {
-            var practices = new List<string>();
-            var allPractices = _context.MoviesPerson.Where(w => !string.IsNullOrEmpty(w.Practices)).GroupBy(g => g.Practices).ToList();
-            if (allPractices.Count != 0)
+            List<string> filters = [];
+            var genres = await _context.Genre.Where(w => w.Name != null && w.IsAdult == false).ToListAsync();
+            if (genres.Count != 0)
+                foreach (var genre in genres)
+                    filters.Add(genre.Name.Trim());
+
+            if (_showAdult)
             {
-                foreach (var practice in allPractices)
+                var moviePerson = await _context.MoviesPerson.Where(w => w.Practices != null).Select(s => s.Practices).ToListAsync();
+                if (moviePerson.Count != 0)
                 {
-                    if (practice.Key.Contains(','))
+                    foreach (var item in moviePerson)
                     {
-                        var keys = practice.Key.Split(',').ToList();
-                        foreach (var key in keys)
+                        var practices = item.Split(",");
+                        if (practices.Length > 0)
                         {
-                            if (!practices.Contains(key.Trim()))
-                                practices.Add(key.Trim());
+                            foreach (var practice in practices)
+                            {
+                                if (practice.Length < 3)
+                                    continue;
+                                filters.Add(practice.Trim());
+                            }
                         }
-                    }
-                    else
-                    {
-                        if (!practices.Contains(practice.Key.Trim()))
-                            practices.Add(practice.Key.Trim());
                     }
                 }
             }
-            practices.Sort();
-            return practices;
+            filters = [.. filters.Distinct()];
+            filters.Sort();
+            return filters;
         }
-
+        
         private List<string> GetFilterContent()
         {
             var filterContent = new List<string>();
