@@ -110,9 +110,7 @@ namespace MvcMoviesCore.Controllers
                             {
                                 continue;
                             }
-
                         }
-
 
                         var person = await _context.Person.Include(i => i.PersonImages.Where(w => w.IsDeleted == false).OrderBy(o => o.Number)).FirstOrDefaultAsync(x => x.Id == personId);
                         if (person != null)
