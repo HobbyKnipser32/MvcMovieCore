@@ -29,6 +29,7 @@ namespace MvcMoviesCore.ViewModels
             Images = person.PersonImages;
             EyeColorId = person.EyeColorId;
             HairColorId = person.HairColorId;
+            AlsoKnownAs = person.AlsoKnownAs;
         }
 
         public IFormFile SelectedFile { get; set; }

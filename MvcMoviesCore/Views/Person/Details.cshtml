@@ -59,6 +59,12 @@
                         <li>
                             <a data-toggle="tab" href="#statsTab" class="nav-link nav-link-teal active" style="border: 2px solid #00677f">Stats</a>
                         </li>
+                        @if (Model.AlsoKnownAs.Count > 0)
+                        {
+                            <li>
+                                <a data-toggle="tab" href="#akaTab" class="nav-link nav-link-teal" style="border: 2px solid #00fff6">Aliase</a>
+                            </li>
+                        }
                         @if (filter.Count() > 1)
                         {
                             <li>
@@ -204,6 +210,29 @@
                                     </div>
                                 </div>
                             }
+
+                        </div>
+
+                        <div id="akaTab" class="tab-pane" style="border: 1px solid #00fff6">
+                            <div class="container-fluid">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Alias</th>
+                                            <th>Beschreibung</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var alias in Model.AlsoKnownAs.OrderBy(o => o.Alias))
+                                        {
+                                            <tr>
+                                                <td width="200px">@alias.Alias</td>
+                                                <td width="200px">@alias.Description</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div id="filterTab" class="tab-pane" style="border: 1px solid rgb(108, 27, 123)">
                             @if (filter.Count() > 0)
@@ -264,7 +293,7 @@
                 {
                     var src = $"{originalFileDirectory}/{image.PersonId}/{image.Name}";
                     @* <div class="myImageSlides fade"> *@
-                        <div class="myImageSlides" style="text-align:center">
+                    <div class="myImageSlides" style="text-align:center">
                         <div class="numbertext">@imageIndex / @Model.PersonImages.Count</div>
                         <img src="@src" style="max-width:100%; height:600px;">
                         <div class="text">Bild @imageIndex</div>
@@ -597,7 +626,7 @@
             else {
                 $('#showImagesModal').show();
             }
-                
+
         }
 
         var myIndex = 0;

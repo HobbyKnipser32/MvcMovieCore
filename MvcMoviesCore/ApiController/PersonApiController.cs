@@ -46,7 +46,7 @@ namespace MvcMoviesCore.ApiController
         #endregion
 
         #region public functions
-        
+
         [HttpGet("GetPersonsWithoutImage")]
         public async Task<IActionResult> GetPersonsWithoutImage()
         {
@@ -240,6 +240,53 @@ namespace MvcMoviesCore.ApiController
                 jsonResult = JsonConvert.SerializeObject(new List<PersonSceneViewModel>());
             }
             return Ok(jsonResult);
+        }
+
+        [HttpGet("GetAlias/{personId}")]
+        public async Task<IActionResult> GetAlias(Guid personId)
+        {
+            var aliases = await _context.AlsoKnownAs.Where(w => w.PersonId.Equals(personId)).OrderBy(o => o.Alias).ToListAsync();
+            string jsonResult;
+            var jsonSerializerSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            jsonResult = JsonConvert.SerializeObject(aliases, Formatting.Indented, jsonSerializerSettings);
+            return Ok(jsonResult);
+        }
+
+        [HttpPost("AddAlias")]
+        public async Task<IActionResult> AddAlias([FromForm] AlsoKnownAs aka)
+        {
+            if (string.IsNullOrWhiteSpace(aka.Alias))
+                return BadRequest("Bitte Alias angegeben!");
+
+            AlsoKnownAs alsoKnownAs = new()
+            {
+                Alias = aka.Alias,
+                Description = aka.Description,
+                PersonId = aka.PersonId,
+                Id = Guid.NewGuid()
+            };
+            _context.AlsoKnownAs.Add(alsoKnownAs);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost("DeleteAlias/{id}")]
+        public async Task<IActionResult> DeleteAlias(Guid id)
+        {
+            try
+            {
+                var aka = await _context.AlsoKnownAs.FindAsync(id);
+                if (aka != null)
+                {
+                    _context.AlsoKnownAs.Remove(aka);
+                    await _context.SaveChangesAsync();
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpGet("GetPracticeFilterElements/{personId}")]

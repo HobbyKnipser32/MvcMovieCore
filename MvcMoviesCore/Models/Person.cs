@@ -106,6 +106,8 @@ namespace MvcMoviesCore.Models
 
         public virtual ICollection<PersonImage> PersonImages { get; set; }
 
+        public virtual ICollection<AlsoKnownAs> AlsoKnownAs { get; set; }
+
         public virtual ICollection<MoviesPerson> MoviesPerson { get; set; }
 
         public virtual PersonTypes PersonType { get; set; }

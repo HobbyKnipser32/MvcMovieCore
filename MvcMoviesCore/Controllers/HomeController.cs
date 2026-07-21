@@ -116,6 +116,7 @@ namespace MvcMoviesCore.Controllers
             model.AddRange(SearchPersons(searchText));
             model.AddRange(SearchGenre(searchText));
             model.AddRange(SearchRole(searchText));
+            model.AddRange(SearchAlias(searchText));
             return View(model.OrderBy(o => o.Name).ToList());
         }
 
@@ -144,7 +145,7 @@ namespace MvcMoviesCore.Controllers
         private List<SearchResult> SearchPersons(string searchText)
         {
             var model = new List<SearchResult>();
-            List<Person> persons = new();
+            List<Person> persons = [];
             if (_showAdult)
             {
                 persons = _context.Person.Where(w => w.Name.Contains(searchText)).ToList();
@@ -204,6 +205,18 @@ namespace MvcMoviesCore.Controllers
                 model.Add(result);
             }
 
+            return model;
+        }
+
+        private List<SearchResult> SearchAlias(string searchText)
+        {
+            List<SearchResult> model = [];
+            List<AlsoKnownAs> aliases = [.. _context.AlsoKnownAs.Where(w => w.Alias.Contains(searchText))];
+            foreach (var alias in aliases)
+            {
+                var result = new SearchResult() { Id = alias.PersonId, Name = alias.Alias, TypeOf = "Alias" };
+                model.Add(result);
+            }
             return model;
         }
 

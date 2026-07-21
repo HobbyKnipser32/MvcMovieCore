@@ -65,133 +65,171 @@
                 <div class="col-sm-9">
                     <div class="card">
                         <div class="card-body">
-                            <div class="col-sm-12">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label for="name" class="form-label">Name:</label>
-                                            <input type="text" asp-for="Name" id="name" class="form-control" />
-                                            <span asp-validation-for="Name" class="text-danger" id="name"></span>
+                            <ul class="nav nav-tabs">
+                                <li>
+                                    <a data-toggle="tab" href="#statsTab" class="nav-link nav-link-teal active" style="border: 2px solid #00677f">Stats</a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#aliasTab" class="nav-link nav-link-teal" style="border: 2px solid #00fff6">Alias</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="statsTab" class="tab-pane active" style="border: 1px solid #00677f">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label for="name" class="form-label">Name:</label>
+                                                    <input type="text" asp-for="Name" id="name" class="form-control" />
+                                                    <span asp-validation-for="Name" class="text-danger" id="name"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="sexId" class="form-label">Geschlecht:</label>
+                                                    <select asp-for="SexId" class="form-select" asp-items="@sexId" id="sexId"></select>
+                                                    <span asp-validation-for="SexId" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="birthday" class="form-label">Geburtstag:</label>
+                                                    <input type="date" asp-for="Birthday" class="form-control" id="birthday" />
+                                                    <span asp-validation-for="Birthday" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="obit" class="form-label">Todestag:</label>
+                                                    <input type="date" asp-for="Obit" class="form-control" id="obit" />
+                                                    <span asp-validation-for="Obit" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="personTypeId" class="form-label">Type:</label>
+                                                    <select asp-for="PersonTypeId" class="form-select" asp-items="@personTypesId" id="personTypeId"></select>
+                                                    <span asp-validation-for="PersonTypeId" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="nationalityId" class="form-label">Nationalität:</label>
+                                                    <select asp-for="NationalityId" class="form-select" asp-items="@nationalityId" id="nationalityId"></select>
+                                                    <span asp-validation-for="NationalityId" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="classification" class="form-label">Klassifizierung:</label>
+                                                    <input type="number" asp-for="Classification" class="form-control" min="1" max="12" id="classification" />
+                                                    <span asp-validation-for="Classification" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="eyeColorId" class="form-label">Augenfarbe:</label>
+                                                    <select asp-for="EyeColorId" class="form-select" asp-items="@eyeColorIds" id="eyeColorId"></select>
+                                                    <span asp-validation-for="EyeColorId" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="hairColorId" class="form-label">Haarfarbe:</label>
+                                                    <select asp-for="HairColorId" class="form-select" asp-items="@hairColorIds" id="hairColorId"></select>
+                                                    <span asp-validation-for="HairColorId" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="height" class="form-label">Größe:</label>
+                                                    <input asp-for="Height" class="form-control" id="height" />
+                                                    <span asp-validation-for="Height" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="weight" class="form-label">Gewicht:</label>
+                                                    <input type="number" asp-for="Weight" class="form-control" id="weight" />
+                                                    <span asp-validation-for="Weight" class="text-danger"></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12" style="display:none" id="adultStuff">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="cupSize" class="form-label">Cupsize:</label>
+                                                    <input asp-for="CupSize" class="form-control" id="cupSize" />
+                                                    <span asp-validation-for="CupSize" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="fakeBoobs" class="form-label">Fakeboobs:</label>
+                                                    <input type="checkbox" asp-for="FakeBoobs" class="form-checkbox" id="fakeBoobs" />
+                                                    <span asp-validation-for="FakeBoobs" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="startOfBusiness" class="form-label">Start of Business:</label>
+                                                    <input type="number" asp-for="StartOfBusiness" class="form-control" id="startOfBusiness" min="@minValue" max="@maxValue" />
+                                                    <span asp-validation-for="StartOfBusiness" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="endOfBusiness" class="form-label">End of Business:</label>
+                                                    <input type="number" asp-for="EndOfBusiness" class="form-control" id="endOfBusiness" />
+                                                    <span asp-validation-for="EndOfBusiness" class="text-danger" min="@minValue" max="@maxValue"></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="sexId" class="form-label">Geschlecht:</label>
-                                            <select asp-for="SexId" class="form-select" asp-items="@sexId" id="sexId"></select>
-                                            <span asp-validation-for="SexId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="birthday" class="form-label">Geburtstag:</label>
-                                            <input type="date" asp-for="Birthday" class="form-control" id="birthday" />
-                                            <span asp-validation-for="Birthday" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="obit" class="form-label">Todestag:</label>
-                                            <input type="date" asp-for="Obit" class="form-control" id="obit" />
-                                            <span asp-validation-for="Obit" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="personTypeId" class="form-label">Type:</label>
-                                            <select asp-for="PersonTypeId" class="form-select" asp-items="@personTypesId" id="personTypeId"></select>
-                                            <span asp-validation-for="PersonTypeId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="nationalityId" class="form-label">Nationalität:</label>
-                                            <select asp-for="NationalityId" class="form-select" asp-items="@nationalityId" id="nationalityId"></select>
-                                            <span asp-validation-for="NationalityId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="classification" class="form-label">Klassifizierung:</label>
-                                            <input type="number" asp-for="Classification" class="form-control" min="1" max="12" id="classification" />
-                                            <span asp-validation-for="Classification" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="eyeColorId" class="form-label">Augenfarbe:</label>
-                                            <select asp-for="EyeColorId" class="form-select" asp-items="@eyeColorIds" id="eyeColorId"></select>
-                                            <span asp-validation-for="EyeColorId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="hairColorId" class="form-label">Haarfarbe:</label>
-                                            <select asp-for="HairColorId" class="form-select" asp-items="@hairColorIds" id="hairColorId"></select>
-                                            <span asp-validation-for="HairColorId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="height" class="form-label">Größe:</label>
-                                            <input asp-for="Height" class="form-control" id="height" />
-                                            <span asp-validation-for="Height" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="weight" class="form-label">Gewicht:</label>
-                                            <input type="number" asp-for="Weight" class="form-control" id="weight" />
-                                            <span asp-validation-for="Weight" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                            <div class="col-sm-12" style="display:none" id="adultStuff">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="cupSize" class="form-label">Cupsize:</label>
-                                            <input asp-for="CupSize" class="form-control" id="cupSize" />
-                                            <span asp-validation-for="CupSize" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="fakeBoobs" class="form-label">Fakeboobs:</label>
-                                            <input type="checkbox" asp-for="FakeBoobs" class="form-checkbox" id="fakeBoobs" />
-                                            <span asp-validation-for="FakeBoobs" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="startOfBusiness" class="form-label">Start of Business:</label>
-                                            <input type="number" asp-for="StartOfBusiness" class="form-control" id="startOfBusiness" min="@minValue" max="@maxValue" />
-                                            <span asp-validation-for="StartOfBusiness" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="endOfBusiness" class="form-label">End of Business:</label>
-                                            <input type="number" asp-for="EndOfBusiness" class="form-control" id="endOfBusiness" />
-                                            <span asp-validation-for="EndOfBusiness" class="text-danger" min="@minValue" max="@maxValue"></span>
-                                        </div>
-                                    </div>
+                                <div id="aliasTab" class="tab-pane" style="border: 1px solid #00fff6">
+                                    <table class="table display" id="alias" style="width: 100%; word-wrap:break-word; table-layout: auto;">
+                                        <thead>
+                                            <tr>
+                                                <th>Alias</th>
+                                                <th>Beschreibung</th>
+                                                <th style="text-align:right">&nbsp;</th>
+                                            </tr>
+                                        </thead>
+                                        
+                                    </table>
+                                    <table class="table display" style="width: 100%; word-wrap:break-word; table-layout: auto;">
+                                        <tbody>
+                                            <tr>
+                                                <td width="200px"><input type="text" name="Alias" id="newAlias" /></td>
+                                                <td width="200px"><input type="text" name="Description" id="newDescription" /></td>
+                                                <td width="100px" align="center">
+                                                    <a title="hinzufügen" onclick="addAlias()">
+                                                        <i class="fa-regular fa-floppy-disk fa-beat fa-2xl" style="color: #63E6BE; --fa-animation-duration: 2s; border: none; background-color: Transparent; "></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
+                        <div class="loader" style="display:none"></div>
                     </div>
                 </div>
             </div>
@@ -273,20 +311,10 @@
 @section Scripts {
 
     <partial name="_ShowImageModalScripts" />
+    <partial name="_DataTableScripts" />
 
     <script>
         $(document).ready(function () {
-            var imageAttributes = {
-                imageContent: '@imgSrc',
-                imageName: '@Model.Image'
-            };
-            var imageAttributes = {};
-            var customMessages = {
-                'default': '<span style="font-size:20px;">Drag & Drop hier</span>',
-                'remove': 'Löschen',
-                'replace': 'Drag & Drop oder hier Klicken zum ersetzen',
-            };
-            dropifyImage.DrawImage(imageAttributes, customMessages);
 
             var adultPersonType = '@adultPersonType';
             var modelPersonType = '@Model.PersonTypeId.ToString()';
@@ -298,136 +326,271 @@
                 $('#adultStuff').hide();
             };
 
-            $('#personTypeId').change(function () {
-                if ($('#personTypeId').val() === adultPersonType) {
-                    $('#adultStuff').show();
-                }
-                else {
-                    $('#adultStuff').hide();
-                };
-            });
+            const personId = '@Model.Id';
 
-
-            $('input:radio[name="isMainImage"]').on('click', function () {
-                let value = $(this).val();
-                $('#Image').attr('value', value);
+            $('#alias').DataTable({
+                ajax: {
+                    url: appRootPath + '/api/PersonApi/GetAlias/' + personId,
+                    dataSrc: '',
+                    beforeSend: function() { $('.loader').show() },
+                    complete: function() { $('.loader').hide() }
+                },
+                columns: [
+                    {
+                        width: '200px',
+                        data: 'Alias'
+                    },
+                    {
+                        width: '200px',
+                        data: 'Description'
+                    },
+                    {
+                        data: 'Id',
+                        render: function(data, type, full) {
+                            if (data && type === 'display') {
+                                let personId = "'" + data + "'";
+                                return '<a title="löschen" onclick="deleteAlias(' + personId + ')">' +
+                                '<i class="fa-solid fa-trash fa-fade" style="color: #ff0000; --fa-animation-duration: 2s;"></i>'
+                            }
+                            return '';
+                        }
+                    },
+                ],
+                order: [
+                    [0, 'asc']
+                ],
+                ordering: false,
+                paging: false,
+                // searchable: false,
+                searching: false,
+                info: false
             });
+        var imageAttributes = {
+        imageContent: '@imgSrc',
+        imageName: '@Model.Image'
+        };
+        var imageAttributes = {};
+        var customMessages = {
+        'default': '<span style="font-size:20px;">Drag & Drop hier</span>',
+        'remove': 'Löschen',
+        'replace': 'Drag & Drop oder hier Klicken zum ersetzen',
+        };
+        dropifyImage.DrawImage(imageAttributes, customMessages);
+
+        
+
+        $('#personTypeId').change(function () {
+            if ($('#personTypeId').val() === adultPersonType) {
+                $('#adultStuff').show();
+            }
+            else {
+                $('#adultStuff').hide();
+            };
+        });
+
+        $('input:radio[name="isMainImage"]').on('click', function () {
+        let value = $(this).val();
+        $('#Image').attr('value', value);
+        });
         });
 
         function save() {
-            var person = {
-                "Id": $('#id').val(),
-                "Name": $('#name').val(),
-                "NationalityId": $('#nationalityId').val(),
-                "SexId": $('#sexId').val(),
-                "Birthday": $('#birthday').val(),
-                "Obit": $('#obit').val(),
-                "PersonTypesId": $('#personTypeId').val(),
-                "Height": $('#height').val(),
-                "Weight": $('#weight').val(),
-                "Classification": $('#classification').val(),
-                "CupSize": $('#cupSize').val(),
-                "FakeBoobs": $('#fakeBoobs').is(":checked"),
-                "StartOfBusiness": $('#startOfBusiness').val(),
-                "EndOfBusiness": $('#endOfBusiness').val(),
-                "Image": $('#isMainImageValue').val(),
-            }
-            var url = appRootPath + '/api/PersonApi/Update';
-            $.post(url, person, function () {
-                Swal.fire({
-                    icon: 'success',
-                    text: 'Daten erfolgreich gespeichert.',
-                    showConfirmButton: false,
-                    timer: 2000
-                })
-            })
-                .fail(function (response) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Daten konnten nicht gespeichert werden!',
-                        footer: response.responseText
-                    })
-                });
+        var person = {
+        "Id": $('#id').val(),
+        "Name": $('#name').val(),
+        "NationalityId": $('#nationalityId').val(),
+        "SexId": $('#sexId').val(),
+        "Birthday": $('#birthday').val(),
+        "Obit": $('#obit').val(),
+        "PersonTypesId": $('#personTypeId').val(),
+        "Height": $('#height').val(),
+        "Weight": $('#weight').val(),
+        "Classification": $('#classification').val(),
+        "CupSize": $('#cupSize').val(),
+        "FakeBoobs": $('#fakeBoobs').is(":checked"),
+        "StartOfBusiness": $('#startOfBusiness').val(),
+        "EndOfBusiness": $('#endOfBusiness').val(),
+        "Image": $('#isMainImageValue').val(),
+        }
+        var url = appRootPath + '/api/PersonApi/Update';
+        $.post(url, person, function () {
+        Swal.fire({
+        icon: 'success',
+        text: 'Daten erfolgreich gespeichert.',
+        showConfirmButton: false,
+        timer: 2000
+        })
+        }).fail(function (response) {
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Daten konnten nicht gespeichert werden!',
+        footer: response.responseText
+        })
+        });
         };
 
         function addNewImage() {
-            let file = $('input[name="SelectedFile"]')[0].files[0];
-            let formData = new FormData();
-            if (file) {
-                formData.append(file.name, file);
-            }
-            else { return; }
+        let file = $('input[name="SelectedFile"]')[0].files[0];
+        let formData = new FormData();
+        if (file) {
+        formData.append(file.name, file);
+        }
+        else { return; }
 
-            let personId = $('#id').val();
-            let url = appRootPath + '/api/PersonApi/SaveImage?personId=' + personId;
-            let xhr = new XMLHttpRequest();
-            xhr.addEventListener("load", transferComplete);
-            xhr.open('POST', url);
-            xhr.send(formData);
-            xhr.onreadystatechange = function () {
-                if (xhr.readystate == 4 && xhr.status == 200) {
-                    alert(xhr.responseText);
-                }
-            }
-            // location.reload();
+        let personId = $('#id').val();
+        let url = appRootPath + '/api/PersonApi/SaveImage?personId=' + personId;
+        let xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", transferComplete);
+        xhr.open('POST', url);
+        xhr.send(formData);
+        xhr.onreadystatechange = function () {
+        if (xhr.readystate == 4 && xhr.status == 200) {
+        alert(xhr.responseText);
+        }
+        }
+        // location.reload();
         }
 
         function transferComplete() {
-            console.log("The transfer is complete.");
-            location.reload();
+        console.log("The transfer is complete.");
+        location.reload();
         }
 
         function deleteImage(id, personId) {
-            Swal.fire({
-                html: 'Bild löschen?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ja',
-                cancelButtonText: 'Nein'
-            }).then(function (result) {
-                if (result.value) {
-                    var url = appRootPath + '/api/PersonApi/DeleteImage?id=' + id + '&personId=' + personId
-                    $.ajax({
-                        url: url,
-                        type: 'POST',
-                        async: false,
-                        statusCode: {
-                            404: function () {
-                                alert("function not found");
-                            }
-                        },
-                        success: function () {
-                            Swal.fire({
-                                icon: 'success',
-                                text: 'Verknüpfung erfolgreich gelöscht.',
-                                showConfirmButton: false,
-                                timer: 2000
-                            })
-                            location.reload();
-                        },
-                    })
-                };
-            });
+        Swal.fire({
+        html: 'Bild löschen?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ja',
+        cancelButtonText: 'Nein'
+        }).then(function (result) {
+        if (result.value) {
+        var url = appRootPath + '/api/PersonApi/DeleteImage?id=' + id + '&personId=' + personId
+        $.ajax({
+        url: url,
+        type: 'POST',
+        async: false,
+        statusCode: {
+        404: function () {
+        alert("function not found");
+        }
+        },
+        success: function () {
+        Swal.fire({
+        icon: 'success',
+        text: 'Verknüpfung erfolgreich gelöscht.',
+        showConfirmButton: false,
+        timer: 2000
+        })
+        location.reload();
+        },
+        })
+        };
+        });
         }
 
         var myIndex = 0;
         carousel();
 
         function carousel() {
-            var i;
-            var x = document.getElementsByClassName("mySlides");
-            if (x.length <= 0)
-                return;
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            myIndex++;
-            if (myIndex > x.length) { myIndex = 1 }
-            x[myIndex - 1].style.display = "block";
-            setTimeout(carousel, 9000); // Change image every 9 seconds
+        var i;
+        var x = document.getElementsByClassName("mySlides");
+        if (x.length <= 0)
+        return;
+        for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+        }
+        myIndex++;
+        if (myIndex > x.length) { myIndex = 1 }
+        x[myIndex - 1].style.display = "block";
+        setTimeout(carousel, 9000); // Change image every 9 seconds
+        }
+
+        function addAlias(){
+        let alias = $('#newAlias').val();
+        let description = $('#newDescription').val();
+        let personId = $('#id').val();
+        let aka = {
+        'Alias': alias,
+        'Description': description,
+        'PersonId': personId
+        };
+        $.ajax({
+        url: appRootPath + '/api/PersonApi/AddAlias',
+        type: 'post',
+        data: { aka: aka },
+        beforeSend: function(){ $('.loader').show() },
+        success: function () {
+        // $('#showNew').DataTable().ajax.reload();
+        Swal.fire({
+        icon: 'success',
+        text: 'Alias hinzugefügt',
+        showConfirmButton: false,
+        timer: 2000
+        });
+        clearText();
+        },
+        fail: function (response) {
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Daten konnten nicht gespeichert werden!',
+        footer: response.responseText
+        })
+        },
+        complete: function(){ $('.loader').hide() }
+        });
+        }
+
+        function clearText(){
+            $('#newAlias').val(null);
+            $('#newDescription').val(null);
+        }
+
+        function deleteAlias(id){
+        Swal.fire({
+        text: 'Alias löschen?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ja',
+        cancelButtonText: 'Nein'
+        }).then(function (result) {
+        if (result.value) {
+        var url = appRootPath + '/api/PersonApi/DeleteAlias/' + id;
+        $.ajax({
+        url: url,
+        type: 'POST',
+        async: false,
+        statusCode: {
+        404: function () {
+        alert("function not found");
+        }
+        },
+        success: function () {
+        // $('#showNew').DataTable().ajax.reload();
+        Swal.fire({
+        icon: 'success',
+        text: 'Alias wurde gelöscht.',
+        showConfirmButton: false,
+        timer: 2000
+        })
+        },
+        error: function (response) {
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Alias konnte nicht gelöscht werden!',
+        footer: response.responseText
+        })
+        }
+        })
+        };
+        })
         }
     </script>
 }

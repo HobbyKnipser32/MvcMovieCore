@@ -166,6 +166,7 @@ namespace MvcMoviesCore.Controllers
                                   .Include(i => i.HairColors)
                                   .Include(i => i.MoviesPerson)
                                   .Include(i => i.PersonImages)
+                                  .Include(i => i.AlsoKnownAs)
                                   .Where(w => w.NationalityId.Equals(id))
                                   .OrderBy(o => o.Name)
                                   .AsQueryable();
@@ -200,6 +201,7 @@ namespace MvcMoviesCore.Controllers
                 .Include(i => i.EyeColors)
                 .Include(i => i.HairColors)
                 .Include(i => i.PersonImages.Where(w => !w.IsDeleted).OrderBy(o => o.Number))
+                .Include(i => i.AlsoKnownAs)
                 .Include(i => i.MoviesPerson)
                 .ThenInclude(t => t.MovieRole)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -277,7 +279,10 @@ namespace MvcMoviesCore.Controllers
                 return NotFound();
             }
 
-            var person = await _context.Person.Include(i => i.PersonImages.Where(w => w.IsDeleted == false).OrderBy(o => o.Number)).FirstOrDefaultAsync(f => f.Id.Equals(id));
+            var person = await _context.Person
+                .Include(i => i.PersonImages.Where(w => w.IsDeleted == false).OrderBy(o => o.Number))
+                .Include(i => i.AlsoKnownAs.OrderBy(o => o.Alias))
+                 .FirstOrDefaultAsync(f => f.Id.Equals(id));
             if (person == null)
             {
                 return NotFound();
