@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MvcMoviesCore.Data;
 using MvcMoviesCore.Models;
 using System;
 using System.Linq;

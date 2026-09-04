@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MvcMoviesCore.Models;
 
 // ReSharper disable once CheckNamespace
-namespace MvcMoviesCore.Models
+namespace MvcMoviesCore.Data
 {
     public class MvcMovieCoreContext : DbContext
     {
@@ -42,5 +43,7 @@ namespace MvcMoviesCore.Models
         public DbSet<EyeColor> EyeColors { get; set; }
         
         public DbSet<HairColor> HairColors { get; set; }
+
+        public DbSet<Practice> Practices { get; set; }
     }
 }

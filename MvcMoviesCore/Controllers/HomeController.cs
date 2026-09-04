@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MvcMoviesCore.Data;
 using MvcMoviesCore.Models;
 using MvcMoviesCore.ViewModels;
 using System;

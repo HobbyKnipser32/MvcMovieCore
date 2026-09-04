@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MvcMoviesCore.Data;
 using MvcMoviesCore.Models;
 using System;
 using System.Linq;

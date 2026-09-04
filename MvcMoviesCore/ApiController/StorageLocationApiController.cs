@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MvcMoviesCore.Models;
+using MvcMoviesCore.Data;
 using Newtonsoft.Json;
 using System;
 using System.Linq;

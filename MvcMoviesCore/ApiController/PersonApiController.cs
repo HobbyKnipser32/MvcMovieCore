@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MvcMoviesCore.Data;
 using MvcMoviesCore.Models;
 using MvcMoviesCore.ViewModels;
 using Newtonsoft.Json;
@@ -81,7 +82,6 @@ namespace MvcMoviesCore.ApiController
             var jsonResult = JsonConvert.SerializeObject(persons.Where(w => w.MoviesPerson.Count > 0), Formatting.Indented, jsonSerializerSettings);
             return Ok(jsonResult);
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Get()

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcMoviesCore.Classes;
+using MvcMoviesCore.Data;
 using MvcMoviesCore.Models;
 using Newtonsoft.Json;
 using NuGet.Packaging;

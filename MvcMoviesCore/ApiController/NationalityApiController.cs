@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGeneration.Utils;
-using MvcMoviesCore.Models;
+using MvcMoviesCore.Data;
 using MvcMoviesCore.ViewModels;
 using Newtonsoft.Json;
 using System;

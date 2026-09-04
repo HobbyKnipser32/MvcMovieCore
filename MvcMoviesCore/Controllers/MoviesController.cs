@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+using MvcMoviesCore.Data;
 using MvcMoviesCore.Models;
 using MvcMoviesCore.ViewModels;
 using System;

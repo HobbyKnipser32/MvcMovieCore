@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using MvcMoviesCore.Models;
+using MvcMoviesCore.Data;
 using MvcMoviesCore.ViewModels;
 using Newtonsoft.Json;
 using System;

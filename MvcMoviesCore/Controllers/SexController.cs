@@ -4,6 +4,7 @@ using MvcMoviesCore.Models;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using MvcMoviesCore.Data;
 
 namespace MvcMoviesCore.Controllers
 {

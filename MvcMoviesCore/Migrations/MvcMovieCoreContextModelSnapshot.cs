@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using MvcMoviesCore.Models;
+using MvcMoviesCore.Data;
 using System;
 
 namespace MvcMoviesCore.Migrations

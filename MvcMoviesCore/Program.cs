@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MvcMoviesCore.Models;
+using Microsoft.Extensions.Logging;
+using MvcMoviesCore.Data;
 
 namespace MvcMoviesCore
 {
@@ -20,6 +21,8 @@ namespace MvcMoviesCore
             builder.Services.AddDbContext<MvcMovieCoreContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("MvcMovieCoreContext")));
             builder.Services.AddOpenApiDocument();
+
+            builder.Services.AddLogging(builder => builder.AddConsole());
 
             var app = builder.Build();
 

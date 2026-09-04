@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using MvcMoviesCore.Models;
+using MvcMoviesCore.Data;
 using System.Globalization;
 using System.IO;
 
